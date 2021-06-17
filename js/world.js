@@ -4,11 +4,22 @@ var BootScene = new Phaser.Class({
         Phaser.Scene.call(this, {
             key: 'BootScene'
         });
+
+    },
+
+    init: function(data){
+        console.log(data)
+        if (jQuery.isEmptyObject(data)){
+            this.catParty = new catParty();
+        }
+        else{
+            this.catParty = data.catParty;
+        }
+        console.log(this.catParty);
     },
 
     preload: function () {
         this.load.image('tiles', 'assets/map/Mapset.png');
-
     },
 
     create: function () {
@@ -54,7 +65,10 @@ var BootScene = new Phaser.Class({
             }).setInteractive();
 
         text1.on('pointerdown', () => {
-            this.scene.start('WorldScene');
+            this.scene.start('WorldScene', {
+                "catParty" : this.catParty,
+                "level" : 0
+            });
         });
 
         var text2 = this.add.text(185,
@@ -98,23 +112,21 @@ var BootScene = new Phaser.Class({
 
 var WorldScene = new Phaser.Class({
     Extends: Phaser.Scene,
-    initialize: function WorldScene(level) {
+    initialize: function WorldScene(data) {
         Phaser.Scene.call(this, {
             key: 'WorldScene'
         });
-        
-        if (level == null){
+    },
+
+    init: function(data){
+        if (data != null && data.level === 0){
             this.currentLevel = 0;
         }
         else{
-            this.currentLevel = level
+            this.currentLevel = data.level
         }
-
-        this.catFood = 0; //premium currency for rolling in gacha
-        this.currentTeam = []; //current team of cats (maximum of 4)
-        this.allCats = []; //all the cats that has been unlocked thus far
-
-
+        console.log(data);
+        this.catParty = data.catParty;
     },
 
     preload: function () {
@@ -140,6 +152,15 @@ var WorldScene = new Phaser.Class({
     },
 
     update: function () {
+        //some core logic goes in here, requires to be updated frame by frame such as cameras
 
     },
 });
+
+class catParty {
+    constructor() {
+        this.allCats = []; 
+        this.currentTeam = [];
+        this.totalCoins = 0; 
+    }
+}
