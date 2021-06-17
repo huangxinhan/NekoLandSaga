@@ -163,4 +163,44 @@ class catParty {
         this.currentTeam = [];
         this.totalCoins = 0; 
     }
+
+    obtainNewCat(cat){
+        this.allCats.push(cat);
+    }
+
+    
+}
+
+class Cat {
+    constructor(name, description, rarity, skillArray, HP, ATK, DEF, WT) {
+        this.name = name; 
+        this.description = description;
+        this.rarity = rarity; 
+        this.skillArray = skillArray;
+        this.maxHP = HP; 
+        this.HP = this.maxHP; 
+        this.ATK = ATK;
+        this.DEF = DEF;
+        this.WT = WT;
+    }
+}
+
+class Enemy {
+    constructor(name, description, skillArray, HP, ATK, DEF, WT) {
+        this.name = name;
+        this.description = description;
+        this.skillArray = skillArray;
+        this.maxHP = HP;
+        this.HP = this.maxHP;
+        this.ATK = ATK;
+        this.DEF = DEF;
+        this.WT = WT; //weights affects movement speed etc. 
+    }
+}
+
+class Skill {
+    constructor(name, description){
+        this.name = name;
+        this.description = description;
+    }
 }
