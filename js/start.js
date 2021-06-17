@@ -1,9 +1,9 @@
 var config = {
-    type: Phaser.AUTO,
+    type: Phaser.GRAPHICS,
     parent: 'content',
     width: 1280,
     height: 964,
-    pixelArt: true,
+    roundPixels: true,
     physics: {
         default: 'arcade',
         arcade: {

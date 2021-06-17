@@ -9,8 +9,6 @@ var BootScene = new Phaser.Class({
     preload: function () {
         this.load.image('tiles', 'assets/map/Mapset.png');
 
-        this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-
     },
 
     create: function () {
@@ -100,24 +98,45 @@ var BootScene = new Phaser.Class({
 
 var WorldScene = new Phaser.Class({
     Extends: Phaser.Scene,
-    initialize: function WorldScene() {
+    initialize: function WorldScene(level) {
         Phaser.Scene.call(this, {
             key: 'WorldScene'
         });
+        
+        if (level == null){
+            this.currentLevel = 0;
+        }
+        else{
+            this.currentLevel = level
+        }
+
+        this.catFood = 0; //premium currency for rolling in gacha
+        this.currentTeam = []; //current team of cats (maximum of 4)
+        this.allCats = []; //all the cats that has been unlocked thus far
+
+
     },
 
     preload: function () {
-
+        //load based on the level
+        if (this.currentLevel === 0){
+            this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
+        }
+        
     },
 
     create: function () {
-        var testground = this.make.tilemap({
-            key: 'testground'
-        });
-        var tiles = testground.addTilesetImage('Mapset', 'tiles');
-        var traverseLayer = testground.createLayer('traverseLayer', tiles, 0, 0);
-        var blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
-        blockedLayer.setCollisionByExclusion([-1]);
+        if (this.currentLevel === 0){
+            var testground = this.make.tilemap({
+                key: 'testground'
+            });
+            var tiles = testground.addTilesetImage('Mapset', 'tiles');
+            var traverseLayer = testground.createLayer('traverseLayer', tiles, 0, 0);
+            var blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
+            blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+        }
+
     },
 
     update: function () {
