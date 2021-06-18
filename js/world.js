@@ -157,80 +157,17 @@ var WorldScene = new Phaser.Class({
                 key: 'testground'
             });
             var tiles = testground.addTilesetImage('Mapset', 'tiles');
-            var traverseLayer = testground.createLayer('traverseLayer', tiles, 0, 0);
-            var blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
-            blockedLayer.setCollisionByExclusion([-1]);
+            this.traverseLayer = testground.createLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
             
-            for (var i = 0; i < this.catParty.currentTeam.length; i++){
-                if (i === 0){
-                    var tempCat0 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
-                    tempCat0.setCircle(64);
-                    tempCat0.setCollideWorldBounds(true);
-                    tempCat0.setBounce(1);
-                    tempCat0.setInteractive();
-                    tempCat0.unitInformation = this.catParty.currentTeam[i];
-                    this.physics.add.collider(tempCat0, blockedLayer);
-                    tempCat0.on('pointerover', () => {
-                        console.log(tempCat0.unitInformation);
-                    })
-                    this.allUnits.push(tempCat0);
-                }
-                if (i === 1){
-                    var tempCat1 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
-                    tempCat1.setCircle(64);
-                    tempCat1.setCollideWorldBounds(true);
-                    tempCat1.setBounce(1);
-                    tempCat1.setInteractive();
-                    tempCat1.unitInformation = this.catParty.currentTeam[i];
-                    this.physics.add.collider(tempCat1, blockedLayer);
-                    tempCat1.on('pointerover', () => {
-                        console.log(tempCat1.unitInformation);
-                    })
-                    this.allUnits.push(tempCat1);
-                }
-                if (i === 2){
-                    var tempCat2 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
-                    tempCat2.setCircle(64);
-                    tempCat2.setCollideWorldBounds(true);
-                    tempCat2.setBounce(1);
-                    tempCat2.setInteractive();
-                    tempCat2.unitInformation = this.catParty.currentTeam[i];
-                    this.physics.add.collider(tempCat2, blockedLayer);
-                    tempCat2.on('pointerover', () => {
-                        console.log(tempCat2.unitInformation);
-                    })
-                    this.allUnits.push(tempCat2);
-                }
-                if (i === 3){
-                    var tempCat3 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
-                    tempCat3.setCircle(64);
-                    tempCat3.setCollideWorldBounds(true);
-                    tempCat3.setBounce(1);
-                    tempCat3.setInteractive();
-                    tempCat3.unitInformation = this.catParty.currentTeam[i];
-                    this.physics.add.collider(tempCat3, blockedLayer);
-                    tempCat3.on('pointerover', () => {
-                        console.log(tempCat3.unitInformation);
-                    })
-                    this.allUnits.push(tempCat3);
-                }
-            }
+            this.spawnCats();
 
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Mecha Cat", "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
-            var tempEnemy = this.physics.add.image(750, 150, "mechaCatCircle"); 
-            tempEnemy.setCircle(64);
-            tempEnemy.setCollideWorldBounds(true);
-            tempEnemy.setBounce(1);
-            tempEnemy.setInteractive();
-            tempEnemy.unitInformation = enemyInformation;
-            this.physics.add.collider(tempEnemy, blockedLayer);
-            tempEnemy.on('pointerover', () => {
-                console.log(tempEnemy.unitInformation);
-            })
-            this.allUnits.push(tempEnemy);
-            
+            this.spawnEnemies(enemyInformation, 750, 150, "mechaCatCircle");
+
 
             //collide with all other units 
             for (var i = 0; i < this.allUnits.length; i++){
@@ -248,6 +185,78 @@ var WorldScene = new Phaser.Class({
         //some core logic goes in here, requires to be updated frame by frame such as cameras
 
     },
+
+    spawnEnemies: function(enemyInformation, x, y, name){
+
+        var tempEnemy = this.physics.add.image(x, y, name); 
+        tempEnemy.setCircle(64);
+        tempEnemy.setCollideWorldBounds(true);
+        tempEnemy.setBounce(1);
+        tempEnemy.setInteractive();
+        tempEnemy.unitInformation = enemyInformation;
+        this.physics.add.collider(tempEnemy, this.blockedLayer);
+        tempEnemy.on('pointerover', () => {
+            console.log(tempEnemy.unitInformation);
+        })
+        this.allUnits.push(tempEnemy);
+    },
+
+    spawnCats: function(){
+        for (var i = 0; i < this.catParty.currentTeam.length; i++){
+            if (i === 0){
+                var tempCat0 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                tempCat0.setCircle(64);
+                tempCat0.setCollideWorldBounds(true);
+                tempCat0.setBounce(1);
+                tempCat0.setInteractive();
+                tempCat0.unitInformation = this.catParty.currentTeam[i];
+                this.physics.add.collider(tempCat0, this.blockedLayer);
+                tempCat0.on('pointerover', () => {
+                    console.log(tempCat0.unitInformation);
+                })
+                this.allUnits.push(tempCat0);
+            }
+            if (i === 1){
+                var tempCat1 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                tempCat1.setCircle(64);
+                tempCat1.setCollideWorldBounds(true);
+                tempCat1.setBounce(1);
+                tempCat1.setInteractive();
+                tempCat1.unitInformation = this.catParty.currentTeam[i];
+                this.physics.add.collider(tempCat1, this.blockedLayer);
+                tempCat1.on('pointerover', () => {
+                    console.log(tempCat1.unitInformation);
+                })
+                this.allUnits.push(tempCat1);
+            }
+            if (i === 2){
+                var tempCat2 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                tempCat2.setCircle(64);
+                tempCat2.setCollideWorldBounds(true);
+                tempCat2.setBounce(1);
+                tempCat2.setInteractive();
+                tempCat2.unitInformation = this.catParty.currentTeam[i];
+                this.physics.add.collider(tempCat2, this.blockedLayer);
+                tempCat2.on('pointerover', () => {
+                    console.log(tempCat2.unitInformation);
+                })
+                this.allUnits.push(tempCat2);
+            }
+            if (i === 3){
+                var tempCat3 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                tempCat3.setCircle(64);
+                tempCat3.setCollideWorldBounds(true);
+                tempCat3.setBounce(1);
+                tempCat3.setInteractive();
+                tempCat3.unitInformation = this.catParty.currentTeam[i];
+                this.physics.add.collider(tempCat3, this.blockedLayer);
+                tempCat3.on('pointerover', () => {
+                    console.log(tempCat3.unitInformation);
+                })
+                this.allUnits.push(tempCat3);
+            }
+        }
+    }
 });
 
 class catParty {
