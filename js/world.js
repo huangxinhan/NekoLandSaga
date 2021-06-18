@@ -71,8 +71,8 @@ var BootScene = new Phaser.Class({
             });
         });
 
-        var text2 = this.add.text(185,
-            710, "LOAD", {
+        var text2 = this.add.text(145,
+            710, "CAT GACHA", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -133,6 +133,9 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0){
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
+            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!",3, [], 49, 32, 26, 5);
+            this.catParty.obtainNewCat(chefCat); 
+            this.catParty.swapCat(0, 0);
         }
         
     },
@@ -148,7 +151,6 @@ var WorldScene = new Phaser.Class({
             blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
         }
-
     },
 
     update: function () {
@@ -161,11 +163,20 @@ class catParty {
     constructor() {
         this.allCats = []; 
         this.currentTeam = [];
-        this.totalCoins = 0; 
+        this.totalCatFood = 0;
+    }
+
+    //search for a cat reference inside the all cats array and place it inside the current cat array
+    swapCat(indexCurrent, indexAllCats){
+        this.currentTeam[indexCurrent] = this.allCats[indexAllCats]; 
     }
 
     obtainNewCat(cat){
         this.allCats.push(cat);
+    }
+
+    obtainCatFood(amount){
+        this.totalCatFood += amount; 
     }
 
     
@@ -182,6 +193,15 @@ class Cat {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT;
+        this.status = null; //current status being affected 
+    }
+
+    removeStatus(){
+        this.status = null;
+    }
+
+    inflictStatus(status){
+        this.status = status;
     }
 }
 
@@ -195,10 +215,18 @@ class Enemy {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
+        this.status = null;
     }
 }
 
 class Skill {
+    constructor(name, description){
+        this.name = name;
+        this.description = description;
+    }
+}
+
+class Status {
     constructor(name, description){
         this.name = name;
         this.description = description;
