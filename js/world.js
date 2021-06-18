@@ -163,13 +163,58 @@ var WorldScene = new Phaser.Class({
             this.cameras.main.roundPixels = true;
             
             for (var i = 0; i < this.catParty.currentTeam.length; i++){
-                var tempCat = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
-                tempCat.setCircle(64);
-                tempCat.setCollideWorldBounds(true);
-                tempCat.setBounce(1);
-                tempCat.unitInformation = this.catParty.currentTeam[i];
-                this.physics.add.collider(tempCat, blockedLayer);
-                this.allUnits.push(tempCat);
+                if (i === 0){
+                    var tempCat0 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                    tempCat0.setCircle(64);
+                    tempCat0.setCollideWorldBounds(true);
+                    tempCat0.setBounce(1);
+                    tempCat0.setInteractive();
+                    tempCat0.unitInformation = this.catParty.currentTeam[i];
+                    this.physics.add.collider(tempCat0, blockedLayer);
+                    tempCat0.on('pointerover', () => {
+                        console.log(tempCat0.unitInformation);
+                    })
+                    this.allUnits.push(tempCat0);
+                }
+                if (i === 1){
+                    var tempCat1 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                    tempCat1.setCircle(64);
+                    tempCat1.setCollideWorldBounds(true);
+                    tempCat1.setBounce(1);
+                    tempCat1.setInteractive();
+                    tempCat1.unitInformation = this.catParty.currentTeam[i];
+                    this.physics.add.collider(tempCat1, blockedLayer);
+                    tempCat1.on('pointerover', () => {
+                        console.log(tempCat1.unitInformation);
+                    })
+                    this.allUnits.push(tempCat1);
+                }
+                if (i === 2){
+                    var tempCat2 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                    tempCat2.setCircle(64);
+                    tempCat2.setCollideWorldBounds(true);
+                    tempCat2.setBounce(1);
+                    tempCat2.setInteractive();
+                    tempCat2.unitInformation = this.catParty.currentTeam[i];
+                    this.physics.add.collider(tempCat2, blockedLayer);
+                    tempCat2.on('pointerover', () => {
+                        console.log(tempCat2.unitInformation);
+                    })
+                    this.allUnits.push(tempCat2);
+                }
+                if (i === 3){
+                    var tempCat3 = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                    tempCat3.setCircle(64);
+                    tempCat3.setCollideWorldBounds(true);
+                    tempCat3.setBounce(1);
+                    tempCat3.setInteractive();
+                    tempCat3.unitInformation = this.catParty.currentTeam[i];
+                    this.physics.add.collider(tempCat3, blockedLayer);
+                    tempCat3.on('pointerover', () => {
+                        console.log(tempCat3.unitInformation);
+                    })
+                    this.allUnits.push(tempCat3);
+                }
             }
 
             //enemy spawns for this current level
@@ -178,8 +223,12 @@ var WorldScene = new Phaser.Class({
             tempEnemy.setCircle(64);
             tempEnemy.setCollideWorldBounds(true);
             tempEnemy.setBounce(1);
+            tempEnemy.setInteractive();
             tempEnemy.unitInformation = enemyInformation;
             this.physics.add.collider(tempEnemy, blockedLayer);
+            tempEnemy.on('pointerover', () => {
+                console.log(tempEnemy.unitInformation);
+            })
             this.allUnits.push(tempEnemy);
             
 
