@@ -20,6 +20,12 @@ var BootScene = new Phaser.Class({
 
     preload: function () {
         this.load.image('tiles', 'assets/map/Mapset.png');
+        this.load.image('chefCat', 'assets/cats/chefCat.png');
+        this.load.image('chefCatCircle', 'assets/cats/chefCatCircle.png');
+        this.load.image('knightCat', 'assets/cats/knightCatCircle.png');
+        this.load.image('knightCatCircle', 'assets/cats/knightCatCircle.png');
+        this.load.image('mechaCat', 'assets/cats/mechaCat.png');
+        this.load.image('mechaCatCircle', 'assets/cats/mechaCatCircle.png');
     },
 
     create: function () {
@@ -127,15 +133,20 @@ var WorldScene = new Phaser.Class({
         }
         console.log(data);
         this.catParty = data.catParty;
+        this.allUnits = []; //the all units array stores the enemy and the cats
     },
 
     preload: function () {
         //load based on the level
         if (this.currentLevel === 0){
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!",3, [], 49, 32, 26, 5);
+            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!",3, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
             this.catParty.obtainNewCat(chefCat); 
             this.catParty.swapCat(0, 0);
+
+            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 3, [], 30, 50, 50,  8, "knightCat", "knightCatCircle");
+            this.catParty.obtainNewCat(knightCat);
+            this.catParty.swapCat(1, 1);
         }
         
     },
@@ -150,6 +161,27 @@ var WorldScene = new Phaser.Class({
             var blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
             blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
+            
+            for (var i = 0; i < this.catParty.currentTeam.length; i++){
+                var tempCat = this.physics.add.image(750 + i*200, 800, this.catParty.currentTeam[i].photoCircle);
+                tempCat.setCircle(64);
+                tempCat.setCollideWorldBounds(true);
+                tempCat.setBounce(1);
+                tempCat.unitInformation = this.catParty.currentTeam[i];
+                this.physics.add.collider(tempCat, blockedLayer);
+                this.allUnits.push(tempCat);
+            }
+
+            //collide with all other units 
+            for (var i = 0; i < this.allUnits.length; i++){
+                for (j = i; j < this.allUnits.length; j++){
+                    this.physics.add.collider(this.allUnits[i], this.allUnits[j]);
+                }
+            }
+
+            this.allUnits[0].setVelocity(150);
+            this.allUnits[1].setVelocity(100);
+
         }
     },
 
@@ -183,7 +215,7 @@ class catParty {
 }
 
 class Cat {
-    constructor(name, description, rarity, skillArray, HP, ATK, DEF, WT) {
+    constructor(name, description, rarity, skillArray, HP, ATK, DEF, WT, photo, photoCircle) {
         this.name = name; 
         this.description = description;
         this.rarity = rarity; 
@@ -194,6 +226,8 @@ class Cat {
         this.DEF = DEF;
         this.WT = WT;
         this.status = null; //current status being affected 
+        this.photo = photo; 
+        this.photoCircle = photoCircle;
     }
 
     removeStatus(){
