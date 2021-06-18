@@ -140,11 +140,11 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0){
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!",3, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
+            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!",4, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
             this.catParty.obtainNewCat(chefCat); 
             this.catParty.swapCat(0, 0);
 
-            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 3, [], 30, 50, 50,  8, "knightCat", "knightCatCircle");
+            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50,  8, "knightCat", "knightCatCircle");
             this.catParty.obtainNewCat(knightCat);
             this.catParty.swapCat(1, 1);
         }
@@ -172,6 +172,17 @@ var WorldScene = new Phaser.Class({
                 this.allUnits.push(tempCat);
             }
 
+            //enemy spawns for this current level
+            var enemyInformation = new Enemy("Mecha Cat", "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
+            var tempEnemy = this.physics.add.image(750, 150, "mechaCatCircle"); 
+            tempEnemy.setCircle(64);
+            tempEnemy.setCollideWorldBounds(true);
+            tempEnemy.setBounce(1);
+            tempEnemy.unitInformation = enemyInformation;
+            this.physics.add.collider(tempEnemy, blockedLayer);
+            this.allUnits.push(tempEnemy);
+            
+
             //collide with all other units 
             for (var i = 0; i < this.allUnits.length; i++){
                 for (j = i; j < this.allUnits.length; j++){
@@ -179,8 +190,7 @@ var WorldScene = new Phaser.Class({
                 }
             }
 
-            this.allUnits[0].setVelocity(150);
-            this.allUnits[1].setVelocity(100);
+            console.log(this.allUnits);
 
         }
     },
@@ -228,6 +238,7 @@ class Cat {
         this.status = null; //current status being affected 
         this.photo = photo; 
         this.photoCircle = photoCircle;
+        this.type = "cat";
     }
 
     removeStatus(){
@@ -250,6 +261,7 @@ class Enemy {
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
         this.status = null;
+        this.type = "enemy";
     }
 }
 
