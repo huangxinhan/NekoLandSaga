@@ -205,12 +205,19 @@ var WorldScene = new Phaser.Class({
     },
 
     redraw: function () {
-        if (this.hideLine === false) {
+        if (this.hideLine === false && this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) <= 500) {
             this.graphics.clear();
             this.graphics.strokeLineShape(this.line);
         }
+        if (this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) > 500){
+            this.graphics.clear();
+        }
     },
 
+    ManhattanDistance: function(x1, y1, x2, y2){
+        var distance = Math.abs(x2- x1) + Math.abs(y2 - y1);
+        return distance;
+    },
 
     nextTurn: function () {
         //main turn system function
