@@ -177,13 +177,65 @@ var WorldScene = new Phaser.Class({
             }
 
             console.log(this.allUnits);
+            //turn counter
+            this.index = -1; 
+            this.currentCat = null;
+            this.currentEnemy = null; 
+            this.input.on('pointerdown', ()=> {
+                console.log(this.allUnits[this.index].unitInformation.name);
+                this.nextTurn();
+            });
+            this.nextTurn();
 
         }
     },
 
-    update: function () {
-        //some core logic goes in here, requires to be updated frame by frame such as cameras
+    nextTurn: function() {
+        //main turn system function
+        if (this.checkEndBattle()){
+            this.endBattle();
+            return;
+        }
 
+        do {
+            this.index++;
+            if (this.index >= this.allUnits.length){
+                this.index = 0;
+            }
+        } while (!this.allUnits[this.index].unitInformation.status === "dead")
+
+        //if player
+        if (this.allUnits[this.index].type === "cat"){
+            this.currentCat = this.allUnits[this.index];
+        }
+        //else it is the enemy
+        else{
+            this.currentEnemy = this.allUnits[this.index];
+        }
+
+        return;
+
+    },
+
+    checkEndBattle: function(){
+        var deathCounter = 0;
+        for (var i = 0; i < this.allUnits.length; i++){
+            if (this.allUnits[i].unitInformation.HP <= 0 && this.allUnits[i].unitInformation.type === "cat"){
+                deathCounter++;
+            }   
+        }
+        if (deathCounter === this.catParty.currentTeam.length){
+            return true;
+        }
+        return false;
+    },
+
+    endBattle: function(){
+
+    },
+
+    update: function () {
+        // //some core logic goes in here, requires to be updated frame by frame such as cameras
     },
 
     spawnEnemies: function(enemyInformation, x, y, name){
