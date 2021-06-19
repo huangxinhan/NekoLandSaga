@@ -170,7 +170,7 @@ var WorldScene = new Phaser.Class({
             //collide with all other units 
             for (var i = 0; i < this.allUnits.length; i++) {
                 for (j = i; j < this.allUnits.length; j++) {
-                    this.physics.add.collider(this.allUnits[i], this.allUnits[j]);
+                    this.physics.add.collider(this.allUnits[i], this.allUnits[j]); //need an event handler method here for damage calcs
                 }
             }
 
@@ -181,8 +181,9 @@ var WorldScene = new Phaser.Class({
             this.currentEnemy = null;
             this.input.on('pointerdown', () => {
                 console.log(this.allUnits[this.index].unitInformation.name);
-                this.nextTurn();
+                this.fireCat(); //will be changed to this.fireCat();
             });
+
             this.nextTurn();
 
             this.hideLine = false;
@@ -212,6 +213,18 @@ var WorldScene = new Phaser.Class({
         if (this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) > 500){
             this.graphics.clear();
         }
+    },
+
+    fireCat: function(){
+        var manhattanDistance = this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y);
+        //can reach up to 250 speed in total 
+        if (manhattanDistance > 500){
+            return; //don't fire if that is the acase
+        }
+        var power = manhattanDistance * 1.5; 
+        this.physics.moveToObject(this.currentCat, this.input.activePointer, power);
+
+        
     },
 
     ManhattanDistance: function(x1, y1, x2, y2){
@@ -278,6 +291,8 @@ var WorldScene = new Phaser.Class({
         tempEnemy.setCollideWorldBounds(true);
         tempEnemy.setBounce(1);
         tempEnemy.setInteractive();
+        tempEnemy.setMass(enemyInformation.WT)
+        tempEnemy.setDrag(100);
         tempEnemy.unitInformation = enemyInformation;
         this.physics.add.collider(tempEnemy, this.blockedLayer);
         tempEnemy.on('pointerover', () => {
@@ -285,6 +300,7 @@ var WorldScene = new Phaser.Class({
         })
         this.allUnits.push(tempEnemy);
     },
+
 
     spawnCats: function () {
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
@@ -294,6 +310,8 @@ var WorldScene = new Phaser.Class({
                 tempCat0.setCollideWorldBounds(true);
                 tempCat0.setBounce(1);
                 tempCat0.setInteractive();
+                tempCat0.setMass(this.catParty.currentTeam[i].WT)
+                tempCat0.setDrag(100);
                 tempCat0.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat0, this.blockedLayer);
                 tempCat0.on('pointerover', () => {
@@ -307,6 +325,8 @@ var WorldScene = new Phaser.Class({
                 tempCat1.setCollideWorldBounds(true);
                 tempCat1.setBounce(1);
                 tempCat1.setInteractive();
+                tempCat1.setMass(this.catParty.currentTeam[i].WT);
+                tempCat1.setDrag(100);
                 tempCat1.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat1, this.blockedLayer);
                 tempCat1.on('pointerover', () => {
@@ -320,7 +340,9 @@ var WorldScene = new Phaser.Class({
                 tempCat2.setCollideWorldBounds(true);
                 tempCat2.setBounce(1);
                 tempCat2.setInteractive();
+                tempCat2.setMass(this.catParty.currentTeam[i].WT)
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
+                tempCat2.setDrag(100);
                 this.physics.add.collider(tempCat2, this.blockedLayer);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
@@ -333,7 +355,9 @@ var WorldScene = new Phaser.Class({
                 tempCat3.setCollideWorldBounds(true);
                 tempCat3.setBounce(1);
                 tempCat3.setInteractive();
+                tempCat3.setMass(this.catParty.currentTeam[i].WT)
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
+                tempCat3.setDrag(100);
                 this.physics.add.collider(tempCat3, this.blockedLayer);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
