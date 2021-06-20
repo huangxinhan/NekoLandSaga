@@ -135,7 +135,6 @@ var WorldScene = new Phaser.Class({
 
         //move phase active, indicating all cats are now moving
         this.movePhase = false;
-        this.isColliding = false;
     },
 
     preload: function () {
@@ -292,22 +291,15 @@ var WorldScene = new Phaser.Class({
 
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
-        if (this.isColliding == false && this.movePhase == true && Math.floor(this.currentCat.body.velocity.x < 1) && Math.floor(this.currentCat.body.velocity.y < 1)) {
-            this.sleep(2000).then(() => {
-                if (this.movePhase == true && Math.floor(this.currentCat.body.velocity.x < 1) && Math.floor(this.currentCat.body.velocity.y < 1)) {
-                    console.log("its now zero");
-                    this.movePhase = false;
-                }
-                else{
-                    console.log("that was a fluke!");
-                }
-            });
-
+        if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y ))< 1)) {
+            console.log(Math.abs(Math.floor(this.currentCat.body.velocity.x)));
+            console.log(Math.abs(Math.floor(this.currentCat.body.velocity.y)));
+            console.log("its now zero");
+            this.movePhase = false;
         }
 
-        if (this.isColliding == true){
-            this.isColliding = false;
-        }
+
+        
     },
 
     spawnEnemies: function (enemyInformation, x, y, name) {
@@ -328,7 +320,7 @@ var WorldScene = new Phaser.Class({
     },
 
     wallCollision: function(){
-        this.isColliding = true;
+        console.log(this.currentCat.body.velocity);
     },
 
 
