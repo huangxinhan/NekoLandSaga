@@ -141,6 +141,8 @@ var WorldScene = new Phaser.Class({
         this.skillPhase = false; 
         //enemyphase 
         this.enemyPhase = false;
+        //amount of catfood 
+        this.catFoodGained = 0;
     },
 
     preload: function () {
@@ -195,7 +197,7 @@ var WorldScene = new Phaser.Class({
                 }
             });
 
-            this.nextTurn();
+    
 
             this.hideLine = false;
             this.graphics = this.add.graphics({
@@ -231,6 +233,20 @@ var WorldScene = new Phaser.Class({
                     this.skipTurn();
                 }
             });
+
+            this.announcementText = this.add.text(525, 50, "", 
+                {
+                    color: "#000000",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+            });
+
+            this.nextTurn();
 
         }
     },
@@ -281,6 +297,7 @@ var WorldScene = new Phaser.Class({
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
+            this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn")
         }
         //else it is the enemy
         else {
@@ -290,6 +307,7 @@ var WorldScene = new Phaser.Class({
             //temporarily forget about enemy AI, make enemy phase true; 
             this.enemyPhase = true;
             this.enemyPhase = false;
+            this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn")
             this.nextTurn(); 
         }
 
