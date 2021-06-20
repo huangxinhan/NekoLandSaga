@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.GRAPHICS,
     parent: 'content',
-    width: 1280,
+    width: 1580,
     height: 964,
     roundPixels: true,
     physics: {

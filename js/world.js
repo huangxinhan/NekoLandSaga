@@ -138,11 +138,13 @@ var WorldScene = new Phaser.Class({
         //move phase active, indicating all cats are now moving
         this.movePhase = false;
         //skill phase active, indicating that the current cat can use a skill
-        this.skillPhase = false; 
+        this.skillPhase = false;
         //enemyphase 
         this.enemyPhase = false;
         //amount of catfood 
         this.catFoodGained = 0;
+        //whether or not unit is colliding, limits the amount of damage delt at one time 
+        this.isColliding = false;
     },
 
     preload: function () {
@@ -179,11 +181,7 @@ var WorldScene = new Phaser.Class({
 
 
             //collide with all other units 
-            for (var i = 0; i < this.allUnits.length; i++) {
-                for (j = i; j < this.allUnits.length; j++) {
-                    this.physics.add.collider(this.allUnits[i], this.allUnits[j]); //need an event handler method here for damage calcs
-                }
-            }
+            this.setUnitCollision();
 
             console.log(this.allUnits);
             //turn counter
@@ -197,7 +195,7 @@ var WorldScene = new Phaser.Class({
                 }
             });
 
-    
+
 
             this.hideLine = false;
             this.graphics = this.add.graphics({
@@ -218,38 +216,77 @@ var WorldScene = new Phaser.Class({
             this.useSkillButton = this.physics.add.image(1150, 800, 'useSkill');
             this.useSkillButton.setInteractive();
             this.useSkillButton.visible = false;
-            this.useSkillButton.on('pointerdown', ()=> {
-                if (this.skillPhase === true){
+            this.useSkillButton.on('pointerdown', () => {
+                if (this.skillPhase === true) {
                     this.useSkill();
                 }
-                
+
             });
 
             this.skipTurnButton = this.physics.add.image(1150, 900, 'skipTurn');
             this.skipTurnButton.setInteractive();
             this.skipTurnButton.visible = false;
-            this.skipTurnButton.on('pointerdown', ()=> {
-                if (this.skillPhase === true){
+            this.skipTurnButton.on('pointerdown', () => {
+                if (this.skillPhase === true) {
                     this.skipTurn();
                 }
             });
 
-            this.announcementText = this.add.text(525, 50, "", 
-                {
-                    color: "#000000",
-                    align: "center",
-                    fontWeight: 'bold',
-                    font: '32px Arial',
-                    wordWrap: {
-                        width: 1000,
-                        useAdvancedWrap: true
-                    }
+            this.announcementText = this.add.text(500, 50, "", {
+                color: "#000000",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 1000,
+                    useAdvancedWrap: true
+                }
             });
 
             this.nextTurn();
 
         }
     },
+
+    unitCollision: function (unit1, unit2) {
+
+        if (unit1.unitInformation.type === unit2.unitInformation.type) {
+            return; //nothing happens 
+        } else if (this.isColliding === false) {
+            //we do calculations here for damage delt 
+            if (this.movePhase === true) {
+                //if the player is moving, player deals dmg to enemy 
+                if (unit1.unitInformation.type === "cat") {
+                    //then deal dmg to unit2
+                    console.log("damage delt!!");
+                } else if (unit2.unitInformation.type === "cat") {
+                    //then deal dmg to unit1
+                    console.log("damage delt!!");
+                }
+                this.isColliding = true;
+            } else if (this.enemyPhase === true) {
+                //if the enemy is moving, dmg to be delt to the player
+                if (unit1.unitInformation.type === "enemy") {
+                    //then deal dmg to unit 2
+                    console.log("damage delt!!");
+                } else if (unit2.unitInformation.type === "enemy") {
+                    //then deal dmg to unit 1 
+                    console.log("damage delt!!");
+                }
+                this.isColliding = true;
+            }
+        }
+    },
+
+    setUnitCollision: function () {
+        //collide with all other units 
+        for (var i = 0; i < this.allUnits.length; i++) {
+            for (j = i; j < this.allUnits.length; j++) {
+                this.physics.add.collider(this.allUnits[i], this.allUnits[j], this.unitCollision, false, this); //need an event handler method here for damage calcs
+            }
+        }
+    },
+
 
     redraw: function () {
         if (this.hideLine === false && this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) <= 500) {
@@ -308,21 +345,29 @@ var WorldScene = new Phaser.Class({
             this.enemyPhase = true;
             this.enemyPhase = false;
             this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn")
-            this.nextTurn(); 
+            this.nextTurn();
         }
 
         return;
 
     },
 
-    useSkill: function() {
+    useSkill: function () {
         console.log("used skill");
-        this.sleep(3000).then(() => {this.skillPhase = false; this.nextTurn();});
+        this.announcementText.setText(this.currentCat.unitInformation.name + " used a skill!")
+        this.sleep(3000).then(() => {
+            this.skillPhase = false;
+            this.nextTurn();
+        });
     },
 
-    skipTurn: function() {
+    skipTurn: function () {
         console.log("turn skipped");
-        this.sleep(3000).then(() => {this.skillPhase = false; this.nextTurn();});
+        this.announcementText.setText(this.currentCat.unitInformation.name + " skips its turn!")
+        this.sleep(3000).then(() => {
+            this.skillPhase = false;
+            this.nextTurn();
+        });
     },
 
     checkEndBattle: function () {
@@ -348,21 +393,22 @@ var WorldScene = new Phaser.Class({
 
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
-        if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y ))< 1)) {
+        if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
             console.log("its now zero");
+            this.announcementText.setText(this.currentCat.unitInformation.name + " is ready to use a skill!");
             this.movePhase = false;
             this.skillPhase = true;
+            this.isColliding = false;
         }
-        
-        if (this.movePhase == true || this.skillPhase == true){
+
+        if (this.movePhase == true || this.skillPhase == true) {
             this.graphics.clear();
         }
 
-        if (this.skillPhase == true){
+        if (this.skillPhase == true) {
             this.useSkillButton.visible = true;
             this.skipTurnButton.visible = true;
-        }
-        else{
+        } else {
             this.useSkillButton.visible = false;
             this.skipTurnButton.visible = false;
         }
@@ -386,7 +432,7 @@ var WorldScene = new Phaser.Class({
         this.allUnits.push(tempEnemy);
     },
 
-    wallCollision: function(){
+    wallCollision: function () {
         console.log(this.currentCat.body.velocity);
     },
 
@@ -402,7 +448,7 @@ var WorldScene = new Phaser.Class({
                 tempCat0.setMass(this.catParty.currentTeam[i].WT)
                 tempCat0.setDrag(100);
                 tempCat0.unitInformation = this.catParty.currentTeam[i];
-                this.physics.add.collider(tempCat0, this.blockedLayer,this.wallCollision, false, this);
+                this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
                 })
@@ -417,7 +463,7 @@ var WorldScene = new Phaser.Class({
                 tempCat1.setMass(this.catParty.currentTeam[i].WT);
                 tempCat1.setDrag(100);
                 tempCat1.unitInformation = this.catParty.currentTeam[i];
-                this.physics.add.collider(tempCat1, this.blockedLayer,this.wallCollision, false, this);
+                this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
                 })
@@ -432,7 +478,7 @@ var WorldScene = new Phaser.Class({
                 tempCat2.setMass(this.catParty.currentTeam[i].WT)
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
                 tempCat2.setDrag(100);
-                this.physics.add.collider(tempCat2, this.blockedLayer,this.wallCollision, false, this);
+                this.physics.add.collider(tempCat2, this.blockedLayer, this.wallCollision, false, this);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
                 })
@@ -447,7 +493,7 @@ var WorldScene = new Phaser.Class({
                 tempCat3.setMass(this.catParty.currentTeam[i].WT)
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
                 tempCat3.setDrag(100);
-                this.physics.add.collider(tempCat3, this.blockedLayer,this.wallCollision, false, this);
+                this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
                 })
