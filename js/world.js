@@ -132,6 +132,10 @@ var WorldScene = new Phaser.Class({
         console.log(data);
         this.catParty = data.catParty;
         this.allUnits = []; //the all units array stores the enemy and the cats
+
+        //move phase active, indicating all cats are now moving
+        this.movePhase = false;
+        this.isColliding = false;
     },
 
     preload: function () {
@@ -142,7 +146,7 @@ var WorldScene = new Phaser.Class({
             this.catParty.obtainNewCat(chefCat);
             this.catParty.swapCat(0, 0);
 
-            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 8, "knightCat", "knightCatCircle");
+            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
             this.catParty.obtainNewCat(knightCat);
             this.catParty.swapCat(1, 1);
         }
@@ -181,7 +185,9 @@ var WorldScene = new Phaser.Class({
             this.currentEnemy = null;
             this.input.on('pointerdown', () => {
                 console.log(this.allUnits[this.index].unitInformation.name);
-                this.fireCat(); //will be changed to this.fireCat();
+                if (this.movePhase === false) {
+                    this.fireCat(); //will be changed to this.fireCat();
+                }
             });
 
             this.nextTurn();
@@ -210,25 +216,25 @@ var WorldScene = new Phaser.Class({
             this.graphics.clear();
             this.graphics.strokeLineShape(this.line);
         }
-        if (this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) > 500){
+        if (this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) > 500) {
             this.graphics.clear();
         }
     },
 
-    fireCat: function(){
+    fireCat: function () {
         var manhattanDistance = this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y);
         //can reach up to 250 speed in total 
-        if (manhattanDistance > 500){
+        if (manhattanDistance > 500) {
             return; //don't fire if that is the acase
         }
-        var power = manhattanDistance * 1.5; 
+        var power = manhattanDistance * 1.5;
         this.physics.moveToObject(this.currentCat, this.input.activePointer, power);
-
-        
+        //update checking if taking turn
+        this.movePhase = true;
     },
 
-    ManhattanDistance: function(x1, y1, x2, y2){
-        var distance = Math.abs(x2- x1) + Math.abs(y2 - y1);
+    ManhattanDistance: function (x1, y1, x2, y2) {
+        var distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
         return distance;
     },
 
@@ -280,8 +286,28 @@ var WorldScene = new Phaser.Class({
 
     },
 
+    sleep: function (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
+        if (this.isColliding == false && this.movePhase == true && Math.floor(this.currentCat.body.velocity.x < 1) && Math.floor(this.currentCat.body.velocity.y < 1)) {
+            this.sleep(2000).then(() => {
+                if (this.movePhase == true && Math.floor(this.currentCat.body.velocity.x < 1) && Math.floor(this.currentCat.body.velocity.y < 1)) {
+                    console.log("its now zero");
+                    this.movePhase = false;
+                }
+                else{
+                    console.log("that was a fluke!");
+                }
+            });
+
+        }
+
+        if (this.isColliding == true){
+            this.isColliding = false;
+        }
     },
 
     spawnEnemies: function (enemyInformation, x, y, name) {
@@ -301,6 +327,10 @@ var WorldScene = new Phaser.Class({
         this.allUnits.push(tempEnemy);
     },
 
+    wallCollision: function(){
+        this.isColliding = true;
+    },
+
 
     spawnCats: function () {
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
@@ -313,7 +343,7 @@ var WorldScene = new Phaser.Class({
                 tempCat0.setMass(this.catParty.currentTeam[i].WT)
                 tempCat0.setDrag(100);
                 tempCat0.unitInformation = this.catParty.currentTeam[i];
-                this.physics.add.collider(tempCat0, this.blockedLayer);
+                this.physics.add.collider(tempCat0, this.blockedLayer,this.wallCollision, false, this);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
                 })
@@ -328,7 +358,7 @@ var WorldScene = new Phaser.Class({
                 tempCat1.setMass(this.catParty.currentTeam[i].WT);
                 tempCat1.setDrag(100);
                 tempCat1.unitInformation = this.catParty.currentTeam[i];
-                this.physics.add.collider(tempCat1, this.blockedLayer);
+                this.physics.add.collider(tempCat1, this.blockedLayer,this.wallCollision, false, this);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
                 })
@@ -343,7 +373,7 @@ var WorldScene = new Phaser.Class({
                 tempCat2.setMass(this.catParty.currentTeam[i].WT)
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
                 tempCat2.setDrag(100);
-                this.physics.add.collider(tempCat2, this.blockedLayer);
+                this.physics.add.collider(tempCat2, this.blockedLayer,this.wallCollision, false, this);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
                 })
@@ -358,7 +388,7 @@ var WorldScene = new Phaser.Class({
                 tempCat3.setMass(this.catParty.currentTeam[i].WT)
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
                 tempCat3.setDrag(100);
-                this.physics.add.collider(tempCat3, this.blockedLayer);
+                this.physics.add.collider(tempCat3, this.blockedLayer,this.wallCollision, false, this);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
                 })
