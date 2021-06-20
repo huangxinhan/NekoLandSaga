@@ -19,6 +19,8 @@ var BootScene = new Phaser.Class({
 
     preload: function () {
         this.load.image('tiles', 'assets/map/Mapset.png');
+        this.load.image('useSkill', 'assets/text/useSkill.png');
+        this.load.image('skipTurn', 'assets/text/skipTurn.png');
         this.load.image('chefCat', 'assets/cats/chefCat.png');
         this.load.image('chefCatCircle', 'assets/cats/chefCatCircle.png');
         this.load.image('knightCat', 'assets/cats/knightCatCircle.png');
@@ -135,6 +137,10 @@ var WorldScene = new Phaser.Class({
 
         //move phase active, indicating all cats are now moving
         this.movePhase = false;
+        //skill phase active, indicating that the current cat can use a skill
+        this.skillPhase = false; 
+        //enemyphase 
+        this.enemyPhase = false;
     },
 
     preload: function () {
@@ -184,7 +190,7 @@ var WorldScene = new Phaser.Class({
             this.currentEnemy = null;
             this.input.on('pointerdown', () => {
                 console.log(this.allUnits[this.index].unitInformation.name);
-                if (this.movePhase === false) {
+                if (this.movePhase === false && this.skillPhase === false && this.enemyPhase === false) {
                     this.fireCat(); //will be changed to this.fireCat();
                 }
             });
@@ -206,6 +212,25 @@ var WorldScene = new Phaser.Class({
             });
 
             this.redraw();
+
+            this.useSkillButton = this.physics.add.image(1150, 800, 'useSkill');
+            this.useSkillButton.setInteractive();
+            this.useSkillButton.visible = false;
+            this.useSkillButton.on('pointerdown', ()=> {
+                if (this.skillPhase === true){
+                    this.useSkill();
+                }
+                
+            });
+
+            this.skipTurnButton = this.physics.add.image(1150, 900, 'skipTurn');
+            this.skipTurnButton.setInteractive();
+            this.skipTurnButton.visible = false;
+            this.skipTurnButton.on('pointerdown', ()=> {
+                if (this.skillPhase === true){
+                    this.skipTurn();
+                }
+            });
 
         }
     },
@@ -262,10 +287,24 @@ var WorldScene = new Phaser.Class({
             this.graphics.clear();
             this.hideLine = true;
             this.currentEnemy = this.allUnits[this.index];
+            //temporarily forget about enemy AI, make enemy phase true; 
+            this.enemyPhase = true;
+            this.enemyPhase = false;
+            this.nextTurn(); 
         }
 
         return;
 
+    },
+
+    useSkill: function() {
+        console.log("used skill");
+        this.sleep(3000).then(() => {this.skillPhase = false; this.nextTurn();});
+    },
+
+    skipTurn: function() {
+        console.log("turn skipped");
+        this.sleep(3000).then(() => {this.skillPhase = false; this.nextTurn();});
     },
 
     checkEndBattle: function () {
@@ -292,14 +331,20 @@ var WorldScene = new Phaser.Class({
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
         if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y ))< 1)) {
-            console.log(Math.abs(Math.floor(this.currentCat.body.velocity.x)));
-            console.log(Math.abs(Math.floor(this.currentCat.body.velocity.y)));
             console.log("its now zero");
             this.movePhase = false;
+            this.skillPhase = true;
+        }
+        
+        if (this.movePhase == true || this.skillPhase == true){
+            this.graphics.clear();
         }
 
+        if (this.skillPhase == true){
+            this.useSkillButton.visible = true;
+            this.skipTurnButton.visible = true;
+        }
 
-        
     },
 
     spawnEnemies: function (enemyInformation, x, y, name) {
