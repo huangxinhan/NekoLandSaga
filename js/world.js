@@ -344,6 +344,10 @@ var WorldScene = new Phaser.Class({
             this.useSkillButton.visible = true;
             this.skipTurnButton.visible = true;
         }
+        else{
+            this.useSkillButton.visible = false;
+            this.skipTurnButton.visible = false;
+        }
 
     },
 
