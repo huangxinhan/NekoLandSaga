@@ -27,6 +27,7 @@ var BootScene = new Phaser.Class({
         this.load.image('knightCatCircle', 'assets/cats/knightCatCircle.png');
         this.load.image('mechaCat', 'assets/cats/mechaCat.png');
         this.load.image('mechaCatCircle', 'assets/cats/mechaCatCircle.png');
+        this.load.image('sideMenu', 'assets/text/sideMenu.png')
     },
 
     create: function () {
@@ -213,7 +214,9 @@ var WorldScene = new Phaser.Class({
 
             this.redraw();
 
-            this.useSkillButton = this.physics.add.image(1150, 800, 'useSkill');
+            this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
+
+            this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
             this.useSkillButton.setInteractive();
             this.useSkillButton.visible = false;
             this.useSkillButton.on('pointerdown', () => {
@@ -223,7 +226,7 @@ var WorldScene = new Phaser.Class({
 
             });
 
-            this.skipTurnButton = this.physics.add.image(1150, 900, 'skipTurn');
+            this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
             this.skipTurnButton.setInteractive();
             this.skipTurnButton.visible = false;
             this.skipTurnButton.on('pointerdown', () => {
@@ -428,12 +431,33 @@ var WorldScene = new Phaser.Class({
         this.physics.add.collider(tempEnemy, this.blockedLayer);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
-        })
+        });
+        tempEnemy.damageText = this.add.text(500, 50, "234", {
+            color: "#FF0000",
+            align: "center",
+            fontWeight: 'bold',
+            font: '32px Arial',
+            wordWrap: {
+                width: 1000,
+                useAdvancedWrap: true
+            }
+        }).visible = false;
+
+        tempEnemy.healText = this.add.text(500, 50, "234", {
+            color: "#00FF00",
+            align: "center",
+            fontWeight: 'bold',
+            font: '32px Arial',
+            wordWrap: {
+                width: 1000,
+                useAdvancedWrap: true
+            }
+        }).visible = false;
         this.allUnits.push(tempEnemy);
     },
 
     wallCollision: function () {
-        console.log(this.currentCat.body.velocity);
+        //console.log(this.currentCat.body.velocity);
     },
 
 
@@ -451,7 +475,28 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
-                })
+                });
+                tempCat0.damageText = this.add.text(500, 50, "234", {
+                    color: "#FF0000",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
+
+                tempCat0.healText = this.add.text(500, 50, "234", {
+                    color: "#00FF00",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
                 this.allUnits.push(tempCat0);
             }
             if (i === 1) {
@@ -466,7 +511,28 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
-                })
+                });
+                tempCat1.damageText = this.add.text(500, 50, "234", {
+                    color: "#FF0000",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
+
+                tempCat1.healText = this.add.text(500, 50, "234", {
+                    color: "#00FF00",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
                 this.allUnits.push(tempCat1);
             }
             if (i === 2) {
@@ -482,6 +548,27 @@ var WorldScene = new Phaser.Class({
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
                 })
+                tempCat2.damageText = this.add.text(500, 50, "234", {
+                    color: "#FF0000",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
+
+                tempCat2.healText = this.add.text(500, 50, "234", {
+                    color: "#00FF00",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
                 this.allUnits.push(tempCat2);
             }
             if (i === 3) {
@@ -496,7 +583,28 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
-                })
+                });
+                tempCat3.damageText = this.add.text(500, 50, "234", {
+                    color: "#FF0000",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
+
+                tempCat3.healText = this.add.text(500, 50, "234", {
+                    color: "#00FF00",
+                    align: "center",
+                    fontWeight: 'bold',
+                    font: '32px Arial',
+                    wordWrap: {
+                        width: 1000,
+                        useAdvancedWrap: true
+                    }
+                }).visible = false;
                 this.allUnits.push(tempCat3);
             }
         }
