@@ -216,6 +216,18 @@ var WorldScene = new Phaser.Class({
 
             this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
 
+            this.sideMenuText = this.add.text(1300, 25, "", {
+                color: "#FFFFFF",
+                align: "left",
+                fontWeight: 'bold',
+                font: '28px Arial',
+                wordWrap: {
+                    width: 275,
+                    useAdvancedWrap: true
+                }
+            });
+
+
             this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
             this.useSkillButton.setInteractive();
             this.useSkillButton.visible = false;
@@ -406,7 +418,7 @@ var WorldScene = new Phaser.Class({
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
         if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
             console.log("its now zero");
-            this.announcementText.setText(this.currentCat.unitInformation.name + " is ready to use a skill!");
+            this.announcementText.setText(this.currentCat.unitInformation.name + " 's skill is ready");
             this.movePhase = false;
             this.skillPhase = true;
             this.isColliding = false;
@@ -439,6 +451,15 @@ var WorldScene = new Phaser.Class({
         this.physics.add.collider(tempEnemy, this.blockedLayer);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
+            this.sideMenuText.setText("Name: " + tempEnemy.unitInformation.name + "\n" + "\n" +
+            "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" +
+            "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" +
+            //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+            "Skills: " + "\n" + "\n" +
+            "Attack: " + tempEnemy.unitInformation.ATK + "\n" + "\n" +
+            "Defense: " + tempEnemy.unitInformation.DEF + "\n" +  "\n" +
+            "Weight: " + tempEnemy.unitInformation.WT + "\n" + "\n" +
+            "Status: " + tempEnemy.unitInformation.status + "\n")
         });
         tempEnemy.damageText = this.add.text(500, 50, "234", {
             color: "#FF0000",
@@ -483,6 +504,16 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
+                    this.sideMenuText.setText("Name: " + tempCat0.unitInformation.name + "\n" + "\n" +
+                    "Level: " + tempCat0.unitInformation.level + "\n" + "\n" +
+                    "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
+                    "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" +
+                    //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                    "Skills: " + "\n" + "\n" +
+                    "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
+                    "Defense: " + tempCat0.unitInformation.DEF + "\n" +  "\n" +
+                    "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
+                    "Status: " + tempCat0.unitInformation.status + "\n")
                 });
                 tempCat0.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -519,6 +550,16 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
+                    this.sideMenuText.setText("Name: " + tempCat1.unitInformation.name + "\n" + "\n" +
+                    "Level: " + tempCat1.unitInformation.level + "\n" + "\n" +
+                    "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
+                    "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" +
+                    //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                    "Skills: " + "\n" + "\n" +
+                    "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
+                    "Defense: " + tempCat1.unitInformation.DEF + "\n" +  "\n" +
+                    "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
+                    "Status: " + tempCat1.unitInformation.status + "\n")
                 });
                 tempCat1.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -555,6 +596,16 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat2, this.blockedLayer, this.wallCollision, false, this);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
+                    this.sideMenuText.setText("Name: " + tempCat2.unitInformation.name + "\n" + "\n" +
+                    "Level: " + tempCat2.unitInformation.level + "\n" + "\n" +
+                    "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
+                    "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" +
+                    //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                    "Skills: " + "\n" + "\n" +
+                    "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
+                    "Defense: " + tempCat2.unitInformation.DEF + "\n" +  "\n" +
+                    "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
+                    "Status: " + tempCat2.unitInformation.status + "\n")
                 })
                 tempCat2.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -591,6 +642,16 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
+                    this.sideMenuText.setText("Name: " + tempCat3.unitInformation.name + "\n" + "\n" +
+                    "Level: " + tempCat3.unitInformation.level + "\n" + "\n" +
+                    "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
+                    "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" +
+                    //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                    "Skills: " + "\n" + "\n" +
+                    "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
+                    "Defense: " + tempCat3.unitInformation.DEF + "\n" +  "\n" +
+                    "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
+                    "Status: " + tempCat3.unitInformation.status + "\n")
                 });
                 tempCat3.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -654,7 +715,7 @@ class Cat {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT;
-        this.status = null; //current status being affected 
+        this.status = "none"; //current status being affected 
         this.photo = photo;
         this.photoCircle = photoCircle;
         this.type = "cat";
@@ -681,7 +742,7 @@ class Enemy {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
-        this.status = null;
+        this.status = "none";
         this.type = "enemy";
     }
 }
