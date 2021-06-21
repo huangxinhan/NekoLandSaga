@@ -152,11 +152,11 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0) {
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-            var chefCat = new Cat("Chef Cat", "The best chef in town, makes the best cat food!", 4, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
+            var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
             this.catParty.obtainNewCat(chefCat);
             this.catParty.swapCat(0, 0);
 
-            var knightCat = new Cat('Knight Cat', "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
+            var knightCat = new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
             this.catParty.obtainNewCat(knightCat);
             this.catParty.swapCat(1, 1);
         }
@@ -177,7 +177,7 @@ var WorldScene = new Phaser.Class({
             this.spawnCats();
 
             //enemy spawns for this current level
-            var enemyInformation = new Enemy("Mecha Cat", "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
+            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
             this.spawnEnemies(enemyInformation, 750, 150, "mechaCatCircle");
 
 
@@ -262,9 +262,13 @@ var WorldScene = new Phaser.Class({
                 if (unit1.unitInformation.type === "cat") {
                     //then deal dmg to unit2
                     console.log("damage delt!!");
+                    console.log(unit1.unitInformation);
+                    console.log(unit2.unitInformation);
                 } else if (unit2.unitInformation.type === "cat") {
                     //then deal dmg to unit1
                     console.log("damage delt!!");
+                    console.log(unit1.unitInformation);
+                    console.log(unit2.unitInformation);
                 }
                 this.isColliding = true;
             } else if (this.enemyPhase === true) {
@@ -272,9 +276,13 @@ var WorldScene = new Phaser.Class({
                 if (unit1.unitInformation.type === "enemy") {
                     //then deal dmg to unit 2
                     console.log("damage delt!!");
+                    console.log(unit1.unitInformation);
+                    console.log(unit2.unitInformation);
                 } else if (unit2.unitInformation.type === "enemy") {
                     //then deal dmg to unit 1 
                     console.log("damage delt!!");
+                    console.log(unit1.unitInformation);
+                    console.log(unit2.unitInformation);
                 }
                 this.isColliding = true;
             }
@@ -635,8 +643,9 @@ class catParty {
 }
 
 class Cat {
-    constructor(name, description, rarity, skillArray, HP, ATK, DEF, WT, photo, photoCircle) {
+    constructor(name, level, description, rarity, skillArray, HP, ATK, DEF, WT, photo, photoCircle) {
         this.name = name;
+        this.level = level;
         this.description = description;
         this.rarity = rarity;
         this.skillArray = skillArray;
@@ -649,6 +658,7 @@ class Cat {
         this.photo = photo;
         this.photoCircle = photoCircle;
         this.type = "cat";
+        this.exp = 0;
     }
 
     removeStatus() {
@@ -661,8 +671,9 @@ class Cat {
 }
 
 class Enemy {
-    constructor(name, description, skillArray, HP, ATK, DEF, WT) {
+    constructor(name, level, description, skillArray, HP, ATK, DEF, WT) {
         this.name = name;
+        this.level = level;
         this.description = description;
         this.skillArray = skillArray;
         this.maxHP = HP;
