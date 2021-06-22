@@ -268,8 +268,10 @@ var WorldScene = new Phaser.Class({
     },
 
     damageDealingInteractions: function(unit2, damage) {
+        var success = false;
         unit2.unitInformation.HP -= damage;
         if (unit2.unitInformation.HP <= 0){
+            success = true;
             unit2.unitInformation.HP = 0;
             unit2.unitInformation.status = "dead";
             this.sleep(2000).then(() => {
@@ -286,9 +288,47 @@ var WorldScene = new Phaser.Class({
         console.log(unit2);
         unit2.damageText.setText("-" + damage);
         unit2.damageText.visible = true;
-        this.sleep(3000).then(() => {
+        this.sleep(1000).then(() => {
             unit2.damageText.visible = false;
         });
+        return success;
+    },
+
+    gainExp: function(success, level){
+        if (success == true){
+            var expGain = 20 * (level - this.currentCat.unitInformation.level);
+            if (expGain <= 0){
+                expGain = 1;
+            }
+            if (this.currentCat.unitInformation.level == 40){
+                expGain = 0;
+            }
+            if (expGain + this.currentCat.unitInformation.exp >= 100){
+                this.currentCat.unitInformation.exp = 0;
+                console.log("leveld up!")
+                if (this.currentCat.unitInformation.level < 40){
+                    console.log("level up!")
+                    this.currentCat.unitInformation.level = this.currentCat.unitInformation.level + 1;
+                    this.currentCat.unitInformation.ATK = this.currentCat.unitInformation.ATK + 1;
+                    this.currentCat.unitInformation.DEF = this.currentCat.unitInformation.DEF + 1;
+                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.HP + 1; 
+                    this.currentCat.healText.visible = true;
+                    this.currentCat.healText.setText("Level up!");
+                    this.sleep(1000).then(() => {
+                    this.currentCat.healText.visible = false;
+                    });
+                }
+            }
+            else{
+                console.log("gained exp!")
+                this.currentCat.healText.visible = true;
+                this.currentCat.healText.setText("EXP + " + expGain);
+                this.sleep(1000).then(() => {
+                this.currentCat.healText.visible = false;
+                });
+                this.currentCat.unitInformation.exp = expGain + this.currentCat.unitInformation.exp; 
+            }
+        }
     },
 
     unitCollision: function (unit1, unit2) {
@@ -303,11 +343,11 @@ var WorldScene = new Phaser.Class({
                     //then deal dmg to unit2
                     //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
-                    this.damageDealingInteractions(unit2, damage);
+                    this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                    this.damageDealingInteractions(unit1, damage);
+                    this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                 }
                 this.isColliding = true;
             } else if (this.enemyPhase === true) {
@@ -352,7 +392,7 @@ var WorldScene = new Phaser.Class({
         } else if (temp.unitInformation.type === "cat") {
             this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
-                "EXP: " + temp.unitInformation.EXP + "\n" + "\n" +
+                "EXP: " + temp.unitInformation.exp + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                 "Skills: " + "\n" + "\n" +
@@ -483,7 +523,7 @@ var WorldScene = new Phaser.Class({
             this.allUnits[i].damageText.x = this.allUnits[i].body.position.x + 40;
             this.allUnits[i].damageText.y = this.allUnits[i].body.position.y - 20;
             this.allUnits[i].healText.x = this.allUnits[i].body.position.x + 40;
-            this.allUnits[i].healText.y = this.allUnits[i].body.position.y - 50;
+            this.allUnits[i].healText.y = this.allUnits[i].body.position.y - 20;
         }
 
         if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
