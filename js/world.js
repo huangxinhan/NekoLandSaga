@@ -277,32 +277,83 @@ var WorldScene = new Phaser.Class({
                 //if the player is moving, player deals dmg to enemy 
                 if (unit1.unitInformation.type === "cat") {
                     //then deal dmg to unit2
-                    console.log("damage delt!!");
-                    console.log(unit1.unitInformation);
-                    console.log(unit2.unitInformation);
+                    //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
+                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    unit2.unitInformation.HP -= damage;
+                    if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
+                        this.healthBar.decrease(damage);
+                        this.resetText(unit2);
+                    }
+                    console.log(unit2);
+                    unit2.damageText.setText("-" + damage);
+                    unit2.damageText.visible = true;
+                    this.sleep(3000).then(() => {
+                        unit2.damageText.visible = false;
+                    });
+
                 } else if (unit2.unitInformation.type === "cat") {
-                    //then deal dmg to unit1
-                    console.log("damage delt!!");
-                    console.log(unit1.unitInformation);
-                    console.log(unit2.unitInformation);
+                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    unit1.unitInformation.HP -= damage;
+                    if (this.sideMenuText.text.includes(unit1.unitInformation.name)) {
+                        this.healthBar.decrease(damage);
+                        this.resetText(unit1);
+                    }
+                    console.log(unit1);
+                    unit1.damageText.setText("-" + damage);
+                    unit1.damageText.visible = true;
+                    this.sleep(3000).then(() => {
+                        unit1.damageText.visible = false;
+                    });
                 }
                 this.isColliding = true;
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
-                    //then deal dmg to unit 2
-                    console.log("damage delt!!");
-                    console.log(unit1.unitInformation);
-                    console.log(unit2.unitInformation);
+                    
                 } else if (unit2.unitInformation.type === "enemy") {
-                    //then deal dmg to unit 1 
-                    console.log("damage delt!!");
-                    console.log(unit1.unitInformation);
-                    console.log(unit2.unitInformation);
+
                 }
                 this.isColliding = true;
             }
         }
+    },
+
+    calculateDamage: function (attack, defense, velocityX, velocityY) {
+        var totalVelocity = Math.abs(velocityX) + Math.abs(velocityY);
+        var damageDelt = Math.floor((2 * attack - defense) * (totalVelocity/1000));
+        if (damageDelt < 0) {
+            damageDelt = 0;
+        }
+
+        return damageDelt;
+    },
+
+
+    resetText: function (temp) {
+        if (temp.unitInformation.type === "enemy") {
+            this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
+                "Level: " + temp.unitInformation.level + "\n" + "\n" +
+                "EXP: MAX" + "\n" + "\n" +
+                "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
+                //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                "Skills: " + "\n" + "\n" +
+                "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
+                "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
+                "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
+                "Status: " + temp.unitInformation.status + "\n");
+        } else if (temp.unitInformation.type === "cat") {
+            this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
+                "Level: " + temp.unitInformation.level + "\n" + "\n" +
+                "EXP: " + temp.unitInformation.EXP + "\n" + "\n" +
+                "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
+                //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
+                "Skills: " + "\n" + "\n" +
+                "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
+                "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
+                "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
+                "Status: " + temp.unitInformation.status + "\n");
+        }
+
     },
 
     setUnitCollision: function () {
@@ -420,6 +471,13 @@ var WorldScene = new Phaser.Class({
 
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
+        for (var i = 0; i < this.allUnits.length; i++){
+            this.allUnits[i].damageText.x = this.allUnits[i].body.position.x + 40;
+            this.allUnits[i].damageText.y = this.allUnits[i].body.position.y - 20;
+            this.allUnits[i].healText.x = this.allUnits[i].body.position.x + 40;
+            this.allUnits[i].healText.y = this.allUnits[i].body.position.y - 50;
+        }
+
         if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
             console.log("its now zero");
             this.announcementText.setText(this.currentCat.unitInformation.name + " 's skill is ready");
@@ -455,12 +513,12 @@ var WorldScene = new Phaser.Class({
         this.physics.add.collider(tempEnemy, this.blockedLayer);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
-            this.healthBar.bar.visible = true; 
+            this.healthBar.bar.visible = true;
             this.healthBar.draw2(tempEnemy.unitInformation.HP, tempEnemy.unitInformation.maxHP);
             this.sideMenuText.setText("Name: " + tempEnemy.unitInformation.name + "\n" + "\n" +
-                "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" + 
-                "EXP: MAX" + "\n"+ "\n"+ 
-                "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n"+
+                "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" +
+                "EXP: MAX" + "\n" + "\n" +
+                "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                 "Skills: " + "\n" + "\n" +
                 "Attack: " + tempEnemy.unitInformation.ATK + "\n" + "\n" +
@@ -477,7 +535,8 @@ var WorldScene = new Phaser.Class({
                 width: 1000,
                 useAdvancedWrap: true
             }
-        }).visible = false;
+        });
+        tempEnemy.damageText.visible = false;
 
         tempEnemy.healText = this.add.text(500, 50, "234", {
             color: "#00FF00",
@@ -488,7 +547,8 @@ var WorldScene = new Phaser.Class({
                 width: 1000,
                 useAdvancedWrap: true
             }
-        }).visible = false;
+        });
+        tempEnemy.healText.visible = false;
         this.allUnits.push(tempEnemy);
     },
 
@@ -511,12 +571,12 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
-                    this.healthBar.bar.visible = true; 
+                    this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat0.unitInformation.HP, tempCat0.unitInformation.maxHP);
                     this.sideMenuText.setText("Name: " + tempCat0.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat0.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
-                        "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n"+
+                        "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skills: " + "\n" + "\n" +
                         "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
@@ -533,7 +593,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat0.damageText.visible = false;
 
                 tempCat0.healText = this.add.text(500, 50, "234", {
                     color: "#00FF00",
@@ -544,7 +605,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat0.healText.visible = false;
                 this.allUnits.push(tempCat0);
             }
             if (i === 1) {
@@ -559,12 +621,12 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
-                    this.healthBar.bar.visible = true; 
+                    this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat1.unitInformation.HP, tempCat1.unitInformation.maxHP);
                     this.sideMenuText.setText("Name: " + tempCat1.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat1.unitInformation.level + "\n" + "\n" +
-                        "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" + 
-                        "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n"+
+                        "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
+                        "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skills: " + "\n" + "\n" +
                         "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
@@ -581,7 +643,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat1.damageText.visible = false;
 
                 tempCat1.healText = this.add.text(500, 50, "234", {
                     color: "#00FF00",
@@ -592,7 +655,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat1.healText.visible = false;
                 this.allUnits.push(tempCat1);
             }
             if (i === 2) {
@@ -607,12 +671,12 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat2, this.blockedLayer, this.wallCollision, false, this);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
-                    this.healthBar.bar.visible = true; 
+                    this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat2.unitInformation.HP, tempCat2.unitInformation.maxHP);
                     this.sideMenuText.setText("Name: " + tempCat2.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat2.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
-                        "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n"+
+                        "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skills: " + "\n" + "\n" +
                         "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
@@ -629,7 +693,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat2.damageText.visible = false;
 
                 tempCat2.healText = this.add.text(500, 50, "234", {
                     color: "#00FF00",
@@ -640,7 +705,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat2.healText.visible = false;
                 this.allUnits.push(tempCat2);
             }
             if (i === 3) {
@@ -655,12 +721,12 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
-                    this.healthBar.bar.visible = true; 
+                    this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat3.unitInformation.HP, tempCat3.unitInformation.maxHP);
                     this.sideMenuText.setText("Name: " + tempCat3.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat3.unitInformation.level + "\n" + "\n" +
-                        "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" + 
-                        "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n"+
+                        "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
+                        "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skills: " + "\n" + "\n" +
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
@@ -677,7 +743,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat3.damageText.visible = false;
 
                 tempCat3.healText = this.add.text(500, 50, "234", {
                     color: "#00FF00",
@@ -688,7 +755,8 @@ var WorldScene = new Phaser.Class({
                         width: 1000,
                         useAdvancedWrap: true
                     }
-                }).visible = false;
+                });
+                tempCat3.healText.visible = false;
                 this.allUnits.push(tempCat3);
             }
         }
@@ -713,6 +781,13 @@ class catParty {
 
     obtainCatFood(amount) {
         this.totalCatFood += amount;
+    }
+
+    resetCats() {
+        for (var i = 0; i < this.allCats.length; i++) {
+            this.allCats[i].HP = this.allCats[i].maxHP;
+            this.allCats[i].status = "none";
+        }
     }
 
 
@@ -849,7 +924,7 @@ class HealthBar {
     draw2(hp, maxhp) {
 
         this.value = hp;
-        this.maxHP = maxhp; 
+        this.maxHP = maxhp;
         this.bar.clear();
 
         //  BG
