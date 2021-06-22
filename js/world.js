@@ -152,7 +152,7 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0) {
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-            var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 32, 26, 5, "chefCat", "chefCatCircle");
+            var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle");
             this.catParty.obtainNewCat(chefCat);
             this.catParty.swapCat(0, 0);
 
@@ -267,6 +267,30 @@ var WorldScene = new Phaser.Class({
         }
     },
 
+    damageDealingInteractions: function(unit2, damage) {
+        unit2.unitInformation.HP -= damage;
+        if (unit2.unitInformation.HP <= 0){
+            unit2.unitInformation.HP = 0;
+            unit2.unitInformation.status = "dead";
+            this.sleep(2000).then(() => {
+               unit2.setInteractive(false);
+               unit2.setActive(false).setVisible(false);
+               unit2.x = - 9999;
+               unit2.y = - 9999;
+            });
+        }
+        if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
+            this.healthBar.decrease(damage);
+            this.resetText(unit2);
+        }
+        console.log(unit2);
+        unit2.damageText.setText("-" + damage);
+        unit2.damageText.visible = true;
+        this.sleep(3000).then(() => {
+            unit2.damageText.visible = false;
+        });
+    },
+
     unitCollision: function (unit1, unit2) {
 
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
@@ -279,62 +303,22 @@ var WorldScene = new Phaser.Class({
                     //then deal dmg to unit2
                     //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
-                    unit2.unitInformation.HP -= damage;
-                    if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
-                        this.healthBar.decrease(damage);
-                        this.resetText(unit2);
-                    }
-                    console.log(unit2);
-                    unit2.damageText.setText("-" + damage);
-                    unit2.damageText.visible = true;
-                    this.sleep(3000).then(() => {
-                        unit2.damageText.visible = false;
-                    });
+                    this.damageDealingInteractions(unit2, damage);
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                    unit1.unitInformation.HP -= damage;
-                    if (this.sideMenuText.text.includes(unit1.unitInformation.name)) {
-                        this.healthBar.decrease(damage);
-                        this.resetText(unit1);
-                    }
-                    console.log(unit1);
-                    unit1.damageText.setText("-" + damage);
-                    unit1.damageText.visible = true;
-                    this.sleep(3000).then(() => {
-                        unit1.damageText.visible = false;
-                    });
+                    this.damageDealingInteractions(unit1, damage);
                 }
                 this.isColliding = true;
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
-                    unit2.unitInformation.HP -= damage;
-                    if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
-                        this.healthBar.decrease(damage);
-                        this.resetText(unit2);
-                    }
-                    console.log(unit2);
-                    unit2.damageText.setText("-" + damage);
-                    unit2.damageText.visible = true;
-                    this.sleep(3000).then(() => {
-                        unit2.damageText.visible = false;
-                    });
+                    this.damageDealingInteractions(unit2);
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                    unit1.unitInformation.HP -= damage;
-                    if (this.sideMenuText.text.includes(unit1.unitInformation.name)) {
-                        this.healthBar.decrease(damage);
-                        this.resetText(unit1);
-                    }
-                    console.log(unit1);
-                    unit1.damageText.setText("-" + damage);
-                    unit1.damageText.visible = true;
-                    this.sleep(3000).then(() => {
-                        unit1.damageText.visible = false;
-                    });
+                   this.damageDealingInteractions(unit1);
 
                 }
                 this.isColliding = true;
