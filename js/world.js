@@ -178,7 +178,7 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
-            this.spawnEnemies(enemyInformation, 750, 150, "mechaCatCircle");
+            this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
 
 
             //collide with all other units 
@@ -309,8 +309,32 @@ var WorldScene = new Phaser.Class({
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
-                    
+                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    unit2.unitInformation.HP -= damage;
+                    if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
+                        this.healthBar.decrease(damage);
+                        this.resetText(unit2);
+                    }
+                    console.log(unit2);
+                    unit2.damageText.setText("-" + damage);
+                    unit2.damageText.visible = true;
+                    this.sleep(3000).then(() => {
+                        unit2.damageText.visible = false;
+                    });
+
                 } else if (unit2.unitInformation.type === "enemy") {
+                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    unit1.unitInformation.HP -= damage;
+                    if (this.sideMenuText.text.includes(unit1.unitInformation.name)) {
+                        this.healthBar.decrease(damage);
+                        this.resetText(unit1);
+                    }
+                    console.log(unit1);
+                    unit1.damageText.setText("-" + damage);
+                    unit1.damageText.visible = true;
+                    this.sleep(3000).then(() => {
+                        unit1.damageText.visible = false;
+                    });
 
                 }
                 this.isColliding = true;
@@ -320,7 +344,7 @@ var WorldScene = new Phaser.Class({
 
     calculateDamage: function (attack, defense, velocityX, velocityY) {
         var totalVelocity = Math.abs(velocityX) + Math.abs(velocityY);
-        var damageDelt = Math.floor((2 * attack - defense) * (totalVelocity/1000));
+        var damageDelt = Math.floor((2 * attack - defense) * (totalVelocity / 1000));
         if (damageDelt < 0) {
             damageDelt = 0;
         }
@@ -462,7 +486,7 @@ var WorldScene = new Phaser.Class({
     },
 
     endBattle: function () {
-
+        this.catParty.resetCats();
     },
 
     sleep: function (ms) {
@@ -471,7 +495,7 @@ var WorldScene = new Phaser.Class({
 
     update: function () {
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
-        for (var i = 0; i < this.allUnits.length; i++){
+        for (var i = 0; i < this.allUnits.length; i++) {
             this.allUnits[i].damageText.x = this.allUnits[i].body.position.x + 40;
             this.allUnits[i].damageText.y = this.allUnits[i].body.position.y - 20;
             this.allUnits[i].healText.x = this.allUnits[i].body.position.x + 40;
