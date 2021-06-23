@@ -456,8 +456,8 @@ var WorldScene = new Phaser.Class({
 
     nextTurn: function () {
         //main turn system function
-        this.skillCounter++; 
         this.turnCounter++;
+
 
         this.checkEndBattle()
         
@@ -468,6 +468,7 @@ var WorldScene = new Phaser.Class({
         do {
             this.index++;
             if (this.index >= this.allUnits.length) {
+                this.skillCounter++; 
                 this.index = 0;
             }
         } while (!this.allUnits[this.index].unitInformation.status === "dead")
@@ -477,7 +478,8 @@ var WorldScene = new Phaser.Class({
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
-            this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn")
+            this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
+            this.resetText(this.currentCat);
         }
         //else it is the enemy
         else {
