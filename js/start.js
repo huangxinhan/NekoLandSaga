@@ -13,7 +13,8 @@ var config = {
     },
     scene: [
         BootScene,
-        WorldScene
+        WorldScene,
+        GachaScene
     ]
 };
 var game = new Phaser.Game(config);

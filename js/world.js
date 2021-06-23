@@ -11,6 +11,7 @@ var BootScene = new Phaser.Class({
         console.log(data)
         if (jQuery.isEmptyObject(data)) {
             this.catParty = new catParty();
+            this.catParty.obtainCatFood(10);
         } else {
             this.catParty = data.catParty;
         }
@@ -27,7 +28,13 @@ var BootScene = new Phaser.Class({
         this.load.image('knightCatCircle', 'assets/cats/knightCatCircle.png');
         this.load.image('mechaCat', 'assets/cats/mechaCat.png');
         this.load.image('mechaCatCircle', 'assets/cats/mechaCatCircle.png');
-        this.load.image('sideMenu', 'assets/text/sideMenu.png')
+        this.load.image('sideMenu', 'assets/text/sideMenu.png');
+        this.load.image('chainsawCat', 'assets/cats/chainsawCat.png');
+        this.load.image('chainsawCatCircle', 'assets/cats/chainsawCatCircle.png');
+        this.load.image('wizardCat', 'assets/cats/wizardCat.png');
+        this.load.image('wizardCatCircle', 'assets/cats/wizardCatCircle.png');
+        this.load.image('twinCat', 'assets/cats/twinCat.png');
+        this.load.image('twinCatCircle', 'assets/cats/twinCatCircle.png');
     },
 
     create: function () {
@@ -90,6 +97,11 @@ var BootScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
+        text2.on('pointerdown', () => {
+            this.scene.start('GachaScene', {
+                "catParty": this.catParty
+            })
+        })
 
         var text3 = this.add.text(185,
             810, "ABOUT", {
@@ -114,6 +126,150 @@ var BootScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
+    }
+
+});
+
+var GachaScene = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize: function GachaScene() {
+        Phaser.Scene.call(this, {
+            key: 'GachaScene'
+        });
+    },
+
+    init: function (data) {
+        console.log(data);
+        this.catParty = data.catParty;
+        console.log(this.catParty);
+    },
+
+    preload: function () {},
+
+    create: function () {
+        this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
+        this.graphics = this.add.graphics();
+        this.graphics.lineStyle(1, 0xffffff);
+        this.graphics.fillStyle(0x031f4c, 1);
+
+        this.graphics.strokeRect(90, 600, 300, 50);
+        this.graphics.fillRect(90, 600, 300, 50);
+
+        this.graphics.strokeRect(90, 700, 300, 50);
+        this.graphics.fillRect(90, 700, 300, 50);
+
+
+        var text = this.add.text(1280 / 2 - 200,
+            200, "Cat Gacha", {
+                color: "#000000",
+                align: "center",
+                fontWeight: 'bold',
+                font: '60px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+
+        var text1 = this.add.text(145,
+            610, "Play Gacha!", {
+                color: "#ffffff",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+
+        text1.on('pointerdown', () => {
+            this.playGacha();
+        });
+
+        var text2 = this.add.text(175,
+            710, "Return", {
+                color: "#ffffff",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+        text2.on('pointerdown', () => {
+            this.scene.start('BootScene', {
+                "catParty": this.catParty
+            })
+        });
+
+        this.threeStarCats = [];
+        this.fourStarCats = [];
+        this.fiveStarCats = [];
+
+        this.threeStarCats.push(new Cat("chainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", 3, [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
+        this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
+        this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
+        this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", 5, [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
+        this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", 5, [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
+        this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", 5, [], 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
+    },
+
+    playGacha: function () {
+        if (this.catParty.totalCatFood >= 5) {
+            this.catParty.totalCatFood -= 5;
+            var randomInteger = Math.floor(Math.random() * 100) + 1;
+            if (randomInteger <= 60) {
+                var randomCat = this.threeStarCats[Math.floor(Math.random() * this.threeStarCats.length)];
+                var obtainedCat = JSON.parse(JSON.stringify(randomCat));
+                var alreadyHas = false;
+                for (var i = 0; i < this.catParty.allCats.length; i++) {
+                    if (obtainedCat.name === this.catParty.allCats[i].name) {
+                        alert("congratulations! You got Cat Food x 5!");
+                        alreadyHas = true;
+                        this.catParty.obtainCatFood(5);
+                    }
+                }
+                if (alreadyHas === false) {
+                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.catParty.obtainNewCat(obtainedCat);
+                }
+            } else if (randomInteger > 60 && randomInteger <= 95) {
+                var randomCat = this.fourStarCats[Math.floor(Math.random() * this.fourStarCats.length)];
+                var obtainedCat = JSON.parse(JSON.stringify(randomCat));
+                var alreadyHas = false;
+                for (var i = 0; i < this.catParty.allCats.length; i++) {
+                    if (obtainedCat.name === this.catParty.allCats[i].name) {
+                        alert("congratulations! You got Cat Food x 5!");
+                        alreadyHas = true;
+                        this.catParty.obtainCatFood(5);
+                    }
+                }
+                if (alreadyHas === false) {
+                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.catParty.obtainNewCat(obtainedCat);
+                }
+            } else {
+                var randomCat = this.fiveStarCats[Math.floor(Math.random() * this.fiveStarCats.length)];
+                var obtainedCat = JSON.parse(JSON.stringify(randomCat));
+                var alreadyHas = false;
+                for (var i = 0; i < this.catParty.allCats.length; i++) {
+                    if (obtainedCat.name === this.catParty.allCats[i].name) {
+                        alert("congratulations! You got Cat Food x 5!");
+                        alreadyHas = true;
+                        this.catParty.obtainCatFood(5);
+                    }
+                }
+                if (alreadyHas === false) {
+                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.catParty.obtainNewCat(obtainedCat);
+                }
+            }
+        }
+        else{
+            alert("not enough cat food! 5x Cat Foods per roll! You current have: " + this.catParty.totalCatFood + " cat food!");
+        }
     }
 
 });
@@ -242,7 +398,6 @@ var WorldScene = new Phaser.Class({
                 if (this.skillPhase === true) {
                     this.useSkill();
                 }
-
             });
 
             this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
@@ -274,18 +429,18 @@ var WorldScene = new Phaser.Class({
         }
     },
 
-    damageDealingInteractions: function(unit2, damage) {
+    damageDealingInteractions: function (unit2, damage) {
         var success = false;
         unit2.unitInformation.HP -= damage;
-        if (unit2.unitInformation.HP <= 0){
+        if (unit2.unitInformation.HP <= 0) {
             success = true;
             unit2.unitInformation.HP = 0;
             unit2.unitInformation.status = "dead";
             this.sleep(2000).then(() => {
-               unit2.setInteractive(false);
-               unit2.setActive(false).setVisible(false);
-               unit2.x = - 9999;
-               unit2.y = - 9999;
+                unit2.setInteractive(false);
+                unit2.setActive(false).setVisible(false);
+                unit2.x = -9999;
+                unit2.y = -9999;
             });
         }
         if (this.sideMenuText.text.includes(unit2.unitInformation.name)) {
@@ -301,39 +456,38 @@ var WorldScene = new Phaser.Class({
         return success;
     },
 
-    gainExp: function(success, level){
-        if (success == true){
+    gainExp: function (success, level) {
+        if (success == true) {
             var expGain = 20 * (level - this.currentCat.unitInformation.level);
-            if (expGain <= 0){
+            if (expGain <= 0) {
                 expGain = 1;
             }
-            if (this.currentCat.unitInformation.level == 40){
+            if (this.currentCat.unitInformation.level == 40) {
                 expGain = 0;
             }
-            if (expGain + this.currentCat.unitInformation.exp >= 100){
+            if (expGain + this.currentCat.unitInformation.exp >= 100) {
                 this.currentCat.unitInformation.exp = 0;
                 console.log("leveld up!")
-                if (this.currentCat.unitInformation.level < 40){
+                if (this.currentCat.unitInformation.level < 40) {
                     console.log("level up!")
                     this.currentCat.unitInformation.level = this.currentCat.unitInformation.level + 1;
                     this.currentCat.unitInformation.ATK = this.currentCat.unitInformation.ATK + 1;
                     this.currentCat.unitInformation.DEF = this.currentCat.unitInformation.DEF + 1;
-                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.HP + 1; 
+                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.HP + 1;
                     this.currentCat.healText.visible = true;
                     this.currentCat.healText.setText("Level up!");
                     this.sleep(1000).then(() => {
-                    this.currentCat.healText.visible = false;
+                        this.currentCat.healText.visible = false;
                     });
                 }
-            }
-            else{
+            } else {
                 console.log("gained exp!")
                 this.currentCat.healText.visible = true;
                 this.currentCat.healText.setText("EXP + " + expGain);
                 this.sleep(1000).then(() => {
-                this.currentCat.healText.visible = false;
+                    this.currentCat.healText.visible = false;
                 });
-                this.currentCat.unitInformation.exp = expGain + this.currentCat.unitInformation.exp; 
+                this.currentCat.unitInformation.exp = expGain + this.currentCat.unitInformation.exp;
             }
         }
     },
@@ -367,7 +521,7 @@ var WorldScene = new Phaser.Class({
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                   this.damageDealingInteractions(unit1);
+                    this.damageDealingInteractions(unit1);
 
                 }
                 this.isColliding = true;
@@ -460,7 +614,7 @@ var WorldScene = new Phaser.Class({
 
 
         this.checkEndBattle()
-        
+
 
         this.checkEndBattleVictory();
 
@@ -468,7 +622,7 @@ var WorldScene = new Phaser.Class({
         do {
             this.index++;
             if (this.index >= this.allUnits.length) {
-                this.skillCounter++; 
+                this.skillCounter++;
                 this.index = 0;
             }
         } while (!this.allUnits[this.index].unitInformation.status === "dead")
@@ -533,28 +687,27 @@ var WorldScene = new Phaser.Class({
         if (deathCounter === this.catParty.currentTeam.length) {
             this.endBattle();
         }
-        
+
     },
 
-    checkEndBattleVictory: function() {
-        if (this.bossStage === false){
+    checkEndBattleVictory: function () {
+        if (this.bossStage === false) {
             var deathCounter = 0;
-            for  (var i = 0; i < this.allUnits.length; i++){
+            for (var i = 0; i < this.allUnits.length; i++) {
                 if (this.allUnits[i].unitInformation.HP <= 0 && this.allUnits[i].unitInformation.type === "enemy") {
                     deathCounter++;
                 }
             }
-            if (deathCounter === this.enemyCount){
+            if (deathCounter === this.enemyCount) {
                 this.endBattleVictory();
             }
-            
-        }
-        else if (this.bossStage === true){
-            if (this.boss.unitInformation.HP <= 0){
+
+        } else if (this.bossStage === true) {
+            if (this.boss.unitInformation.HP <= 0) {
                 this.endBattleVictory();
             }
         }
-        
+
     },
 
     endBattle: function () {
@@ -562,7 +715,7 @@ var WorldScene = new Phaser.Class({
         this.catParty.resetCats();
     },
 
-    endBattleVictory: function() {
+    endBattleVictory: function () {
         console.log("victory!");
         this.catParty.resetCats();
     },
