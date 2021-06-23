@@ -148,6 +148,8 @@ var WorldScene = new Phaser.Class({
         this.isColliding = false;
 
         this.buttonLock = false;
+        this.skillCounter = 0;
+        this.turnCounter = 0;
     },
 
     preload: function () {
@@ -393,22 +395,24 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skills: " + "\n" + "\n" +
+                "Skill: " + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
-                "Status: " + temp.unitInformation.status + "\n");
+                "Status: " + temp.unitInformation.status + "\n" + "\n" +
+                "Energy: " + this.skillCounter);
         } else if (temp.unitInformation.type === "cat") {
             this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
                 "EXP: " + temp.unitInformation.exp + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skills: " + "\n" + "\n" +
+                "Skill: " + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
-                "Status: " + temp.unitInformation.status + "\n");
+                "Status: " + temp.unitInformation.status + "\n" + "\n" +
+                "Energy: " + this.skillCounter);
         }
 
     },
@@ -452,6 +456,9 @@ var WorldScene = new Phaser.Class({
 
     nextTurn: function () {
         //main turn system function
+        this.skillCounter++; 
+        this.turnCounter++;
+
         this.checkEndBattle()
         
 
@@ -613,7 +620,7 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skills: " + "\n" + "\n" +
+                "Skill: " + "\n" + "\n" +
                 "Attack: " + tempEnemy.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + tempEnemy.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + tempEnemy.unitInformation.WT + "\n" + "\n" +
@@ -671,11 +678,12 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skills: " + "\n" + "\n" +
+                        "Skill: " + "\n" + "\n" +
                         "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat0.unitInformation.status + "\n")
+                        "Status: " + tempCat0.unitInformation.status + "\n" + "\n" +
+                        "Energy: " + this.skillCounter)
                 });
                 tempCat0.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -721,11 +729,12 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skills: " + "\n" + "\n" +
+                        "Skill: " + "\n" + "\n" +
                         "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat1.unitInformation.status + "\n")
+                        "Status: " + tempCat1.unitInformation.status + "\n" + "\n" +
+                        "Energy: " + this.skillCounter)
                 });
                 tempCat1.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -771,11 +780,12 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skills: " + "\n" + "\n" +
+                        "Skill: " + "\n" + "\n" +
                         "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat2.unitInformation.status + "\n")
+                        "Status: " + tempCat2.unitInformation.status + "\n" + "\n" +
+                        "Energy: " + this.skillCounter)
                 })
                 tempCat2.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -821,11 +831,12 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skills: " + "\n" + "\n" +
+                        "Skill: " + "\n" + "\n" +
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat3.unitInformation.status + "\n")
+                        "Status: " + tempCat3.unitInformation.status + "\n" + "\n" +
+                        "Energy: " + this.skillCounter)
                 });
                 tempCat3.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -887,12 +898,12 @@ class catParty {
 }
 
 class Cat {
-    constructor(name, level, description, rarity, skillArray, HP, ATK, DEF, WT, photo, photoCircle) {
+    constructor(name, level, description, rarity, skill, HP, ATK, DEF, WT, photo, photoCircle) {
         this.name = name;
         this.level = level;
         this.description = description;
         this.rarity = rarity;
-        this.skillArray = skillArray;
+        this.skill = skill;
         this.maxHP = HP;
         this.HP = this.maxHP;
         this.ATK = ATK;
@@ -915,11 +926,11 @@ class Cat {
 }
 
 class Enemy {
-    constructor(name, level, description, skillArray, HP, ATK, DEF, WT) {
+    constructor(name, level, description, skill, HP, ATK, DEF, WT) {
         this.name = name;
         this.level = level;
         this.description = description;
-        this.skillArray = skillArray;
+        this.skill = skill;
         this.maxHP = HP;
         this.HP = this.maxHP;
         this.ATK = ATK;
