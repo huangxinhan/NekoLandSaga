@@ -146,6 +146,8 @@ var WorldScene = new Phaser.Class({
         this.catFoodGained = 0;
         //whether or not unit is colliding, limits the amount of damage delt at one time 
         this.isColliding = false;
+
+        this.buttonLock = false;
     },
 
     preload: function () {
@@ -159,6 +161,9 @@ var WorldScene = new Phaser.Class({
             var knightCat = new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
             this.catParty.obtainNewCat(knightCat);
             this.catParty.swapCat(1, 1);
+
+            this.bossStage = false;
+            this.enemyCount = 1;
         }
 
     },
@@ -350,6 +355,8 @@ var WorldScene = new Phaser.Class({
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                 }
                 this.isColliding = true;
+                this.checkEndBattle();
+                this.checkEndBattleVictory();
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
@@ -362,6 +369,8 @@ var WorldScene = new Phaser.Class({
 
                 }
                 this.isColliding = true;
+                this.checkEndBattle();
+                this.checkEndBattleVictory();
             }
         }
     },
@@ -443,10 +452,11 @@ var WorldScene = new Phaser.Class({
 
     nextTurn: function () {
         //main turn system function
-        if (this.checkEndBattle()) {
-            this.endBattle();
-            return;
-        }
+        this.checkEndBattle()
+        
+
+        this.checkEndBattleVictory();
+
 
         do {
             this.index++;
@@ -480,18 +490,26 @@ var WorldScene = new Phaser.Class({
 
     useSkill: function () {
         console.log("used skill");
+        this.buttonLock = true;
+        this.skipTurnButton.visible = false;
+        this.useSkillButton.visible = false;
         this.announcementText.setText(this.currentCat.unitInformation.name + " used a skill!")
         this.sleep(3000).then(() => {
             this.skillPhase = false;
+            this.buttonLock = false;
             this.nextTurn();
         });
     },
 
     skipTurn: function () {
         console.log("turn skipped");
+        this.buttonLock = true;
+        this.skipTurnButton.visible = false;
+        this.useSkillButton.visible = false;
         this.announcementText.setText(this.currentCat.unitInformation.name + " skips its turn!")
         this.sleep(3000).then(() => {
             this.skillPhase = false;
+            this.buttonLock = false;
             this.nextTurn();
         });
     },
@@ -504,12 +522,39 @@ var WorldScene = new Phaser.Class({
             }
         }
         if (deathCounter === this.catParty.currentTeam.length) {
-            return true;
+            this.endBattle();
         }
-        return false;
+        
+    },
+
+    checkEndBattleVictory: function() {
+        if (this.bossStage === false){
+            var deathCounter = 0;
+            for  (var i = 0; i < this.allUnits.length; i++){
+                if (this.allUnits[i].unitInformation.HP <= 0 && this.allUnits[i].unitInformation.type === "enemy") {
+                    deathCounter++;
+                }
+            }
+            if (deathCounter === this.enemyCount){
+                this.endBattleVictory();
+            }
+            
+        }
+        else if (this.bossStage === true){
+            if (this.boss.unitInformation.HP <= 0){
+                this.endBattleVictory();
+            }
+        }
+        
     },
 
     endBattle: function () {
+        console.log("battle ends");
+        this.catParty.resetCats();
+    },
+
+    endBattleVictory: function() {
+        console.log("victory!");
         this.catParty.resetCats();
     },
 
@@ -538,7 +583,7 @@ var WorldScene = new Phaser.Class({
             this.graphics.clear();
         }
 
-        if (this.skillPhase == true) {
+        if (this.skillPhase == true && this.buttonLock == false) {
             this.useSkillButton.visible = true;
             this.skipTurnButton.visible = true;
         } else {
