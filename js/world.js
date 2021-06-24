@@ -11,7 +11,7 @@ var BootScene = new Phaser.Class({
         console.log(data)
         if (jQuery.isEmptyObject(data)) {
             this.catParty = new catParty();
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(20);
         } else {
             this.catParty = data.catParty;
         }
@@ -105,8 +105,8 @@ var BootScene = new Phaser.Class({
             })
         })
 
-        var text3 = this.add.text(185,
-            510, "ABOUT", {
+        var text3 = this.add.text(125,
+            510, "MANAGE TEAM", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -116,6 +116,11 @@ var BootScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
+        text3.on('pointerdown', () => {
+            this.scene.start("PartyScene", {
+                "catParty": this.catParty
+            })
+        })
 
         var text4 = this.add.text(185,
             610, "HELP", {
@@ -269,12 +274,97 @@ var GachaScene = new Phaser.Class({
                     this.catParty.obtainNewCat(obtainedCat);
                 }
             }
-        }
-        else{
+        } else {
             alert("not enough cat food! 5x Cat Foods per roll! You current have: " + this.catParty.totalCatFood + " cat food!");
         }
     }
 
+});
+
+var PartyScene = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize: function PartyScene() {
+        Phaser.Scene.call(this, {
+            key: 'PartyScene'
+        });
+    },
+
+    init: function (data) {
+        console.log(data);
+        this.catParty = data.catParty;
+        console.log(this.catParty);
+    },
+
+    preload: function () {},
+
+    create: function () {
+        this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
+        this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
+        this.graphics = this.add.graphics();
+        this.graphics.lineStyle(1, 0xffffff);
+        this.graphics.fillStyle(0x031f4c, 1);
+
+        this.graphics.strokeRect(90, 100, 300, 50);
+        this.graphics.fillRect(90, 100, 300, 50);
+
+
+        this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
+
+        this.sideMenuText = this.add.text(1300, 25, "", {
+            color: "#FFFFFF",
+            align: "left",
+            fontWeight: 'bold',
+            font: '28px Arial',
+            wordWrap: {
+                width: 275,
+                useAdvancedWrap: true
+            }
+        });
+
+        var text = this.add.text(85,
+            30, "Manage Team", {
+                color: "#000000",
+                align: "center",
+                fontWeight: 'bold',
+                font: '60px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+
+        var text1 = this.add.text(185,
+            110, "Return", {
+                color: "#ffffff",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+
+        text1.on('pointerdown', () => {
+            this.scene.start('BootScene', {
+                "catParty": this.catParty
+            })
+        });
+    },
+
+    resetText: function (temp) {
+        if (temp.type === "cat") {
+            this.sideMenuText.setText("Name: " + temp.name + "\n" + "\n" +
+                "Level: " + temp.level + "\n" + "\n" +
+                "EXP: " + temp.exp + "\n" + "\n" +
+                "HP: " + temp.HP + "/" + temp.maxHP + "\n" + "\n" + "\n" +
+                "Skill: " + "\n" + "\n" +
+                "Attack: " + temp.ATK + "\n" + "\n" +
+                "Defense: " + temp.DEF + "\n" + "\n" +
+                "Weight: " + temp.WT + "\n" + "\n" +
+                "Description: " + temp.description );
+        }
+    }
 });
 
 var WorldScene = new Phaser.Class({
