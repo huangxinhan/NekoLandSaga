@@ -19,6 +19,7 @@ var BootScene = new Phaser.Class({
     },
 
     preload: function () {
+        this.load.image("nekolandsaga", 'assets/text/nekolandsaga.png');
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
         this.load.image('skipTurn', 'assets/text/skipTurn.png');
@@ -39,24 +40,25 @@ var BootScene = new Phaser.Class({
 
     create: function () {
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
+        this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
 
+        this.graphics.strokeRect(90, 300, 300, 50);
+        this.graphics.fillRect(90, 300, 300, 50);
+
+        this.graphics.strokeRect(90, 400, 300, 50);
+        this.graphics.fillRect(90, 400, 300, 50);
+
+        this.graphics.strokeRect(90, 500, 300, 50);
+        this.graphics.fillRect(90, 500, 300, 50);
+
         this.graphics.strokeRect(90, 600, 300, 50);
         this.graphics.fillRect(90, 600, 300, 50);
 
-        this.graphics.strokeRect(90, 700, 300, 50);
-        this.graphics.fillRect(90, 700, 300, 50);
-
-        this.graphics.strokeRect(90, 800, 300, 50);
-        this.graphics.fillRect(90, 800, 300, 50);
-
-        this.graphics.strokeRect(90, 900, 300, 50);
-        this.graphics.fillRect(90, 900, 300, 50);
-
-        var text = this.add.text(1280 / 2 - 200,
-            200, "Neko Land Saga", {
+        var text = this.add.text(85,
+            130, "Neko Land Saga", {
                 color: "#000000",
                 align: "center",
                 fontWeight: 'bold',
@@ -68,7 +70,7 @@ var BootScene = new Phaser.Class({
             }).setInteractive();
 
         var text1 = this.add.text(185,
-            610, "    START    ", {
+            310, "    START    ", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -87,7 +89,7 @@ var BootScene = new Phaser.Class({
         });
 
         var text2 = this.add.text(145,
-            710, "CAT GACHA", {
+            410, "CAT GACHA", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -104,7 +106,7 @@ var BootScene = new Phaser.Class({
         })
 
         var text3 = this.add.text(185,
-            810, "ABOUT", {
+            510, "ABOUT", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -116,7 +118,7 @@ var BootScene = new Phaser.Class({
             }).setInteractive();
 
         var text4 = this.add.text(185,
-            910, "HELP", {
+            610, "HELP", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -148,19 +150,20 @@ var GachaScene = new Phaser.Class({
 
     create: function () {
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
+        this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
 
-        this.graphics.strokeRect(90, 600, 300, 50);
-        this.graphics.fillRect(90, 600, 300, 50);
+        this.graphics.strokeRect(90, 300, 300, 50);
+        this.graphics.fillRect(90, 300, 300, 50);
 
-        this.graphics.strokeRect(90, 700, 300, 50);
-        this.graphics.fillRect(90, 700, 300, 50);
+        this.graphics.strokeRect(90, 400, 300, 50);
+        this.graphics.fillRect(90, 400, 300, 50);
 
 
-        var text = this.add.text(1280 / 2 - 200,
-            200, "Cat Gacha", {
+        var text = this.add.text(85,
+            130, "Cat Gacha", {
                 color: "#000000",
                 align: "center",
                 fontWeight: 'bold',
@@ -172,7 +175,7 @@ var GachaScene = new Phaser.Class({
             }).setInteractive();
 
         var text1 = this.add.text(145,
-            610, "Play Gacha!", {
+            310, "Play Gacha!", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -188,7 +191,7 @@ var GachaScene = new Phaser.Class({
         });
 
         var text2 = this.add.text(175,
-            710, "Return", {
+            410, "Return", {
                 color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
@@ -208,7 +211,7 @@ var GachaScene = new Phaser.Class({
         this.fourStarCats = [];
         this.fiveStarCats = [];
 
-        this.threeStarCats.push(new Cat("chainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", 3, [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
+        this.threeStarCats.push(new Cat("ChainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", 3, [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
         this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
         this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", 5, [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
