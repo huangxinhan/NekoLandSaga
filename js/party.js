@@ -19,6 +19,11 @@ var PartyScene = new Phaser.Class({
         this.position2 = [340, 250];
         this.position3 = [540, 250];
         this.position4 = [740, 250];
+        this.positions = [];
+        //stores all the positions
+        this.positions.push(this.position1, this.position2, this.position3, this.position4);
+        //stores all the party images
+        this.partyImages = [];
     },
 
     preload: function () {},
@@ -61,13 +66,79 @@ var PartyScene = new Phaser.Class({
 
         var counter = -1;
         var dictionary = []; //associative array
-        for (var i = 0; i < this.catParty.allCats.length; i++){
-            counter++; 
-            dictionary[i] = {image: this.physics.add.image(140 + ((i%5) * 200), 475 + (Math.floor(counter/5) * 150), 
-                this.catParty.allCats[i].photoCircle).setInteractive(), index: i, name: this.catParty.allCats[i].name}
+        for (var i = 0; i < this.catParty.allCats.length; i++) {
+            counter++;
+            dictionary[i] = {
+                image: this.physics.add.image(140 + ((i % 5) * 200), 475 + (Math.floor(counter / 5) * 150),
+                    this.catParty.allCats[i].photoCircle).setInteractive(),
+                index: i,
+                name: this.catParty.allCats[i].name
+            }
+        }
+
+        //adding current team images
+        for(var i = 0; i < this.catParty.currentTeam.length; i++){
+            this.partyImages[i] = this.physics.add.image(this.positions[i][0], this.positions[i][1], 
+                this.catParty.currentTeam[i].photoCircle);
         }
 
         //will make them interactive here, 20 lines of code in total
+        for (var i = 0; i < dictionary.length; i++) {
+            switch (i) {
+                case 0:
+                    dictionary[i].image.on('pointerdown', () => {
+                        if (this.selectionMode === true){
+                            this.catParty.swapCat(this.currentSlot, 0);
+                            if (this.partyImages[this.currentSlot] != null){
+                                this.partyImages[this.currentSlot].destroy();
+                            }
+                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1], 
+                                this.catParty.allCats[this.currentSlot].photoCircle);
+                        }
+                    })
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    break;
+                case 12:
+                    break;
+                case 13:
+                    break;
+                case 14:
+                    break;
+                case 15:
+                    break;
+                case 16:
+                    break;
+                case 17:
+                    break;
+                case 18:
+                    break;
+                case 19:
+                    break;
+                case 20:
+                    break;
+            }
+        }
 
 
         this.sideMenuText = this.add.text(1300, 25, "", {
@@ -135,7 +206,7 @@ var PartyScene = new Phaser.Class({
             })
         });
 
-        var removeText =  this.add.text(985,
+        var removeText = this.add.text(985,
             245, "Remove", {
                 color: "#ffffff",
                 align: "center",
