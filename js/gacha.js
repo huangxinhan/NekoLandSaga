@@ -104,7 +104,7 @@ var GachaScene = new Phaser.Class({
                     alert("Congratulations! You got: " + obtainedCat.name + "!");
                     this.catParty.obtainNewCat(obtainedCat);
                 }
-            } else if (randomInteger > 60 && randomInteger <= 95) {
+            } else if (randomInteger > 60 && randomInteger <= 90) {
                 var randomCat = this.fourStarCats[Math.floor(Math.random() * this.fourStarCats.length)];
                 var obtainedCat = JSON.parse(JSON.stringify(randomCat));
                 var alreadyHas = false;

@@ -29,7 +29,14 @@ var PartyScene = new Phaser.Class({
         this.placeholder2 = this.physics.add.image(340, 250, 'placeholder');
         this.placeholder3 = this.physics.add.image(540, 250, 'placeholder');
         this.placeholder4 = this.physics.add.image(740, 250, 'placeholder');
-        this.placeholder5 = this.physics.add.image(140, 475, 'placeholder');
+        //this.placeholder5 = this.physics.add.image(140, 475, 'placeholder');
+
+        var counter = -1;
+        for (var i = 0; i < this.catParty.allCats.length; i++){
+            counter++; 
+            var dictionary = []; //associative array
+            dictionary["cat" + i] = this.physics.add.image(140 + ((i%5) * 200), 475 + (Math.floor(counter/5) * 150), this.catParty.allCats[i].photoCircle);
+        }
 
         //will make them interactive here
 

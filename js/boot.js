@@ -11,7 +11,7 @@ var BootScene = new Phaser.Class({
         console.log(data)
         if (jQuery.isEmptyObject(data)) {
             this.catParty = new catParty();
-            this.catParty.obtainCatFood(20);
+            this.catParty.obtainCatFood(30);
         } else {
             this.catParty = data.catParty;
         }
