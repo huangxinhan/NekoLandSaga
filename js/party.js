@@ -10,6 +10,15 @@ var PartyScene = new Phaser.Class({
         console.log(data);
         this.catParty = data.catParty;
         console.log(this.catParty);
+        //whether or not selection mode is on
+        this.selectionMode = false;
+        this.currentSlot = 0; //the slot to switch
+
+        //positions to move the cats into
+        this.position1 = [140, 250];
+        this.position2 = [340, 250];
+        this.position3 = [540, 250];
+        this.position4 = [740, 250];
     },
 
     preload: function () {},
@@ -24,21 +33,41 @@ var PartyScene = new Phaser.Class({
         this.graphics.strokeRect(890, 40, 300, 50);
         this.graphics.fillRect(890, 40, 300, 50);
 
+        this.graphics.strokeRect(890, 235, 300, 50);
+        this.graphics.fillRect(890, 235, 300, 50);
+
         this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
-        this.placeholder1 = this.physics.add.image(140, 250, 'placeholder');
-        this.placeholder2 = this.physics.add.image(340, 250, 'placeholder');
-        this.placeholder3 = this.physics.add.image(540, 250, 'placeholder');
-        this.placeholder4 = this.physics.add.image(740, 250, 'placeholder');
+        this.placeholder1 = this.physics.add.image(140, 250, 'placeholder').setInteractive();
+        this.placeholder2 = this.physics.add.image(340, 250, 'placeholder').setInteractive();
+        this.placeholder3 = this.physics.add.image(540, 250, 'placeholder').setInteractive();
+        this.placeholder4 = this.physics.add.image(740, 250, 'placeholder').setInteractive();
+        this.placeholder1.on('pointerdown', () => {
+            this.selectionMode = true;
+            this.currentSlot = 0;
+        });
+        this.placeholder2.on('pointerdown', () => {
+            this.selectionMode = true;
+            this.currentSlot = 1;
+        });
+        this.placeholder3.on('pointerdown', () => {
+            this.selectionMode = true;
+            this.currentSlot = 2;
+        });
+        this.placeholder4.on('pointerdown', () => {
+            this.selectionMode = true;
+            this.currentSlot = 3;
+        });
         //this.placeholder5 = this.physics.add.image(140, 475, 'placeholder');
 
         var counter = -1;
+        var dictionary = []; //associative array
         for (var i = 0; i < this.catParty.allCats.length; i++){
             counter++; 
-            var dictionary = []; //associative array
-            dictionary["cat" + i] = this.physics.add.image(140 + ((i%5) * 200), 475 + (Math.floor(counter/5) * 150), this.catParty.allCats[i].photoCircle);
+            dictionary[i] = {image: this.physics.add.image(140 + ((i%5) * 200), 475 + (Math.floor(counter/5) * 150), 
+                this.catParty.allCats[i].photoCircle).setInteractive(), index: i, name: this.catParty.allCats[i].name}
         }
 
-        //will make them interactive here
+        //will make them interactive here, 20 lines of code in total
 
 
         this.sideMenuText = this.add.text(1300, 25, "", {
@@ -105,6 +134,18 @@ var PartyScene = new Phaser.Class({
                 "catParty": this.catParty
             })
         });
+
+        var removeText =  this.add.text(985,
+            245, "Remove", {
+                color: "#ffffff",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
     },
 
     resetText: function (temp) {
