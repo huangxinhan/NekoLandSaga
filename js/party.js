@@ -69,10 +69,10 @@ var PartyScene = new Phaser.Class({
         //this.placeholder5 = this.physics.add.image(140, 475, 'placeholder');
 
         var counter = -1;
-        var dictionary = []; //associative array
+        this.dictionary = []; //associative array
         for (var i = 0; i < this.catParty.allCats.length; i++) {
             counter++;
-            dictionary[i] = {
+            this.dictionary[i] = {
                 image: this.physics.add.image(140 + ((i % 5) * 200), 475 + (Math.floor(counter / 5) * 150),
                     this.catParty.allCats[i].photoCircle).setInteractive(),
                 index: i,
@@ -87,119 +87,70 @@ var PartyScene = new Phaser.Class({
         }
 
         //will make them interactive here, 20 lines of code in total
-        for (var i = 0; i < dictionary.length; i++) {
+        for (var i = 0; i < this.dictionary.length; i++) {
             switch (i) {
                 case 0:
-                    dictionary[0].image.on('pointerdown', () => {
-                        if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[0])) {
-                            this.catParty.swapCat(this.currentSlot, 0);
-                            if (this.partyImages[this.currentSlot] != null) {
-                                this.partyImages[this.currentSlot].destroy();
-                            }
-                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                                this.catParty.allCats[0].photoCircle);
-                            this.selectionMode = false;
-                        } else {
-                            this.selectionMode = false;
-                            alert("Team slot not selected or cat is already in party!");
-                        }
-                    })
+                    this.addInteractions(0);
                     break;
                 case 1:
-                    dictionary[1].image.on('pointerdown', () => {
-                        if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[1])) {
-                            this.catParty.swapCat(this.currentSlot, 1);
-                            if (this.partyImages[this.currentSlot] != null) {
-                                this.partyImages[this.currentSlot].destroy();
-                            }
-                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                                this.catParty.allCats[1].photoCircle);
-                                this.selectionMode = false;
-                        } else {
-                            this.selectionMode = false;
-                            alert("Team slot not selected or cat is already in party!");
-                        }
-                    })
+                    this.addInteractions(1);
                     break;
                 case 2:
-                    dictionary[2].image.on('pointerdown', () => {
-                        if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[2])) {
-                            this.catParty.swapCat(this.currentSlot, 2);
-                            if (this.partyImages[this.currentSlot] != null) {
-                                this.partyImages[this.currentSlot].destroy();
-                            }
-                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                                this.catParty.allCats[2].photoCircle);
-                                this.selectionMode = false;
-                        } else {
-                            this.selectionMode = false;
-                            alert("Team slot not selected or cat is already in party!");
-                        }
-                    })
+                    this.addInteractions(2);
                     break;
                 case 3:
-                    dictionary[3].image.on('pointerdown', () => {
-                        if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[3])) {
-                            this.catParty.swapCat(this.currentSlot, 3);
-                            if (this.partyImages[this.currentSlot] != null) {
-                                this.partyImages[this.currentSlot].destroy();
-                            }
-                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                                this.catParty.allCats[3].photoCircle);
-                                this.selectionMode = false;
-                        } else {
-                            this.selectionMode = false;
-                            alert("Team slot not selected or cat is already in party!");
-                        }
-                    })
+                    this.addInteractions(3);
                     break;
                 case 4:
-                    dictionary[4].image.on('pointerdown', () => {
-                        if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[4])) {
-                            this.catParty.swapCat(this.currentSlot, 4);
-                            if (this.partyImages[this.currentSlot] != null) {
-                                this.partyImages[this.currentSlot].destroy();
-                            }
-                            this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                                this.catParty.allCats[4].photoCircle);
-                                this.selectionMode = false;
-                        } else {
-                            this.selectionMode = false;
-                            alert("Team slot not selected or cat is already in party!");
-                        }
-                    })
+                    this.addInteractions(4);
                     break;
                 case 5:
+                    this.addInteractions(5);
                     break;
                 case 6:
+                    this.addInteractions(6);
                     break;
                 case 7:
+                    this.addInteractions(7);
                     break;
                 case 8:
+                    this.addInteractions(8);
                     break;
                 case 9:
+                    this.addInteractions(9);
                     break;
                 case 10:
+                    this.addInteractions(10);
                     break;
                 case 11:
+                    this.addInteractions(11);
                     break;
                 case 12:
+                    this.addInteractions(12);
                     break;
                 case 13:
+                    this.addInteractions(13);
                     break;
                 case 14:
+                    this.addInteractions(14);
                     break;
                 case 15:
+                    this.addInteractions(15);
                     break;
                 case 16:
+                    this.addInteractions(16);
                     break;
                 case 17:
+                    this.addInteractions(17);
                     break;
                 case 18:
+                    this.addInteractions(18);
                     break;
                 case 19:
+                    this.addInteractions(19);
                     break;
                 case 20:
+                    this.addInteractions(20);
                     break;
             }
         }
@@ -265,6 +216,7 @@ var PartyScene = new Phaser.Class({
             }).setInteractive();
 
         text1.on('pointerdown', () => {
+            this.organizeTeam();
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
@@ -281,6 +233,31 @@ var PartyScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
+        
+            removeText.on('pointerdown', () => {
+                if(this.selectionMode === true){
+                    this.catParty.currentTeam[this.currentSlot] = null; //empty out that cat
+                    this.partyImages[this.currentSlot].destroy();
+                    this.selectionMode = false;
+                }
+            })
+    },
+
+    addInteractions: function(index){
+        this.dictionary[index].image.on('pointerdown', () => {
+            if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[index])) {
+                this.catParty.swapCat(this.currentSlot, index);
+                if (this.partyImages[this.currentSlot] != null) {
+                    this.partyImages[this.currentSlot].destroy();
+                }
+                this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
+                    this.catParty.allCats[index].photoCircle);
+                    this.selectionMode = false;
+            } else {
+                this.selectionMode = false;
+                alert("Team slot not selected or cat is already in party!");
+            }
+        })
     },
 
     resetText: function (temp) {
@@ -295,5 +272,15 @@ var PartyScene = new Phaser.Class({
                 "Weight: " + temp.WT + "\n" + "\n" +
                 "Description: " + temp.description);
         }
+    },
+
+    organizeTeam: function(){
+        var tempArray = [];
+        this.catParty.currentTeam.forEach((element)=>{
+            if (!!element) {
+              tempArray.push(element);
+            }
+          });
+        this.catParty.currentTeam = tempArray;  
     }
 });
