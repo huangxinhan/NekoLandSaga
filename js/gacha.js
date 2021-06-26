@@ -77,12 +77,12 @@ var GachaScene = new Phaser.Class({
         this.fourStarCats = [];
         this.fiveStarCats = [];
 
-        this.threeStarCats.push(new Cat("ChainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", 3, [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
-        this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
-        this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
-        this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", 5, [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
-        this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", 5, [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
-        this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", 5, [], 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
+        this.threeStarCats.push(new Cat("ChainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", "☆☆☆", [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
+        this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", "☆☆☆☆", [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
+        this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
+        this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
+        this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", "☆☆☆☆☆", [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
+        this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", "☆☆☆☆☆", [], 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
     },
 
     playGacha: function () {
