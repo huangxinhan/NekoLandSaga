@@ -106,7 +106,7 @@ var WorldScene = new Phaser.Class({
                 color: "#FFFFFF",
                 align: "left",
                 fontWeight: 'bold',
-                font: '28px Arial',
+                font: '20px Arial',
                 wordWrap: {
                     width: 275,
                     useAdvancedWrap: true
@@ -143,7 +143,7 @@ var WorldScene = new Phaser.Class({
                 }
             });
 
-            this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 260, 50);
+            this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 190, 50);
 
             this.healthBar.bar.visible = false;
 

@@ -196,7 +196,7 @@ var PartyScene = new Phaser.Class({
             color: "#FFFFFF",
             align: "left",
             fontWeight: 'bold',
-            font: '28px Arial',
+            font: '20px Arial',
             wordWrap: {
                 width: 275,
                 useAdvancedWrap: true
