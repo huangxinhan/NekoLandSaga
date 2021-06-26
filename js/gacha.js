@@ -104,7 +104,7 @@ var GachaScene = new Phaser.Class({
         this.fiveStarCats = [];
 
         this.threeStarCats.push(new Cat("Soldier Cat", 1, "Definitely a well-trained veteran, with many decades of combat experience.", "☆☆☆", [], 20, 19, 13, 8, "soldierCat", "soldierCatCircle"));
-        this.threeStarCats.push(new Cat("ChainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", "☆☆☆", [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
+        this.threeStarCats.push(new Cat("Chainsaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", "☆☆☆", [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
         this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", "☆☆☆☆", [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
         this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));

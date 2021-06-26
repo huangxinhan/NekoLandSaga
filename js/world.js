@@ -36,13 +36,13 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0) {
             this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
-            var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle");
-            this.catParty.obtainNewCat(chefCat);
-            this.catParty.swapCat(0, 0);
+            // var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle");
+            // this.catParty.obtainNewCat(chefCat);
+            // this.catParty.swapCat(0, 0);
 
-            var knightCat = new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
-            this.catParty.obtainNewCat(knightCat);
-            this.catParty.swapCat(1, 1);
+            // var knightCat = new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
+            // this.catParty.obtainNewCat(knightCat);
+            // this.catParty.swapCat(1, 1);
 
             this.bossStage = false;
             this.enemyCount = 1;
@@ -539,7 +539,7 @@ var WorldScene = new Phaser.Class({
     spawnCats: function () {
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
             if (i === 0) {
-                var tempCat0 = this.physics.add.image(750 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat0 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
                 tempCat0.setCircle(64);
                 tempCat0.setCollideWorldBounds(true);
                 tempCat0.setBounce(1);
@@ -590,7 +590,7 @@ var WorldScene = new Phaser.Class({
                 this.allUnits.push(tempCat0);
             }
             if (i === 1) {
-                var tempCat1 = this.physics.add.image(750 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat1 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
                 tempCat1.setCircle(64);
                 tempCat1.setCollideWorldBounds(true);
                 tempCat1.setBounce(1);
@@ -641,7 +641,7 @@ var WorldScene = new Phaser.Class({
                 this.allUnits.push(tempCat1);
             }
             if (i === 2) {
-                var tempCat2 = this.physics.add.image(750 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat2 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
                 tempCat2.setCircle(64);
                 tempCat2.setCollideWorldBounds(true);
                 tempCat2.setBounce(1);
@@ -692,7 +692,7 @@ var WorldScene = new Phaser.Class({
                 this.allUnits.push(tempCat2);
             }
             if (i === 3) {
-                var tempCat3 = this.physics.add.image(750 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat3 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
                 tempCat3.setCircle(64);
                 tempCat3.setCollideWorldBounds(true);
                 tempCat3.setBounce(1);
