@@ -141,8 +141,8 @@ var GachaScene = new Phaser.Class({
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
-                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
-                    this.sleep(3000).then(() => {
+                    this.sleep(200).then(() => {
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -160,8 +160,8 @@ var GachaScene = new Phaser.Class({
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
-                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
-                    this.sleep(3000).then(() => {
+                    this.sleep(200).then(() => {
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -179,8 +179,8 @@ var GachaScene = new Phaser.Class({
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
-                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
-                    this.sleep(3000).then(() => {
+                    this.sleep(200).then(() => {
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
