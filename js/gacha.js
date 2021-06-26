@@ -15,8 +15,8 @@ var GachaScene = new Phaser.Class({
     preload: function () {},
 
     create: function () {
-        this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
-        this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
+        this.cameras.main.setBackgroundColor('rgba(250, 255, 219, 1)');
+        //this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
@@ -73,17 +73,55 @@ var GachaScene = new Phaser.Class({
             })
         });
 
+        this.catFoodText = this.add.text(110, 520, "Cat Food Left: " + this.catParty.totalCatFood, {
+            color: "#000000",
+            align: "center",
+            fontWeight: 'bold',
+            font: '32px Arial',
+            wordWrap: {
+                width: 800,
+                useAdvancedWrap: true
+            }
+        }).setInteractive();
+
+        this.rateText = this.add.text(1200, 150, "Rates:" + "\n" + "\n" +
+            "Three Star Cat: 60%" + "\n" + "\n" +
+            "Four Star Cat: 30%" + "\n" + "\n" +
+            "Five Star Cat: 10%", {
+                color: "#000000",
+                align: "center",
+                fontWeight: 'bold',
+                font: '32px Arial',
+                wordWrap: {
+                    width: 800,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
+
+
         this.threeStarCats = [];
         this.fourStarCats = [];
         this.fiveStarCats = [];
 
-        this.threeStarCats.push(new Cat("Soldier Cat", 1, "Definitely a well-trained veteran, with many decades of combat experience.", "☆☆☆", [], 20,  19, 13, 8, "soldierCat", "soldierCatCircle"));
+        this.threeStarCats.push(new Cat("Soldier Cat", 1, "Definitely a well-trained veteran, with many decades of combat experience.", "☆☆☆", [], 20, 19, 13, 8, "soldierCat", "soldierCatCircle"));
         this.threeStarCats.push(new Cat("ChainSaw Cat", 1, "Beware of this dangerous cat (the chainsaw is likely just a toy.)", "☆☆☆", [], 14, 16, 13, 5, "chainsawCat", "chainsawCatCircle"));
         this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", "☆☆☆☆", [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
         this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
         this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", "☆☆☆☆☆", [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
         this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", "☆☆☆☆☆", [], 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
+
+        this.allGachaCats = this.threeStarCats.concat(this.fourStarCats, this.fiveStarCats);
+        this.dictionary = []; //associative array
+
+        for (var i = 0; i < this.allGachaCats.length; i++) {
+            this.dictionary[this.allGachaCats[i].name] = {
+                image: this.physics.add.image(850, 500, this.allGachaCats[i].photo),
+                name: this.allGachaCats[i].name
+            }
+            this.dictionary[this.allGachaCats[i].name].image.visible = false;
+        }
+
     },
 
     playGacha: function () {
@@ -102,7 +140,11 @@ var GachaScene = new Phaser.Class({
                     }
                 }
                 if (alreadyHas === false) {
-                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.dictionary[obtainedCat.name].image.visible = true;
+                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                    this.sleep(3000).then(() => {
+                        this.dictionary[obtainedCat.name].image.visible = false;
+                    });
                     this.catParty.obtainNewCat(obtainedCat);
                 }
             } else if (randomInteger > 60 && randomInteger <= 90) {
@@ -117,7 +159,11 @@ var GachaScene = new Phaser.Class({
                     }
                 }
                 if (alreadyHas === false) {
-                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.dictionary[obtainedCat.name].image.visible = true;
+                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                    this.sleep(3000).then(() => {
+                        this.dictionary[obtainedCat.name].image.visible = false;
+                    });
                     this.catParty.obtainNewCat(obtainedCat);
                 }
             } else {
@@ -132,13 +178,22 @@ var GachaScene = new Phaser.Class({
                     }
                 }
                 if (alreadyHas === false) {
-                    alert("Congratulations! You got: " + obtainedCat.name + "!");
+                    this.dictionary[obtainedCat.name].image.visible = true;
+                    alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                    this.sleep(3000).then(() => {
+                        this.dictionary[obtainedCat.name].image.visible = false;
+                    });
                     this.catParty.obtainNewCat(obtainedCat);
                 }
             }
         } else {
             alert("not enough cat food! 5x Cat Foods per roll! You current have: " + this.catParty.totalCatFood + " cat food!");
         }
+        this.catFoodText.setText("Cat Food Left: " + this.catParty.totalCatFood);
+    },
+
+    sleep: function (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
 });

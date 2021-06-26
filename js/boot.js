@@ -27,7 +27,7 @@ var BootScene = new Phaser.Class({
         this.load.image('skipTurn', 'assets/text/skipTurn.png');
         this.load.image('chefCat', 'assets/cats/chefCat.png');
         this.load.image('chefCatCircle', 'assets/cats/chefCatCircle.png');
-        this.load.image('knightCat', 'assets/cats/knightCatCircle.png');
+        this.load.image('knightCat', 'assets/cats/knightCat.png');
         this.load.image('knightCatCircle', 'assets/cats/knightCatCircle.png');
         this.load.image('mechaCat', 'assets/cats/mechaCat.png');
         this.load.image('mechaCatCircle', 'assets/cats/mechaCatCircle.png');
