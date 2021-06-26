@@ -288,6 +288,7 @@ var WorldScene = new Phaser.Class({
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
                 "Status: " + temp.unitInformation.status + "\n" + "\n" +
+                "Enhance Level: " + temp.unitInformation.enhanced + "\n" + "\n" +
                 "Energy: " + temp.unitInformation.energy);
         }
 
@@ -560,6 +561,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat0.unitInformation.status + "\n" + "\n" +
+                        "Enhance Level: " + tempCat0.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat0.unitInformation.energy)
                 });
                 tempCat0.damageText = this.add.text(500, 50, "234", {
@@ -611,6 +613,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat1.unitInformation.status + "\n" + "\n" +
+                        "Enhance Level: " + tempCat1.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat1.unitInformation.energy)
                 });
                 tempCat1.damageText = this.add.text(500, 50, "234", {
@@ -662,6 +665,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat2.unitInformation.status + "\n" + "\n" +
+                        "Enhance Level: " + tempCat2.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat2.unitInformation.energy)
                 })
                 tempCat2.damageText = this.add.text(500, 50, "234", {
@@ -713,6 +717,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat3.unitInformation.status + "\n" + "\n" +
+                        "Enhance Level: " + tempCat3.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat3.unitInformation.energy)
                 });
                 tempCat3.damageText = this.add.text(500, 50, "234", {

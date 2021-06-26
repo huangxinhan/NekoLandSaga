@@ -138,7 +138,23 @@ var GachaScene = new Phaser.Class({
                 var alreadyHas = false;
                 for (var i = 0; i < this.catParty.allCats.length; i++) {
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
-                        alert("congratulations! You got Cat Food x 5!");
+                        this.dictionary[obtainedCat.name].image.visible = true;
+                        this.sleep(200).then(() => {
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            this.dictionary[obtainedCat.name].image.visible = false;
+                        })
+                        this.catParty.allCats[i].enhanced++; 
+                        var randomPick = Math.floor(Math.random() * 100) + 1;
+                        if (randomPick <= 33) {
+                            this.catParty.allCats[i].HP++;
+                            this.catParty.allCats[i].maxHP++;
+                        }
+                        else if (randomPick > 33 && randomPick <= 66) {
+                            this.catParty.allCats[i].ATK++;
+                        }
+                        else{
+                            this.catParty.allCats[i].DEF++;
+                        }
                         alreadyHas = true;
                         this.catParty.obtainCatFood(5);
                     }
@@ -157,7 +173,23 @@ var GachaScene = new Phaser.Class({
                 var alreadyHas = false;
                 for (var i = 0; i < this.catParty.allCats.length; i++) {
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
-                        alert("congratulations! You got Cat Food x 5!");
+                        this.dictionary[obtainedCat.name].image.visible = true;
+                        this.sleep(200).then(() => {
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            this.dictionary[obtainedCat.name].image.visible = false;
+                        })
+                        this.catParty.allCats[i].enhanced++;
+                        var randomPick = Math.floor(Math.random() * 100) + 1;
+                        if (randomPick <= 33) {
+                            this.catParty.allCats[i].HP++;
+                            this.catParty.allCats[i].maxHP++;
+                        }
+                        else if (randomPick > 33 && randomPick <= 66) {
+                            this.catParty.allCats[i].ATK++;
+                        }
+                        else{
+                            this.catParty.allCats[i].DEF++;
+                        }
                         alreadyHas = true;
                         this.catParty.obtainCatFood(5);
                     }
@@ -176,7 +208,23 @@ var GachaScene = new Phaser.Class({
                 var alreadyHas = false;
                 for (var i = 0; i < this.catParty.allCats.length; i++) {
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
-                        alert("congratulations! You got Cat Food x 5!");
+                        this.dictionary[obtainedCat.name].image.visible = true;
+                        this.sleep(200).then(() => {
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            this.dictionary[obtainedCat.name].image.visible = false;
+                        })
+                        this.catParty.allCats[i].enhanced++; 
+                        var randomPick = Math.floor(Math.random() * 100) + 1;
+                        if (randomPick <= 33) {
+                            this.catParty.allCats[i].HP++;
+                            this.catParty.allCats[i].maxHP++;
+                        }
+                        else if (randomPick > 33 && randomPick <= 66) {
+                            this.catParty.allCats[i].ATK++;
+                        }
+                        else{
+                            this.catParty.allCats[i].DEF++;
+                        }
                         alreadyHas = true;
                         this.catParty.obtainCatFood(5);
                     }

@@ -46,6 +46,7 @@ class Cat {
         this.type = "cat";
         this.exp = 0;
         this.energy = 0;
+        this.enhanced = 0;
     }
 
     removeStatus() {

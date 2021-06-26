@@ -307,6 +307,7 @@ var PartyScene = new Phaser.Class({
             this.sideMenuText.setText("Name: " + temp.name + "\n" + "\n" +
                 "Rarity: " + temp.rarity + "\n" + "\n" +
                 "Level: " + temp.level + "\n" + "\n" +
+                "Enhance Level: " + temp.enhanced + "\n" + "\n" +
                 "EXP: " + temp.exp + "\n" + "\n" +
                 "HP: " + temp.HP + "/" + temp.maxHP + "\n" + "\n" +
                 "Skill: " + "\n" + "\n" +
