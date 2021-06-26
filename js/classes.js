@@ -45,6 +45,7 @@ class Cat {
         this.photoCircle = photoCircle;
         this.type = "cat";
         this.exp = 0;
+        this.energy = 0;
     }
 
     removeStatus() {
@@ -73,9 +74,10 @@ class Enemy {
 }
 
 class Skill {
-    constructor(name, description) {
+    constructor(name, description, energyCost) {
         this.name = name;
         this.description = description;
+        this.energyCost = energyCost
     }
 }
 

@@ -28,7 +28,6 @@ var WorldScene = new Phaser.Class({
         this.isColliding = false;
 
         this.buttonLock = false;
-        this.skillCounter = 0;
         this.turnCounter = 0;
     },
 
@@ -277,8 +276,7 @@ var WorldScene = new Phaser.Class({
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
-                "Status: " + temp.unitInformation.status + "\n" + "\n" +
-                "Energy: " + this.skillCounter);
+                "Status: " + temp.unitInformation.status + "\n" + "\n");
         } else if (temp.unitInformation.type === "cat") {
             this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
@@ -290,7 +288,7 @@ var WorldScene = new Phaser.Class({
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
                 "Status: " + temp.unitInformation.status + "\n" + "\n" +
-                "Energy: " + this.skillCounter);
+                "Energy: " + temp.unitInformation.energy);
         }
 
     },
@@ -346,7 +344,6 @@ var WorldScene = new Phaser.Class({
         do {
             this.index++;
             if (this.index >= this.allUnits.length) {
-                this.skillCounter++;
                 this.index = 0;
             }
         } while (!this.allUnits[this.index].unitInformation.status === "dead")
@@ -357,6 +354,7 @@ var WorldScene = new Phaser.Class({
             this.currentCat = this.allUnits[this.index];
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
+            this.allUnits[this.index].unitInformation.energy++;
             this.resetText(this.currentCat);
         }
         //else it is the enemy
@@ -562,7 +560,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat0.unitInformation.status + "\n" + "\n" +
-                        "Energy: " + this.skillCounter)
+                        "Energy: " + tempCat0.unitInformation.energy)
                 });
                 tempCat0.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -613,7 +611,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat1.unitInformation.status + "\n" + "\n" +
-                        "Energy: " + this.skillCounter)
+                        "Energy: " + tempCat1.unitInformation.energy)
                 });
                 tempCat1.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -664,7 +662,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat2.unitInformation.status + "\n" + "\n" +
-                        "Energy: " + this.skillCounter)
+                        "Energy: " + tempCat2.unitInformation.energy)
                 })
                 tempCat2.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -715,7 +713,7 @@ var WorldScene = new Phaser.Class({
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat3.unitInformation.status + "\n" + "\n" +
-                        "Energy: " + this.skillCounter)
+                        "Energy: " + tempCat3.unitInformation.energy)
                 });
                 tempCat3.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
