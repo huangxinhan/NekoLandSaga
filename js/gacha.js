@@ -84,10 +84,11 @@ var GachaScene = new Phaser.Class({
             }
         }).setInteractive();
 
-        this.rateText = this.add.text(1200, 150, "Rates:" + "\n" + "\n" +
-            "Three Star Cat: 60%" + "\n" + "\n" +
-            "Four Star Cat: 30%" + "\n" + "\n" +
-            "Five Star Cat: 10%", {
+        this.rateText = this.add.text(1200, 30, "Rates:" + "\n" + "\n" +
+            "☆☆☆ Cat: 60%" + "\n" + "\n" +
+            "☆☆☆☆ Cat: 30%" + "\n" + "\n" +
+            "☆☆☆☆☆ Cat: 10%"  + "\n" + "\n" +
+            "Mecha Cat ☆☆☆☆☆" + "\n" + "\n" + "Available Now!", {
                 color: "#000000",
                 align: "center",
                 fontWeight: 'bold',
@@ -121,6 +122,9 @@ var GachaScene = new Phaser.Class({
             }
             this.dictionary[this.allGachaCats[i].name].image.visible = false;
         }
+
+        this.mechaCatPromotion = this.physics.add.image(1325, 700, "mechaCat");
+        this.mechaCatPromotion.alpha = 0.3;
 
     },
 
