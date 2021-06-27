@@ -117,7 +117,7 @@ var GachaScene = new Phaser.Class({
 
         for (var i = 0; i < this.allGachaCats.length; i++) {
             this.dictionary[this.allGachaCats[i].name] = {
-                image: this.physics.add.image(850, 500, this.allGachaCats[i].photo),
+                image: this.physics.add.image(750, 500, this.allGachaCats[i].photo),
                 name: this.allGachaCats[i].name
             }
             this.dictionary[this.allGachaCats[i].name].image.visible = false;

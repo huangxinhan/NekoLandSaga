@@ -113,6 +113,8 @@ var WorldScene = new Phaser.Class({
                 }
             });
 
+            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
+
 
             this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
             this.useSkillButton.setInteractive();
@@ -132,8 +134,8 @@ var WorldScene = new Phaser.Class({
                 }
             });
 
-            this.announcementText = this.add.text(500, 50, "", {
-                color: "#000000",
+            this.announcementText = this.add.text(750, 30, "", {
+                color: "#ffffff",
                 align: "center",
                 fontWeight: 'bold',
                 font: '32px Arial',

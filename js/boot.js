@@ -21,6 +21,7 @@ var BootScene = new Phaser.Class({
     preload: function () {
         this.load.image("nekolandsaga", 'assets/text/nekolandsaga.png');
         this.load.image('placeholder', 'assets/text/placeholder.png');
+        this.load.image('topMenu', 'assets/text/topMenu.png');
         this.load.image('highlight', 'assets/text/highlight.png');
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
