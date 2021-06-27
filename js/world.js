@@ -60,6 +60,10 @@ var WorldScene = new Phaser.Class({
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
 
+            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
+            this.topMenu.setInteractive();
+            this.topMenu.setImmovable(true);
+
             this.spawnCats();
 
             //enemy spawns for this current level
@@ -101,6 +105,8 @@ var WorldScene = new Phaser.Class({
             this.redraw();
 
             this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
+            this.sideMenu.setInteractive();
+            this.sideMenu.setImmovable(true);
 
             this.sideMenuText = this.add.text(1300, 25, "", {
                 color: "#FFFFFF",
@@ -112,9 +118,6 @@ var WorldScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             });
-
-            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
-
 
             this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
             this.useSkillButton.setInteractive();
@@ -269,7 +272,7 @@ var WorldScene = new Phaser.Class({
 
     resetText: function (temp) {
         if (temp.unitInformation.type === "enemy") {
-            this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
+            this.sideMenuText.setText(temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -280,7 +283,7 @@ var WorldScene = new Phaser.Class({
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
                 "Status: " + temp.unitInformation.status + "\n" + "\n");
         } else if (temp.unitInformation.type === "cat") {
-            this.sideMenuText.setText("Name: " + temp.unitInformation.name + "\n" + "\n" +
+            this.sideMenuText.setText(temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
                 "EXP: " + temp.unitInformation.exp + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -491,6 +494,7 @@ var WorldScene = new Phaser.Class({
         tempEnemy.setDrag(100);
         tempEnemy.unitInformation = enemyInformation;
         this.physics.add.collider(tempEnemy, this.blockedLayer);
+        this.physics.add.collider(tempEnemy, this.topMenu);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
             this.healthBar.bar.visible = true;
@@ -549,11 +553,12 @@ var WorldScene = new Phaser.Class({
                 tempCat0.setDrag(100);
                 tempCat0.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
+                this.physics.add.collider(tempCat0, this.topMenu);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat0.unitInformation.HP, tempCat0.unitInformation.maxHP);
-                    this.sideMenuText.setText("Name: " + tempCat0.unitInformation.name + "\n" + "\n" +
+                    this.sideMenuText.setText(tempCat0.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat0.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -601,11 +606,12 @@ var WorldScene = new Phaser.Class({
                 tempCat1.setDrag(100);
                 tempCat1.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
+                this.physics.add.collider(tempCat1, this.topMenu);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat1.unitInformation.HP, tempCat1.unitInformation.maxHP);
-                    this.sideMenuText.setText("Name: " + tempCat1.unitInformation.name + "\n" + "\n" +
+                    this.sideMenuText.setText(tempCat1.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat1.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -653,11 +659,12 @@ var WorldScene = new Phaser.Class({
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
                 tempCat2.setDrag(100);
                 this.physics.add.collider(tempCat2, this.blockedLayer, this.wallCollision, false, this);
+                this.physics.add.collider(tempCat2, this.topMenu);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat2.unitInformation.HP, tempCat2.unitInformation.maxHP);
-                    this.sideMenuText.setText("Name: " + tempCat2.unitInformation.name + "\n" + "\n" +
+                    this.sideMenuText.setText(tempCat2.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat2.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -705,11 +712,12 @@ var WorldScene = new Phaser.Class({
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
                 tempCat3.setDrag(100);
                 this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
+                this.physics.add.collider(tempCat3, this.topMenu);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat3.unitInformation.HP, tempCat3.unitInformation.maxHP);
-                    this.sideMenuText.setText("Name: " + tempCat3.unitInformation.name + "\n" + "\n" +
+                    this.sideMenuText.setText(tempCat3.unitInformation.name + "\n" + "\n" +
                         "Level: " + tempCat3.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
