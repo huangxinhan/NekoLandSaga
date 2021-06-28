@@ -23,6 +23,16 @@ var BootScene = new Phaser.Class({
         this.load.image('placeholder', 'assets/text/placeholder.png');
         this.load.image('topMenu', 'assets/text/topMenu.png');
         this.load.image('highlight', 'assets/text/highlight.png');
+        this.load.image('catGacha', 'assets/text/catGacha.png');
+        this.load.image('manageTeamText', 'assets/text/manageTeamText.png');
+        this.load.image('catGachaText', 'assets/text/catGachaText.png');
+        this.load.image('help', 'assets/text/help.png');
+        this.load.image('nekolandsagaText', 'assets/text/nekolandsagaText.png');
+        this.load.image('levelSelection', 'assets/text/levelSelection.png');
+        this.load.image('lureCat', 'assets/text/lureCat.png');
+        this.load.image('manageTeam', 'assets/text/manageTeam.png');
+        this.load.image('removeFromParty', 'assets/text/removeFromParty.png');
+        this.load.image('returnToMainMenu', 'assets/text/returnToMainMenu.png');
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
         this.load.image('skipTurn', 'assets/text/skipTurn.png');
@@ -54,94 +64,31 @@ var BootScene = new Phaser.Class({
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
 
-        this.graphics.strokeRect(90, 300, 300, 50);
-        this.graphics.fillRect(90, 300, 300, 50);
+        var nekolandsagaText = this.physics.add.image(400, 210, 'nekolandsagaText');
 
-        this.graphics.strokeRect(90, 400, 300, 50);
-        this.graphics.fillRect(90, 400, 300, 50);
-
-        this.graphics.strokeRect(90, 500, 300, 50);
-        this.graphics.fillRect(90, 500, 300, 50);
-
-        this.graphics.strokeRect(90, 600, 300, 50);
-        this.graphics.fillRect(90, 600, 300, 50);
-
-        var text = this.add.text(85,
-            130, "Neko Land Saga", {
-                color: "#000000",
-                align: "center",
-                fontWeight: 'bold',
-                font: '60px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        var text1 = this.add.text(185,
-            310, "    START    ", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        text1.on('pointerdown', () => {
+        var levelSelection = this.physics.add.image(400, 350, 'levelSelection').setInteractive();
+        levelSelection.on('pointerdown', () => {
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 0
             });
         });
 
-        var text2 = this.add.text(145,
-            410, "CAT GACHA", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-        text2.on('pointerdown', () => {
+        var catGacha = this.physics.add.image(400, 450, 'catGacha').setInteractive();
+        catGacha.on('pointerdown', () => {
             this.scene.start('GachaScene', {
                 "catParty": this.catParty
             })
-        })
+        });
 
-        var text3 = this.add.text(125,
-            510, "MANAGE TEAM", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-        text3.on('pointerdown', () => {
+        var manageTeam = this.physics.add.image(400, 550, 'manageTeam').setInteractive();
+        manageTeam.on('pointerdown', () => {
             this.scene.start("PartyScene", {
                 "catParty": this.catParty
             })
-        })
+        });
 
-        var text4 = this.add.text(185,
-            610, "HELP", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
+        var help = this.physics.add.image(400, 650, 'help').setInteractive();
     }
 
 });

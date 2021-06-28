@@ -21,53 +21,15 @@ var GachaScene = new Phaser.Class({
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
 
-        this.graphics.strokeRect(90, 300, 300, 50);
-        this.graphics.fillRect(90, 300, 300, 50);
-
-        this.graphics.strokeRect(90, 400, 300, 50);
-        this.graphics.fillRect(90, 400, 300, 50);
-
-
-        var text = this.add.text(85,
-            130, "Cat Gacha", {
-                color: "#000000",
-                align: "center",
-                fontWeight: 'bold',
-                font: '60px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        var text1 = this.add.text(145,
-            310, "Play Gacha!", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        text1.on('pointerdown', () => {
+        var catGachaText = this.physics.add.image(240, 200, 'catGachaText');
+        
+        var lureCat = this.physics.add.image(240, 350, 'lureCat').setInteractive();
+        lureCat.on('pointerdown', () => {
             this.playGacha();
         });
 
-        var text2 = this.add.text(175,
-            410, "Return", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-        text2.on('pointerdown', () => {
+        var returnToMainMenu = this.physics.add.image(240, 450, 'returnToMainMenu').setInteractive();
+        returnToMainMenu.on('pointerdown', () => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })

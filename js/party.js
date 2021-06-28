@@ -34,13 +34,6 @@ var PartyScene = new Phaser.Class({
         this.graphics = this.add.graphics();
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
-
-        this.graphics.strokeRect(890, 40, 300, 50);
-        this.graphics.fillRect(890, 40, 300, 50);
-
-        this.graphics.strokeRect(890, 235, 300, 50);
-        this.graphics.fillRect(890, 235, 300, 50);
-
         this.highlight = this.physics.add.image(0, 0, 'highlight').setInteractive();
         this.highlight.visible = false;
 
@@ -226,58 +219,27 @@ var PartyScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
+        
+        var manageTeamText = this.physics.add.image(350, 60, 'manageTeamText');
 
-        var text = this.add.text(85,
-            30, "Manage Team", {
-                color: "#000000",
-                align: "center",
-                fontWeight: 'bold',
-                font: '60px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
 
-        var text1 = this.add.text(985,
-            50, "Return", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        text1.on('pointerdown', () => {
-            this.organizeTeam();
+        var returnToMainMenu = this.physics.add.image(1070, 60, 'returnToMainMenu').setInteractive();
+        returnToMainMenu.on('pointerdown', () => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
         });
 
-        var removeText = this.add.text(985,
-            245, "Remove", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 800,
-                    useAdvancedWrap: true
-                }
-            }).setInteractive();
-
-        removeText.on('pointerdown', () => {
+        var removeFromParty = this.physics.add.image(1070, 250, 'removeFromParty').setInteractive();
+        removeFromParty.on('pointerdown', () => {
             if (this.selectionMode === true) {
                 this.catParty.currentTeam[this.currentSlot] = null; //empty out that cat
                 this.partyImages[this.currentSlot].destroy();
                 this.selectionMode = false;
                 this.highlight.visible = false;
             }
-        })
+        });
+
     },
 
     addInteractions: function (index) {
