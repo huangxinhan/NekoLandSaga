@@ -75,6 +75,7 @@ var GachaScene = new Phaser.Class({
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
         this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", "☆☆☆☆☆", [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
         this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", "☆☆☆☆☆", [], 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
+        this.fiveStarCats.push(new Cat("Hesitant Cat", 1, "Its master demanded it to leap off a cliff and fly high to reach the stars above. However, as cats lack the wings for flight, this cat is hesitant to take that leap of faith.","☆☆☆☆☆", [], 30, 25, 16, 5, "hesitantCat", "hesitantCatCircle" ));
 
         this.allGachaCats = this.threeStarCats.concat(this.fourStarCats, this.fiveStarCats);
         this.dictionary = []; //associative array
