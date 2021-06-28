@@ -225,6 +225,7 @@ var PartyScene = new Phaser.Class({
 
         var returnToMainMenu = this.physics.add.image(1070, 60, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
+            this.organizeTeam();
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
