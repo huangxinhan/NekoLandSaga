@@ -758,4 +758,3 @@ var WorldScene = new Phaser.Class({
         }
     }
 });
-

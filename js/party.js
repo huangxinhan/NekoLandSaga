@@ -219,7 +219,7 @@ var PartyScene = new Phaser.Class({
                     useAdvancedWrap: true
                 }
             }).setInteractive();
-        
+
         var manageTeamText = this.physics.add.image(350, 60, 'manageTeamText');
 
 

@@ -22,7 +22,7 @@ var GachaScene = new Phaser.Class({
         this.graphics.fillStyle(0x031f4c, 1);
 
         var catGachaText = this.physics.add.image(240, 200, 'catGachaText');
-        
+
         var lureCat = this.physics.add.image(240, 350, 'lureCat').setInteractive();
         lureCat.on('pointerdown', () => {
             this.playGacha();
@@ -49,7 +49,7 @@ var GachaScene = new Phaser.Class({
         this.rateText = this.add.text(1200, 30, "Rates:" + "\n" + "\n" +
             "☆☆☆ Cat: 60%" + "\n" + "\n" +
             "☆☆☆☆ Cat: 30%" + "\n" + "\n" +
-            "☆☆☆☆☆ Cat: 10%"  + "\n" + "\n" +
+            "☆☆☆☆☆ Cat: 10%" + "\n" + "\n" +
             "Mecha Cat ☆☆☆☆☆" + "\n" + "\n" + "Available Now!", {
                 color: "#000000",
                 align: "center",
@@ -107,16 +107,14 @@ var GachaScene = new Phaser.Class({
                             alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
-                        this.catParty.allCats[i].enhanced++; 
+                        this.catParty.allCats[i].enhanced++;
                         var randomPick = Math.floor(Math.random() * 100) + 1;
                         if (randomPick <= 33) {
                             this.catParty.allCats[i].HP++;
                             this.catParty.allCats[i].maxHP++;
-                        }
-                        else if (randomPick > 33 && randomPick <= 66) {
+                        } else if (randomPick > 33 && randomPick <= 66) {
                             this.catParty.allCats[i].ATK++;
-                        }
-                        else{
+                        } else {
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
@@ -147,11 +145,9 @@ var GachaScene = new Phaser.Class({
                         if (randomPick <= 33) {
                             this.catParty.allCats[i].HP++;
                             this.catParty.allCats[i].maxHP++;
-                        }
-                        else if (randomPick > 33 && randomPick <= 66) {
+                        } else if (randomPick > 33 && randomPick <= 66) {
                             this.catParty.allCats[i].ATK++;
-                        }
-                        else{
+                        } else {
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
@@ -177,16 +173,14 @@ var GachaScene = new Phaser.Class({
                             alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
-                        this.catParty.allCats[i].enhanced++; 
+                        this.catParty.allCats[i].enhanced++;
                         var randomPick = Math.floor(Math.random() * 100) + 1;
                         if (randomPick <= 33) {
                             this.catParty.allCats[i].HP++;
                             this.catParty.allCats[i].maxHP++;
-                        }
-                        else if (randomPick > 33 && randomPick <= 66) {
+                        } else if (randomPick > 33 && randomPick <= 66) {
                             this.catParty.allCats[i].ATK++;
-                        }
-                        else{
+                        } else {
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
