@@ -78,11 +78,27 @@ var BootScene = new Phaser.Class({
             });
         });
 
+        levelSelection.on('pointerover', () => {
+            levelSelection.setTint("0xf2b3ff");
+        })
+
+        levelSelection.on('pointerout', () => {
+            levelSelection.clearTint();
+        })
+
         var catGacha = this.physics.add.image(400, 450, 'catGacha').setInteractive();
         catGacha.on('pointerdown', () => {
             this.scene.start('GachaScene', {
                 "catParty": this.catParty
             })
+        });
+
+        catGacha.on('pointerover', () => {
+            catGacha.setTint("0xf2b3ff");
+        })
+
+        catGacha.on('pointerout', () => {
+            catGacha.clearTint();
         });
 
         var manageTeam = this.physics.add.image(400, 550, 'manageTeam').setInteractive();
@@ -92,7 +108,24 @@ var BootScene = new Phaser.Class({
             })
         });
 
+        manageTeam.on('pointerover', () => {
+            manageTeam.setTint("0xf2b3ff");
+        })
+
+        manageTeam.on('pointerout', () => {
+            manageTeam.clearTint();
+        });
+
         var help = this.physics.add.image(400, 650, 'help').setInteractive();
+
+        help.on('pointerover', () => {
+            help.setTint("0xf2b3ff");
+        })
+
+        help.on('pointerout', () => {
+            help.clearTint();
+        });
+
     }
 
 });

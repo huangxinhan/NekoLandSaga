@@ -231,6 +231,14 @@ var PartyScene = new Phaser.Class({
             })
         });
 
+        returnToMainMenu.on('pointerover', () => {
+            returnToMainMenu.setTint("0xf2b3ff");
+        })
+
+        returnToMainMenu.on('pointerout', () => {
+            returnToMainMenu.clearTint();
+        });
+
         var removeFromParty = this.physics.add.image(1070, 250, 'removeFromParty').setInteractive();
         removeFromParty.on('pointerdown', () => {
             if (this.selectionMode === true) {
@@ -239,6 +247,14 @@ var PartyScene = new Phaser.Class({
                 this.selectionMode = false;
                 this.highlight.visible = false;
             }
+        });
+
+        removeFromParty.on('pointerover', () => {
+            removeFromParty.setTint("0xf2b3ff");
+        })
+
+        removeFromParty.on('pointerout', () => {
+            removeFromParty.clearTint();
         });
 
     },

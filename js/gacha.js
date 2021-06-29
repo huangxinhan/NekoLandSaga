@@ -28,11 +28,27 @@ var GachaScene = new Phaser.Class({
             this.playGacha();
         });
 
+        lureCat.on('pointerover', () => {
+            lureCat.setTint("0xf2b3ff");
+        })
+
+        lureCat.on('pointerout', () => {
+            lureCat.clearTint();
+        });
+
         var returnToMainMenu = this.physics.add.image(240, 450, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
+        });
+
+        returnToMainMenu.on('pointerover', () => {
+            returnToMainMenu.setTint("0xf2b3ff");
+        })
+
+        returnToMainMenu.on('pointerout', () => {
+            returnToMainMenu.clearTint();
         });
 
         this.catFoodText = this.add.text(110, 520, "Cat Food Left: " + this.catParty.totalCatFood, {

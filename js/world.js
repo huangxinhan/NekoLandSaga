@@ -133,6 +133,14 @@ var WorldScene = new Phaser.Class({
             }
         });
 
+        this.useSkillButton.on('pointerover', () => {
+            this.useSkillButton.setTint("0xf2b3ff");
+        })
+
+        this.useSkillButton.on('pointerout', () => {
+            this.useSkillButton.clearTint();
+        });
+
         this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
         this.skipTurnButton.setInteractive();
         this.skipTurnButton.visible = false;
@@ -140,6 +148,14 @@ var WorldScene = new Phaser.Class({
             if (this.skillPhase === true) {
                 this.skipTurn();
             }
+        });
+
+        this.skipTurnButton.on('pointerover', () => {
+            this.skipTurnButton.setTint("0xf2b3ff");
+        })
+
+        this.skipTurnButton.on('pointerout', () => {
+            this.skipTurnButton.clearTint();
         });
 
         this.announcementText = this.add.text(750, 30, "", {
