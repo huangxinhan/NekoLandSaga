@@ -29,6 +29,7 @@ var WorldScene = new Phaser.Class({
 
         this.buttonLock = false;
         this.turnCounter = 0;
+        this.physics.world.setFPS(120);
     },
 
     preload: function () {
