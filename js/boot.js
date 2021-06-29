@@ -57,6 +57,8 @@ var BootScene = new Phaser.Class({
         this.load.image('sumoCatCircle', 'assets/cats/sumoCatCircle.png');
         this.load.image('hesitantCat', 'assets/cats/hesitantCat.png');
         this.load.image('hesitantCatCircle', 'assets/cats/hesitantCatCircle.png');
+        this.load.image('billionaireCat', 'assets/cats/billionaireCat.png');
+        this.load.image('billionaireCatCircle', 'assets/cats/billionaireCatCircle.png');
     },
 
     create: function () {

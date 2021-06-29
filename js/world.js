@@ -59,103 +59,164 @@ var WorldScene = new Phaser.Class({
             this.blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
-
-            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
-            this.topMenu.setInteractive();
-            this.topMenu.setImmovable(true);
-
-            this.spawnCats();
-
-            //enemy spawns for this current level
-            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
-            this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
-
-
-            //collide with all other units 
-            this.setUnitCollision();
-
-            console.log(this.allUnits);
-            //turn counter
-            this.index = -1;
-            this.currentCat = this.allUnits[0];
-            this.currentEnemy = null;
-            this.input.on('pointerdown', () => {
-                console.log(this.allUnits[this.index].unitInformation.name);
-                if (this.movePhase === false && this.skillPhase === false && this.enemyPhase === false) {
-                    this.fireCat(); //will be changed to this.fireCat();
-                }
-            });
-
-
-
-            this.hideLine = false;
-            this.graphics = this.add.graphics({
-                lineStyle: {
-                    width: 4,
-                    color: 0xaa00aa
-                }
-            });
-            this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
-            this.input.on('pointermove', (pointer) => {
-                this.line.x2 = pointer.x;
-                this.line.y2 = pointer.y;
-                this.redraw();
-            });
-
-            this.redraw();
-
-            this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
-            this.sideMenu.setInteractive();
-            this.sideMenu.setImmovable(true);
-
-            this.sideMenuText = this.add.text(1300, 25, "", {
-                color: "#FFFFFF",
-                align: "left",
-                fontWeight: 'bold',
-                font: '20px Arial',
-                wordWrap: {
-                    width: 275,
-                    useAdvancedWrap: true
-                }
-            });
-
-            this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
-            this.useSkillButton.setInteractive();
-            this.useSkillButton.visible = false;
-            this.useSkillButton.on('pointerdown', () => {
-                if (this.skillPhase === true) {
-                    this.useSkill();
-                }
-            });
-
-            this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
-            this.skipTurnButton.setInteractive();
-            this.skipTurnButton.visible = false;
-            this.skipTurnButton.on('pointerdown', () => {
-                if (this.skillPhase === true) {
-                    this.skipTurn();
-                }
-            });
-
-            this.announcementText = this.add.text(750, 30, "", {
-                color: "#ffffff",
-                align: "center",
-                fontWeight: 'bold',
-                font: '32px Arial',
-                wordWrap: {
-                    width: 1000,
-                    useAdvancedWrap: true
-                }
-            });
-
-            this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 190, 50);
-
-            this.healthBar.bar.visible = false;
-
+            this.setup();
             this.nextTurn();
-
         }
     },
+
+    setup: function(){
+        this.topMenu = this.physics.add.image(480, 48, 'topMenu');
+        this.topMenu.setInteractive();
+        this.topMenu.setImmovable(true);
+
+        this.spawnCats();
+
+        //enemy spawns for this current level
+        var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
+        this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
+
+
+        //collide with all other units 
+        this.setUnitCollision();
+
+        console.log(this.allUnits);
+        //turn counter
+        this.index = -1;
+        this.currentCat = this.allUnits[0];
+        this.currentEnemy = null;
+        this.input.on('pointerdown', () => {
+            console.log(this.allUnits[this.index].unitInformation.name);
+            if (this.movePhase === false && this.skillPhase === false && this.enemyPhase === false) {
+                this.fireCat(); //will be changed to this.fireCat();
+            }
+        });
+
+
+
+        this.hideLine = false;
+        this.graphics = this.add.graphics({
+            lineStyle: {
+                width: 4,
+                color: 0xaa00aa
+            }
+        });
+        this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
+        this.input.on('pointermove', (pointer) => {
+            this.line.x2 = pointer.x;
+            this.line.y2 = pointer.y;
+            this.redraw();
+        });
+
+        this.redraw();
+
+        this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
+        this.sideMenu.setInteractive();
+        this.sideMenu.setImmovable(true);
+
+        this.sideMenuText = this.add.text(1300, 25, "", {
+            color: "#FFFFFF",
+            align: "left",
+            fontWeight: 'bold',
+            font: '20px Arial',
+            wordWrap: {
+                width: 275,
+                useAdvancedWrap: true
+            }
+        });
+
+        this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
+        this.useSkillButton.setInteractive();
+        this.useSkillButton.visible = false;
+        this.useSkillButton.on('pointerdown', () => {
+            if (this.skillPhase === true) {
+                this.useSkill();
+            }
+        });
+
+        this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
+        this.skipTurnButton.setInteractive();
+        this.skipTurnButton.visible = false;
+        this.skipTurnButton.on('pointerdown', () => {
+            if (this.skillPhase === true) {
+                this.skipTurn();
+            }
+        });
+
+        this.announcementText = this.add.text(750, 30, "", {
+            color: "#ffffff",
+            align: "center",
+            fontWeight: 'bold',
+            font: '32px Arial',
+            wordWrap: {
+                width: 1000,
+                useAdvancedWrap: true
+            }
+        });
+
+        this.position1 = [140, 45];
+        this.position2 = [265, 45];
+        this.position3 = [390, 45];
+        this.position4 = [515, 45];
+
+        this.highlight = this.physics.add.image(0, 0, 'highlight').setInteractive();
+        this.highlight.setScale(0.7, 0.7);
+        this.highlight.visible = false;
+        this.catIcons = []; //associative array
+        for (var i = 0; i < this.catParty.currentTeam.length; i++) {
+            this.catIcons[i] = this.physics.add.image(140 + ((i % 5) * 125), 45, this.catParty.currentTeam[i].photoCircle).setInteractive();
+            this.catIcons[i].setScale(0.7, 0.7);
+        }
+
+        for (var i = 0; i < this.catIcons.length; i++) {
+            switch (i) {
+                case 0:
+                    this.catIcons[0].on('pointerover', () => {
+                        this.highlight.visible = true;
+                        this.highlight.x = this.position1[0];
+                        this.highlight.y = this.position1[1];
+                    });
+                    this.catIcons[0].on('pointerout', () => {
+                        this.highlight.visible = false;
+                    });
+                    break;
+                case 1:
+                    this.catIcons[1].on('pointerover', () => {
+                        this.highlight.visible = true;
+                        this.highlight.x = this.position2[0];
+                        this.highlight.y = this.position2[1];
+                    });
+                    this.catIcons[1].on('pointerout', () => {
+                        this.highlight.visible = false;
+                    });
+                    break;
+                case 2:
+                    this.catIcons[2].on('pointerover', () => {
+                        this.highlight.visible = true;
+                        this.highlight.x = this.position3[0];
+                        this.highlight.y = this.position3[1];
+                    });
+                    this.catIcons[2].on('pointerout', () => {
+                        this.highlight.visible = false;
+                    });
+                    break;
+                case 3:
+                    this.catIcons[3].on('pointerover', () => {
+                        this.highlight.visible = true;
+                        this.highlight.x = this.position4[0];
+                        this.highlight.y = this.position4[1];
+                    });
+                    this.catIcons[3].on('pointerout', () => {
+                        this.highlight.visible = false;
+                    });
+                    break;
+            }
+        }
+
+        this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 190, 50);
+
+        this.healthBar.bar.visible = false;
+    },
+
 
     damageDealingInteractions: function (unit2, damage) {
         var success = false;

@@ -71,6 +71,7 @@ var GachaScene = new Phaser.Class({
         this.fourStarCats.push(new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", "☆☆☆☆", [], 49, 132, 26, 5, "chefCat", "chefCatCircle"));
         this.fourStarCats.push(new Cat('Scientist Cat', 1, "Genius of the century, accidently discovered the secrets of the universe!", "☆☆☆☆", [], 30, 30, 1, 5, 'scienceCat', 'scienceCatCircle'));
         this.fourStarCats.push(new Cat("Sumo Cat", 1, "This immovable legendary cat is the world's greatest sumo master... as well as the world's most famous competitive eater.", "☆☆☆☆", [], 100, 28, 36, 9, 'sumoCat', 'sumoCatCircle'));
+        this.fourStarCats.push(new Cat("Billionaire Cat", 1, "This is the richest cat ever. Pretty sure his name is Henry or something. This is the only cat that can afford shoes. If you ask kindly, he may even give you three dollars.", "☆☆☆☆", [], 30, 25,  25, 3, 'billionaireCat', 'billionaireCatCircle'));
         this.fourStarCats.push(new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", [], 30, 50, 50, 6, "knightCat", "knightCatCircle"));
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", [], 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
         this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", "☆☆☆☆☆", [], 30, 25, 10, 1, "twinCat", "twinCatCircle"));
