@@ -299,7 +299,6 @@ var WorldScene = new Phaser.Class({
     },
 
     unitCollision: function (unit1, unit2) {
-
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
             return; //nothing happens 
         } else if (this.isColliding === false) {
@@ -311,10 +310,12 @@ var WorldScene = new Phaser.Class({
                     //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
+                    unit1.unitInformation.lastTarget = unit2.unitInformation; 
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
+                    unit2.unitInformation.lastTarget = unit1.unitInformation;
                 }
                 this.isColliding = true;
                 this.checkEndBattle();
@@ -324,17 +325,29 @@ var WorldScene = new Phaser.Class({
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     this.damageDealingInteractions(unit2);
+                    unit1.unitInformation.lastTarget = unit2.unitInformation;
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     this.damageDealingInteractions(unit1);
-
+                    unit2.unitInformation.lastTarget = unit1.unitInformation;
                 }
                 this.isColliding = true;
                 this.checkEndBattle();
                 this.checkEndBattleVictory();
             }
         }
+    },
+
+    dealEffectDamage: function(unit1, unit2, damage){
+        if (unit1.unitInformation.type === "cat") {
+            this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
+        }
+        else{
+            this.damageDealingInteractions(unit2);
+        }
+        this.checkEndBattle();
+        this.checkEndBattleVictory();
     },
 
     calculateDamage: function (attack, defense, velocityX, velocityY) {
@@ -355,7 +368,7 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skill: " + "\n" + "\n" +
+                "Skill: " + temp.unitInformation.skill.name + "\n" + "\n" + temp.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.unitInformation.skill.energyCost + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
@@ -366,7 +379,7 @@ var WorldScene = new Phaser.Class({
                 "EXP: " + temp.unitInformation.exp + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skill: " + "\n" + "\n" +
+                "Skill: " + temp.unitInformation.skill.name + "\n" + "\n" + temp.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.unitInformation.skill.energyCost + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
@@ -582,7 +595,7 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skill: " + "\n" + "\n" +
+                "Skill: " + tempEnemy.unitInformation.skill.name + "\n" + "\n" + tempEnemy.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempEnemy.unitInformation.skill.energyCost + "\n" + "\n" +
                 "Attack: " + tempEnemy.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + tempEnemy.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + tempEnemy.unitInformation.WT + "\n" + "\n" +
@@ -641,7 +654,7 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + "\n" + "\n" +
+                        "Skill: " + tempCat0.unitInformation.skill.name + "\n" + "\n" + tempCat0.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat0.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
@@ -694,7 +707,7 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + "\n" + "\n" +
+                        "Skill: " + tempCat1.unitInformation.skill.name + "\n" + "\n" +tempCat1.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat1.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
@@ -747,7 +760,7 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + "\n" + "\n" +
+                        "Skill: " + tempCat2.unitInformation.skill.name + "\n" + "\n" +tempCat2.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat2.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
@@ -800,7 +813,7 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + "\n" + "\n" +
+                        "Skill: " + tempCat3.unitInformation.skill.name + "\n" + "\n" +tempCat3.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat3.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +

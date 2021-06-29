@@ -47,6 +47,7 @@ class Cat {
         this.exp = 0;
         this.energy = 0;
         this.enhanced = 0;
+        this.lastTarget = null; //the last enemy hit 
     }
 
     removeStatus() {
@@ -71,6 +72,7 @@ class Enemy {
         this.WT = WT; //weights affects movement speed etc. 
         this.status = "none";
         this.type = "enemy";
+        this.lastTarget = null;
     }
 }
 
@@ -83,9 +85,10 @@ class Skill {
 }
 
 class Status {
-    constructor(name, description) {
+    constructor(name, description, numberOfTurns) {
         this.name = name;
         this.description = description;
+        this.numberOfTurns = numberOfTurns;
     }
 }
 
