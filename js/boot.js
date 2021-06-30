@@ -11,7 +11,7 @@ var BootScene = new Phaser.Class({
         console.log(data)
         if (jQuery.isEmptyObject(data)) {
             this.catParty = new catParty();
-            this.catParty.obtainCatFood(30);
+            this.catParty.obtainCatFood(50);
         } else {
             this.catParty = data.catParty;
         }
@@ -59,6 +59,8 @@ var BootScene = new Phaser.Class({
         this.load.image('hesitantCatCircle', 'assets/cats/hesitantCatCircle.png');
         this.load.image('billionaireCat', 'assets/cats/billionaireCat.png');
         this.load.image('billionaireCatCircle', 'assets/cats/billionaireCatCircle.png');
+        this.load.image('sushiMasterCat', 'assets/cats/sushiMasterCat.png');
+        this.load.image('sushiMasterCatCircle', 'assets/cats/sushiMasterCatCircle.png');
     },
 
     create: function () {

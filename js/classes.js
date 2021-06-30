@@ -73,6 +73,7 @@ class Enemy {
         this.status = "none";
         this.type = "enemy";
         this.lastTarget = null;
+        this.AIType = null; //AI type can be "normal", "immovable", "normalSkill", "escapeSkill", "boss"
     }
 }
 
