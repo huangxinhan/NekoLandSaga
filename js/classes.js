@@ -40,7 +40,7 @@ class Cat {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT;
-        this.status = "none"; //current status being affected 
+        this.status = new Status("None", "", "∞");; //current status being affected 
         this.photo = photo;
         this.photoCircle = photoCircle;
         this.type = "cat";
@@ -70,7 +70,7 @@ class Enemy {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
-        this.status = "none";
+        this.status = new Status("None", "", "∞");
         this.type = "enemy";
         this.lastTarget = null;
         this.AIType = null; //AI type can be "normal", "immovable", "normalSkill", "escapeSkill", "boss"

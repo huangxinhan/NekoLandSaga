@@ -65,7 +65,7 @@ var WorldScene = new Phaser.Class({
         }
     },
 
-    setup: function(){
+    setup: function () {
         this.topMenu = this.physics.add.image(480, 48, 'topMenu');
         this.topMenu.setInteractive();
         this.topMenu.setImmovable(true);
@@ -118,7 +118,7 @@ var WorldScene = new Phaser.Class({
             color: "#FFFFFF",
             align: "left",
             fontWeight: 'bold',
-            font: '20px Arial',
+            font: '15px Arial',
             wordWrap: {
                 width: 275,
                 useAdvancedWrap: true
@@ -159,7 +159,7 @@ var WorldScene = new Phaser.Class({
             this.skipTurnButton.clearTint();
         });
 
-        this.announcementText = this.add.text(750, 30, "", {
+        this.announcementText = this.add.text(550, 30, "", {
             color: "#ffffff",
             align: "center",
             fontWeight: 'bold',
@@ -170,17 +170,17 @@ var WorldScene = new Phaser.Class({
             }
         });
 
-        this.position1 = [140, 45];
-        this.position2 = [265, 45];
-        this.position3 = [390, 45];
-        this.position4 = [515, 45];
+        this.position1 = [60, 45];
+        this.position2 = [185, 45];
+        this.position3 = [310, 45];
+        this.position4 = [435, 45];
 
         this.highlight = this.physics.add.image(0, 0, 'highlight').setInteractive();
         this.highlight.setScale(0.7, 0.7);
         this.highlight.visible = false;
         this.catIcons = []; //associative array
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
-            this.catIcons[i] = this.physics.add.image(140 + ((i % 5) * 125), 45, this.catParty.currentTeam[i].photoCircle).setInteractive();
+            this.catIcons[i] = this.physics.add.image(60 + ((i % 5) * 125), 45, this.catParty.currentTeam[i].photoCircle).setInteractive();
             this.catIcons[i].setScale(0.7, 0.7);
         }
 
@@ -229,7 +229,7 @@ var WorldScene = new Phaser.Class({
             }
         }
 
-        this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 190, 50);
+        this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 150, 50);
 
         this.healthBar.bar.visible = false;
     },
@@ -241,7 +241,7 @@ var WorldScene = new Phaser.Class({
         if (unit2.unitInformation.HP <= 0) {
             success = true;
             unit2.unitInformation.HP = 0;
-            unit2.unitInformation.status = "dead";
+            unit2.unitInformation.status = new Status("dead", "", "∞");
             this.sleep(2000).then(() => {
                 unit2.setInteractive(false);
                 unit2.setActive(false).setVisible(false);
@@ -310,12 +310,12 @@ var WorldScene = new Phaser.Class({
                     //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
-                    unit1.unitInformation.lastTarget = unit2.unitInformation; 
+                    unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
-                    unit2.unitInformation.lastTarget = unit1.unitInformation;
+                    unit2.unitInformation.lastTarget = unit1;
                 }
                 this.isColliding = true;
                 this.checkEndBattle();
@@ -325,12 +325,12 @@ var WorldScene = new Phaser.Class({
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     this.damageDealingInteractions(unit2);
-                    unit1.unitInformation.lastTarget = unit2.unitInformation;
+                    unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     this.damageDealingInteractions(unit1);
-                    unit2.unitInformation.lastTarget = unit1.unitInformation;
+                    unit2.unitInformation.lastTarget = unit1;
                 }
                 this.isColliding = true;
                 this.checkEndBattle();
@@ -339,11 +339,10 @@ var WorldScene = new Phaser.Class({
         }
     },
 
-    dealEffectDamage: function(unit1, unit2, damage){
+    dealEffectDamage: function (unit1, unit2, damage) {
         if (unit1.unitInformation.type === "cat") {
             this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
-        }
-        else{
+        } else {
             this.damageDealingInteractions(unit2);
         }
         this.checkEndBattle();
@@ -368,11 +367,11 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skill: " + temp.unitInformation.skill.name + "\n" + "\n" + temp.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.unitInformation.skill.energyCost + "\n" + "\n" +
+                //"Skill: " + temp.unitInformation.skill.name + "\n" + "\n" + temp.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.unitInformation.skill.energyCost + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
-                "Status: " + temp.unitInformation.status + "\n" + "\n");
+                "Status: " + temp.unitInformation.status.name + "\n" + "\n" + temp.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + temp.unitInformation.status.numberOfTurns);
         } else if (temp.unitInformation.type === "cat") {
             this.sideMenuText.setText(temp.unitInformation.name + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
@@ -383,7 +382,7 @@ var WorldScene = new Phaser.Class({
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
-                "Status: " + temp.unitInformation.status + "\n" + "\n" +
+                "Status: " + temp.unitInformation.status.name + "\n" + "\n" + temp.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + temp.unitInformation.status.numberOfTurns + "\n" + "\n" +
                 "Enhance Level: " + temp.unitInformation.enhanced + "\n" + "\n" +
                 "Energy: " + temp.unitInformation.energy);
         }
@@ -443,7 +442,7 @@ var WorldScene = new Phaser.Class({
             if (this.index >= this.allUnits.length) {
                 this.index = 0;
             }
-        } while (!this.allUnits[this.index].unitInformation.status === "dead")
+        } while (!this.allUnits[this.index].unitInformation.status.name === "dead")
 
         //if player
         if (this.allUnits[this.index].unitInformation.type === "cat") {
@@ -453,6 +452,12 @@ var WorldScene = new Phaser.Class({
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
             this.allUnits[this.index].unitInformation.energy++;
             this.resetText(this.currentCat);
+            if (this.currentCat.unitInformation.status.name != "None") {
+                this.currentCat.unitInformation.status.numberOfTurns--;
+                if (this.currentCat.unitInformation.status.numberOfTurns == 0) {
+                    this.currentCat.unitInformation.status = new Status("None", "", "∞");;
+                }
+            }
         }
         //else it is the enemy
         else {
@@ -462,7 +467,13 @@ var WorldScene = new Phaser.Class({
             //temporarily forget about enemy AI, make enemy phase true; 
             this.enemyPhase = true;
             this.enemyPhase = false;
-            this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn")
+            this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn");
+            if (this.currentEnemy.unitInformation.status.name != "None") {
+                this.currentEnemy.unitInformation.status.numberOfTurns--;
+                if (this.currentEnemy.unitInformation.status.numberOfTurns == 0) {
+                    this.currentEnemy.unitInformation.status = new Status("None", "", "∞");;
+                }
+            }
             this.nextTurn();
         }
 
@@ -472,10 +483,29 @@ var WorldScene = new Phaser.Class({
 
     useSkill: function () {
         console.log("used skill");
-        this.buttonLock = true;
-        this.skipTurnButton.visible = false;
-        this.useSkillButton.visible = false;
-        this.announcementText.setText(this.currentCat.unitInformation.name + " used a skill!")
+        if (this.currentCat.unitInformation.skill.energyCost <= this.currentCat.unitInformation.energy) {
+            this.buttonLock = true;
+            this.skipTurnButton.visible = false;
+            this.useSkillButton.visible = false;
+            this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
+
+            switch (this.currentCat.unitInformation.skill.name) {
+                case "Sniping Tactics":
+                    this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, 20);
+                    break;
+                case "It's a real chainsaw!":
+                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                    this.resetText(this.currentCat);
+                    break;
+
+            }
+        } else {
+            this.buttonLock = true;
+            this.skipTurnButton.visible = false;
+            this.useSkillButton.visible = false;
+            this.announcementText.setText("Not enough energy to use skill!");
+        }
+
         this.sleep(3000).then(() => {
             this.skillPhase = false;
             this.buttonLock = false;
@@ -595,11 +625,11 @@ var WorldScene = new Phaser.Class({
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                "Skill: " + tempEnemy.unitInformation.skill.name + "\n" + "\n" + tempEnemy.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempEnemy.unitInformation.skill.energyCost + "\n" + "\n" +
+                //"Skill: " + tempEnemy.unitInformation.skill.name + "\n" + "\n" + tempEnemy.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempEnemy.unitInformation.skill.energyCost + "\n" + "\n" +
                 "Attack: " + tempEnemy.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + tempEnemy.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + tempEnemy.unitInformation.WT + "\n" + "\n" +
-                "Status: " + tempEnemy.unitInformation.status + "\n");
+                "Status: " + tempEnemy.unitInformation.status.name + "\n" + "\n" + tempEnemy.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempEnemy.unitInformation.status.numberOfTurns);
         });
         tempEnemy.damageText = this.add.text(500, 50, "234", {
             color: "#FF0000",
@@ -658,7 +688,7 @@ var WorldScene = new Phaser.Class({
                         "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat0.unitInformation.status + "\n" + "\n" +
+                        "Status: " + tempCat0.unitInformation.status.name + "\n" + "\n" + tempCat0.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat0.unitInformation.status.numberOfTurns + "\n" + "\n" +
                         "Enhance Level: " + tempCat0.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat0.unitInformation.energy)
                 });
@@ -707,11 +737,11 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + tempCat1.unitInformation.skill.name + "\n" + "\n" +tempCat1.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat1.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Skill: " + tempCat1.unitInformation.skill.name + "\n" + "\n" + tempCat1.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat1.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat1.unitInformation.status + "\n" + "\n" +
+                        "Status: " + tempCat1.unitInformation.status.name + "\n" + "\n" + tempCat1.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat1.unitInformation.status.numberOfTurns + "\n" + "\n" +
                         "Enhance Level: " + tempCat1.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat1.unitInformation.energy)
                 });
@@ -760,11 +790,11 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + tempCat2.unitInformation.skill.name + "\n" + "\n" +tempCat2.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat2.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Skill: " + tempCat2.unitInformation.skill.name + "\n" + "\n" + tempCat2.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat2.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat2.unitInformation.status + "\n" + "\n" +
+                        "Status: " + tempCat2.unitInformation.status.name + "\n" + "\n" + tempCat2.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat2.unitInformation.status.numberOfTurns + "\n" + "\n" +
                         "Enhance Level: " + tempCat2.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat2.unitInformation.energy)
                 })
@@ -813,11 +843,11 @@ var WorldScene = new Phaser.Class({
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
-                        "Skill: " + tempCat3.unitInformation.skill.name + "\n" + "\n" +tempCat3.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat3.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Skill: " + tempCat3.unitInformation.skill.name + "\n" + "\n" + tempCat3.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat3.unitInformation.skill.energyCost + "\n" + "\n" +
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat3.unitInformation.status + "\n" + "\n" +
+                        "Status: " + tempCat3.unitInformation.status.name + "\n" + "\n" + tempCat3.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat0.unitInformation.status.numberOfTurns + "\n" + "\n" +
                         "Enhance Level: " + tempCat3.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat3.unitInformation.energy)
                 });
