@@ -488,6 +488,7 @@ var WorldScene = new Phaser.Class({
         this.skipTurnButton.visible = false;
         this.useSkillButton.visible = false;
         this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
+        this.currentCat.unitInformation.energy -= this.currentCat.unitInformation.skill.energyCost;
 
         switch (this.currentCat.unitInformation.skill.name) {
             case "Sniping Tactics":
@@ -501,7 +502,7 @@ var WorldScene = new Phaser.Class({
                 break;
             case "Some catfood for you!":
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type === "cat") {
+                    if (this.allUnits[i].unitInformation.type == "cat") {
                         this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2);
                         if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
                             this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
@@ -550,8 +551,60 @@ var WorldScene = new Phaser.Class({
                 this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
                 this.resetText(this.currentCat);
                 break;
-            
-            
+            case "Bullet Hell":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                        this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * 2.21));
+                    }
+                };
+                break;
+            case "Celestial Providence":
+                this.index--;
+                break;
+            case "Dark Summoning Arts":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat") {
+                        this.allUnits[i].unitInformation.energy += 5;
+                    }
+                }
+                break;
+            case "Have some Courage!":
+                if (this.currentCat.unitInformation.lastTarget != null) {
+                    this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
+                }
+                break;
+            case "All You Can Eat":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
+                        this.allUnits[i].unitInformation.name != "Sushi Master Cat") {
+                        this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
+                        this.resetText(this.allUnits[i]);
+
+                        var difference = this.allUnits[i].unitInformation.maxHP - this.allUnits[i].unitInformation.HP;
+                        this.allUnits[i].unitInformation.HP += difference;
+                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                        } else {
+                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                this.healthBar.increase(difference);
+                                this.resetText(this.allUnits[i]);
+                            }
+                        }
+                        this.allUnits[i].healText.setText("+" + 9999);
+                        this.allUnits[i].healText.visible = true;
+                    };
+                };
+                this.sleep(1000).then(() => {
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        this.allUnits[i].healText.visible = false;
+                    }
+                });
+                break;
+
+
+
+
+
 
 
 

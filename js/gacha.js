@@ -92,7 +92,7 @@ var GachaScene = new Phaser.Class({
         this.fiveStarCats.push(new Cat("Mecha Cat", 1, "This cat does not know how to operate this machinery at all. Be careful.", "☆☆☆☆☆", new Skill("Bullet Hell", "Inflicts massive AOE damage to all opponents within 500 range.", 5), 100, 50, 60, 3, "mechaCat", "mechaCatCircle"));
         this.fiveStarCats.push(new Cat("Twin Cats", 1, "These cats hold some kind of divine power.", "☆☆☆☆☆", new Skill("Celestial Providence", "Upon activating the skill, unit can start its move phase again. (This move phase is treated as one turn)", 2), 30, 25, 10, 1, "twinCat", "twinCatCircle"));
         this.fiveStarCats.push(new Cat("Wizard Cat", 1, "This wizard cat is about to summon a demon... or so it believed.", "☆☆☆☆☆", new Skill("Dark Summoning Arts", "Increase energy count by 5 for all current cats in the party, except for Wizard Cat", 5), 20, 40, 6, 3, "wizardCat", "wizardCatCircle"));
-        this.fiveStarCats.push(new Cat("Hesitant Cat", 1, "Its master demanded it to leap off a cliff and fly high to reach the stars above. However, as cats lack the wings for flight, this cat is hesitant to take that leap of faith.","☆☆☆☆☆", new Skill("Have some Courage!", "Inflicts 25% of last enemy target's current HP as damage to the last enemy target.", 1), 30, 25, 16, 5, "hesitantCat", "hesitantCatCircle" ));
+        this.fiveStarCats.push(new Cat("Hesitant Cat", 1, "Its master demanded it to leap off a cliff and fly high to reach the stars above. However, as cats lack the wings for flight, this cat is hesitant to take that leap of faith.","☆☆☆☆☆", new Skill("Have some Courage!", "Inflicts 18% of last enemy target's current HP as damage to the last enemy target.", 1), 30, 25, 16, 5, "hesitantCat", "hesitantCatCircle" ));
         this.fiveStarCats.push(new Cat("Sushi Master Cat", 1, "This cat has trained for over 500 years to make the world's finest sushi.", "☆☆☆☆☆", new Skill("All You Can Eat", "Fully recovers HP for cats within 500 range. Applies 'Satisfied' status to all cats within 500 range for 1 turn.", 5), 100, 3, 50, 10, 'sushiMasterCat', 'sushiMasterCatCircle'));
 
         this.allGachaCats = this.threeStarCats.concat(this.fourStarCats, this.fiveStarCats);
@@ -123,7 +123,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -143,7 +143,7 @@ var GachaScene = new Phaser.Class({
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -156,7 +156,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -176,7 +176,7 @@ var GachaScene = new Phaser.Class({
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -189,7 +189,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -209,7 +209,7 @@ var GachaScene = new Phaser.Class({
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
