@@ -451,7 +451,7 @@ var WorldScene = new Phaser.Class({
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
             this.allUnits[this.index].unitInformation.energy++;
-            this.resetText(this.currentCat);
+            //this.resetText(this.currentCat);
             if (this.currentCat.unitInformation.status.name != "None") {
                 this.currentCat.unitInformation.status.numberOfTurns--;
                 if (this.currentCat.unitInformation.status.numberOfTurns == 0) {
@@ -483,28 +483,76 @@ var WorldScene = new Phaser.Class({
 
     useSkill: function () {
         console.log("used skill");
-        if (this.currentCat.unitInformation.skill.energyCost <= this.currentCat.unitInformation.energy) {
-            this.buttonLock = true;
-            this.skipTurnButton.visible = false;
-            this.useSkillButton.visible = false;
-            this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
+        //if (this.currentCat.unitInformation.skill.energyCost <= this.currentCat.unitInformation.energy) {
+        this.buttonLock = true;
+        this.skipTurnButton.visible = false;
+        this.useSkillButton.visible = false;
+        this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
 
-            switch (this.currentCat.unitInformation.skill.name) {
-                case "Sniping Tactics":
+        switch (this.currentCat.unitInformation.skill.name) {
+            case "Sniping Tactics":
+                if (this.currentCat.unitInformation.lastTarget != null) {
                     this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, 20);
-                    break;
-                case "It's a real chainsaw!":
-                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
-                    this.resetText(this.currentCat);
-                    break;
+                }
+                break;
+            case "It's a real chainsaw!":
+                this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                this.resetText(this.currentCat);
+                break;
+            case "Some catfood for you!":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type === "cat") {
+                        this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2);
+                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                        } else {
+                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
+                                this.resetText(this.allUnits[i]);
+                            }
+                        }
+                        this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
+                        this.allUnits[i].healText.visible = true;
+                    }
+                }
+                this.sleep(1000).then(() => {
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        this.allUnits[i].healText.visible = false;
+                    }
+                });
+                break;
+            case "Toxic Chemicals":
+                if (this.currentCat.unitInformation.lastTarget != null) {
+                    this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's current HP each turn.", 3);
+                    this.resetText(this.unitInformation.lastTarget);
+                };
+            case "Immovable Rock":
+                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 5);
+                this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
+                if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
+                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
+                } else {
+                    if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                        this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
+                        this.resetText(this.currentCat);
+                    }
+                }
+                this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
+                this.currentCat.healText.visible = true;
+                this.sleep(1000).then(() => {
+                    this.currentCat.healText.visible = false;
+                });
+                break;
 
-            }
-        } else {
-            this.buttonLock = true;
-            this.skipTurnButton.visible = false;
-            this.useSkillButton.visible = false;
-            this.announcementText.setText("Not enough energy to use skill!");
-        }
+
+
+                //}
+        } // else {
+        this.buttonLock = true;
+        this.skipTurnButton.visible = false;
+        this.useSkillButton.visible = false;
+        this.announcementText.setText("Not enough energy to use skill!");
+        //}
 
         this.sleep(3000).then(() => {
             this.skillPhase = false;
@@ -847,7 +895,7 @@ var WorldScene = new Phaser.Class({
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
-                        "Status: " + tempCat3.unitInformation.status.name + "\n" + "\n" + tempCat3.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat0.unitInformation.status.numberOfTurns + "\n" + "\n" +
+                        "Status: " + tempCat3.unitInformation.status.name + "\n" + "\n" + tempCat3.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat3.unitInformation.status.numberOfTurns + "\n" + "\n" +
                         "Enhance Level: " + tempCat3.unitInformation.enhanced + "\n" + "\n" +
                         "Energy: " + tempCat3.unitInformation.energy)
                 });
