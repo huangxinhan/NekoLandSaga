@@ -543,6 +543,15 @@ var WorldScene = new Phaser.Class({
                     this.currentCat.healText.visible = false;
                 });
                 break;
+            case "Tax Evasion":
+                //increase the catfood, not yet set. 
+                break;
+            case "Piercing Sword":
+                this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                this.resetText(this.currentCat);
+                break;
+            
+            
 
 
 
