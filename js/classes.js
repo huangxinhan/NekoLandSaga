@@ -60,7 +60,7 @@ class Cat {
 }
 
 class Enemy {
-    constructor(name, level, description, skill, HP, ATK, DEF, WT) {
+    constructor(name, level, description, skill, HP, ATK, DEF, WT, AIType) {
         this.name = name;
         this.level = level;
         this.description = description;
@@ -70,10 +70,10 @@ class Enemy {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
+        this.AIType = AIType; //AI type can be "normal", "immovable", "normalSkill", "escapeSkill", "boss"
         this.status = new Status("None", "", "∞");
         this.type = "enemy";
         this.lastTarget = null;
-        this.AIType = null; //AI type can be "normal", "immovable", "normalSkill", "escapeSkill", "boss"
     }
 }
 

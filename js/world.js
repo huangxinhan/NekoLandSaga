@@ -22,6 +22,10 @@ var WorldScene = new Phaser.Class({
         this.skillPhase = false;
         //enemyphase 
         this.enemyPhase = false;
+        //enemy move phase
+        this.enemyMovePhase = false;
+        //enemy skill phase
+        this.enemySkillPhase = false;
         //amount of catfood 
         this.catFoodGained = 0;
         //whether or not unit is colliding, limits the amount of damage delt at one time 
@@ -60,6 +64,11 @@ var WorldScene = new Phaser.Class({
             this.blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
+
+            //enemy spawns for this current level
+            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3, "normal");
+            this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
+
             this.setup();
             this.nextTurn();
         }
@@ -71,11 +80,6 @@ var WorldScene = new Phaser.Class({
         this.topMenu.setImmovable(true);
 
         this.spawnCats();
-
-        //enemy spawns for this current level
-        var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3);
-        this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
-
 
         //collide with all other units 
         this.setUnitCollision();
@@ -334,24 +338,26 @@ var WorldScene = new Phaser.Class({
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    console.log(damage);
                     if (unit1.unitInformation.status.name == "rage") {
                         damage = Math.floor(damage * 1.5);
                     }
                     if (unit2.unitInformation.status.name == "Iron Wall") {
                         damage = Math.floor(damage * 0.5);
                     }
-                    this.damageDealingInteractions(unit2);
+                    this.damageDealingInteractions(unit2, damage);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    console.log(damage);
                     if (unit2.unitInformation.status.name == "rage") {
                         damage = Math.floor(damage * 1.5);
                     }
                     if (unit1.unitInformation.status.name == "Iron Wall") {
                         damage = Math.floor(damage * 0.5);
                     }
-                    this.damageDealingInteractions(unit1);
+                    this.damageDealingInteractions(unit1, damage);
                     unit2.unitInformation.lastTarget = unit1;
                 }
                 this.isColliding = true;
@@ -377,7 +383,6 @@ var WorldScene = new Phaser.Class({
         if (damageDelt < 0) {
             damageDelt = 0;
         }
-
         return damageDelt;
     },
 
@@ -444,12 +449,13 @@ var WorldScene = new Phaser.Class({
     },
 
     ManhattanDistance: function (x1, y1, x2, y2) {
-        var distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
+        var distance  = Math.sqrt( Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2) );
+        //var distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
         return distance;
     },
 
-    dealStatusEffectDamage: function(unit) {
-        if (unit.unitInformation.status.name == "Poisoned"){
+    dealStatusEffectDamage: function (unit) {
+        if (unit.unitInformation.status.name == "Poisoned") {
             console.log("delt poison damage");
             var damage = Math.floor(unit.unitInformation.maxHP * 0.03);
             this.damageDealingInteractions(unit, damage);
@@ -467,15 +473,26 @@ var WorldScene = new Phaser.Class({
         this.checkEndBattleVictory();
 
 
-        do {
+        // do {
+        //     this.index++;
+        //     if (this.index >= this.allUnits.length) {
+        //         this.index = 0;
+        //     }
+        // } while (!this.allUnits[this.index].unitInformation.status.name == "dead")
+
+        while(true) {
             this.index++;
             if (this.index >= this.allUnits.length) {
                 this.index = 0;
             }
-        } while (!this.allUnits[this.index].unitInformation.status.name === "dead")
+            if (this.allUnits[this.index].unitInformation.status.name != "dead"){
+                break;
+            }
+        }
 
         //if player
         if (this.allUnits[this.index].unitInformation.type === "cat") {
+            //camera focus zoom onto the player
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
             this.dealStatusEffectDamage(this.currentCat);
@@ -498,7 +515,6 @@ var WorldScene = new Phaser.Class({
             this.dealStatusEffectDamage(this.currentEnemy);
             //temporarily forget about enemy AI, make enemy phase true; 
             this.enemyPhase = true;
-            this.enemyPhase = false;
             this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn");
             if (this.currentEnemy.unitInformation.status.name != "None") {
                 this.currentEnemy.unitInformation.status.numberOfTurns--;
@@ -506,209 +522,241 @@ var WorldScene = new Phaser.Class({
                     this.currentEnemy.unitInformation.status = new Status("None", "", "∞");;
                 }
             }
-            this.nextTurn();
+            //camera focus zoom onto the enemy first. 
+            this.sleep(1000).then(() => {
+                this.invokeEnemyAI();
+            });
         }
 
         return;
 
     },
 
+    invokeEnemyAI: function() {
+        if (this.currentEnemy.unitInformation.AIType == "normal"){
+            //normal AIs will go max speed at the nearest cat 
+            var selectedCat = null 
+            for (var i = 0; i < this.allUnits.length; i++){
+                if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750
+                && this.allUnits[i].unitInformation.status.name != "dead"){
+                    selectedCat = this.allUnits[i];
+                    break;
+                }
+            }
+            if (selectedCat != null){
+                this.physics.moveToObject(this.currentEnemy, selectedCat , 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                this.enemyMovePhase = true;
+            }
+            else{
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+            }
+        }
+    },
+
+    enemyUseSkill: function () {
+        console.log("enemy used skill");
+        if (this.currentEnemy.unitInformation.AIType == "normal"){
+            //then we don't use a skill
+            this.enemySkillPhase = false;
+            this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
+            this.sleep(3000).then(() => {
+                this.enemyPhase = false;
+                this.nextTurn();
+            });
+        }
+    },
+
     useSkill: function () {
         console.log("used skill");
-        //if (this.currentCat.unitInformation.skill.energyCost <= this.currentCat.unitInformation.energy) {
-        this.buttonLock = true;
-        this.skipTurnButton.visible = false;
-        this.useSkillButton.visible = false;
-        this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
-        this.currentCat.unitInformation.energy -= this.currentCat.unitInformation.skill.energyCost;
+        if (this.currentCat.unitInformation.skill.energyCost <= this.currentCat.unitInformation.energy) {
+            this.buttonLock = true;
+            this.skipTurnButton.visible = false;
+            this.useSkillButton.visible = false;
+            this.announcementText.setText(this.currentCat.unitInformation.name + " used '" + this.currentCat.unitInformation.skill.name + "'!");
+            this.currentCat.unitInformation.energy -= this.currentCat.unitInformation.skill.energyCost;
 
-        switch (this.currentCat.unitInformation.skill.name) {
-            case "Sniping Tactics":
-                if (this.currentCat.unitInformation.lastTarget != null) {
-                    this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, 20);
-                }
-                break;
-            case "It's a real chainsaw!":
-                this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
-                this.resetText(this.currentCat);
-                break;
-            case "Some catfood for you!":
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat") {
-                        this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2);
-                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
-                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
-                        } else {
-                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
-                                this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
-                                this.resetText(this.allUnits[i]);
-                            }
-                        }
-                        this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
-                        this.allUnits[i].healText.visible = true;
+            switch (this.currentCat.unitInformation.skill.name) {
+                case "Sniping Tactics":
+                    if (this.currentCat.unitInformation.lastTarget != null) {
+                        this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, 20);
                     }
-                }
-                this.sleep(1000).then(() => {
+                    break;
+                case "It's a real chainsaw!":
+                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                    this.resetText(this.currentCat);
+                    break;
+                case "Some catfood for you!":
                     for (var i = 0; i < this.allUnits.length; i++) {
-                        this.allUnits[i].healText.visible = false;
-                    }
-                });
-                break;
-            case "Toxic Chemicals":
-                if (this.currentCat.unitInformation.lastTarget != null) {
-                    this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's max HP each turn.", 3);
-                    this.resetText(this.currentCat.unitInformation.lastTarget);
-                };
-                break;
-            case "Immovable Rock":
-                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 5);
-                this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
-                if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
-                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
-                } else {
-                    if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
-                        this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
-                        this.resetText(this.currentCat);
-                    }
-                }
-                this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
-                this.currentCat.healText.visible = true;
-                this.sleep(1000).then(() => {
-                    this.currentCat.healText.visible = false;
-                });
-                break;
-            case "Home Sweet Home":
-                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 1);
-                this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.25);
-                if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
-                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
-                } else {
-                    if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
-                        this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
-                        this.resetText(this.currentCat);
-                    }
-                }
-                this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
-                this.currentCat.healText.visible = true;
-                this.sleep(1000).then(() => {
-                    this.currentCat.healText.visible = false;
-                });
-                break;
-            case "Tax Evasion":
-                //increase the catfood, not yet set. 
-                break;
-            case "Piercing Sword":
-                this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
-                this.resetText(this.currentCat);
-                break;
-            case "Bullet Hell":
-                var numberOfCats = 0;
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
-                        numberOfCats++;
-                    }
-                }
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
-                        this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * (numberOfCats * 1.21)));
-                    }
-                };
-                break;
-            case "Celestial Providence":
-                this.index--;
-                break;
-            case "Building up Stamina":
-                this.index--;
-                break;
-            case "Dark Summoning Arts":
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 800) {
-                        this.allUnits[i].unitInformation.energy += 5;
-                    }
-                }
-                break;
-            case "Have some Courage!":
-                var numberOfCats = 0;
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
-                        numberOfCats++;
-                    }
-                }
-                if (this.currentCat.unitInformation.lastTarget != null) {
-                    if (numberOfCats < 2) {
-                        this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
-                    } else if (numberOfCats >= 2) {
-                        this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
-                    }
-                }
-                break;
-            case "All You Can Eat":
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
-                        this.allUnits[i].unitInformation.name != "Sushi Master Cat") {
-                        this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
-                        this.resetText(this.allUnits[i]);
-
-                        var difference = this.allUnits[i].unitInformation.maxHP - this.allUnits[i].unitInformation.HP;
-                        this.allUnits[i].unitInformation.HP += difference;
-                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
-                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
-                        } else {
-                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
-                                this.healthBar.increase(difference);
-                                this.resetText(this.allUnits[i]);
+                        if (this.allUnits[i].unitInformation.type == "cat") {
+                            this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2);
+                            if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                                this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                            } else {
+                                if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                    this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
+                                    this.resetText(this.allUnits[i]);
+                                }
                             }
+                            this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.2));
+                            this.allUnits[i].healText.visible = true;
                         }
-                        this.allUnits[i].healText.setText("+" + 9999);
-                        this.allUnits[i].healText.visible = true;
+                    }
+                    this.sleep(1000).then(() => {
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            this.allUnits[i].healText.visible = false;
+                        }
+                    });
+                    break;
+                case "Toxic Chemicals":
+                    if (this.currentCat.unitInformation.lastTarget != null) {
+                        this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's max HP each turn.", 3);
+                        this.resetText(this.currentCat.unitInformation.lastTarget);
                     };
-                };
-                this.sleep(1000).then(() => {
-                    for (var i = 0; i < this.allUnits.length; i++) {
-                        this.allUnits[i].healText.visible = false;
-                    }
-                });
-                break;
-            case "Catch of the day?":
-                for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
-                        this.allUnits[i].unitInformation.name != "Fishing Cat") {
-
-                        this.allUnits[i].unitInformation.HP += Math.floor(this.currentCat.unitInformation.ATK * 0.5);
-                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
-                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
-                        } else {
-                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
-                                this.healthBar.increase(difference);
-                                this.resetText(this.allUnits[i]);
-                            }
+                    break;
+                case "Immovable Rock":
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 5);
+                    this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
+                    if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
+                        this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
+                    } else {
+                        if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                            this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
+                            this.resetText(this.currentCat);
                         }
-                        this.allUnits[i].healText.setText("+" + Math.floor(this.currentCat.unitInformation.ATK * 0.5));
-                        this.allUnits[i].healText.visible = true;
-                    };
-                };
-                this.sleep(1000).then(() => {
-                    for (var i = 0; i < this.allUnits.length; i++) {
-                        this.allUnits[i].healText.visible = false;
                     }
-                });
-                break;
+                    this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
+                    this.currentCat.healText.visible = true;
+                    this.sleep(1000).then(() => {
+                        this.currentCat.healText.visible = false;
+                    });
+                    break;
+                case "Home Sweet Home":
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 1);
+                    this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.25);
+                    if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
+                        this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
+                    } else {
+                        if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                            this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
+                            this.resetText(this.currentCat);
+                        }
+                    }
+                    this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
+                    this.currentCat.healText.visible = true;
+                    this.sleep(1000).then(() => {
+                        this.currentCat.healText.visible = false;
+                    });
+                    break;
+                case "Tax Evasion":
+                    //increase the catfood, not yet set. 
+                    break;
+                case "Piercing Sword":
+                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                    this.resetText(this.currentCat);
+                    break;
+                case "Bullet Hell":
+                    var numberOfCats = 0;
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                            numberOfCats++;
+                        }
+                    }
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                            this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * (numberOfCats * 1.21)));
+                        }
+                    };
+                    break;
+                case "Celestial Providence":
+                    this.index--;
+                    break;
+                case "Building up Stamina":
+                    this.index--;
+                    break;
+                case "Dark Summoning Arts":
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 800) {
+                            this.allUnits[i].unitInformation.energy += 5;
+                        }
+                    }
+                    break;
+                case "Have some Courage!":
+                    var numberOfCats = 0;
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                            numberOfCats++;
+                        }
+                    }
+                    if (this.currentCat.unitInformation.lastTarget != null) {
+                        if (numberOfCats < 2) {
+                            this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
+                        } else if (numberOfCats >= 2) {
+                            this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
+                        }
+                    }
+                    break;
+                case "All You Can Eat":
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
+                            this.allUnits[i].unitInformation.name != "Sushi Master Cat") {
+                            this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
+                            this.resetText(this.allUnits[i]);
 
+                            var difference = this.allUnits[i].unitInformation.maxHP - this.allUnits[i].unitInformation.HP;
+                            this.allUnits[i].unitInformation.HP += difference;
+                            if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                                this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                            } else {
+                                if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                    this.healthBar.increase(difference);
+                                    this.resetText(this.allUnits[i]);
+                                }
+                            }
+                            this.allUnits[i].healText.setText("+" + 9999);
+                            this.allUnits[i].healText.visible = true;
+                        };
+                    };
+                    this.sleep(1000).then(() => {
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            this.allUnits[i].healText.visible = false;
+                        }
+                    });
+                    break;
+                case "Catch of the day?":
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
+                            this.allUnits[i].unitInformation.name != "Fishing Cat") {
 
-
-
-
-
-
-
-
-                //}
-        } // else {
-        this.buttonLock = true;
-        this.skipTurnButton.visible = false;
-        this.useSkillButton.visible = false;
-        this.announcementText.setText("Not enough energy to use skill!");
-        //}
+                            this.allUnits[i].unitInformation.HP += Math.floor(this.currentCat.unitInformation.ATK * 0.5);
+                            if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                                this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                            } else {
+                                if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                    this.healthBar.increase(difference);
+                                    this.resetText(this.allUnits[i]);
+                                }
+                            }
+                            this.allUnits[i].healText.setText("+" + Math.floor(this.currentCat.unitInformation.ATK * 0.5));
+                            this.allUnits[i].healText.visible = true;
+                        };
+                    };
+                    this.sleep(1000).then(() => {
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            this.allUnits[i].healText.visible = false;
+                        }
+                    });
+                    break;
+            }
+        } else {
+            this.buttonLock = true;
+            this.skipTurnButton.visible = false;
+            this.useSkillButton.visible = false;
+            this.announcementText.setText("Not enough energy to use skill!");
+        }
 
         this.sleep(3000).then(() => {
             this.skillPhase = false;
@@ -722,7 +770,7 @@ var WorldScene = new Phaser.Class({
         this.buttonLock = true;
         this.skipTurnButton.visible = false;
         this.useSkillButton.visible = false;
-        this.announcementText.setText(this.currentCat.unitInformation.name + " skips its turn!")
+        this.announcementText.setText(this.currentCat.unitInformation.name + " skips its turn!");
         this.sleep(3000).then(() => {
             this.skillPhase = false;
             this.buttonLock = false;
@@ -794,7 +842,15 @@ var WorldScene = new Phaser.Class({
             this.isColliding = false;
         }
 
-        if (this.movePhase == true || this.skillPhase == true) {
+        if (this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y))< 1)){
+            console.log("enemy now slowed down to 0");
+            this.enemyMovePhase = false; 
+            this.enemySkillPhase = true; 
+            this.enemyUseSkill();
+            this.isColliding = false;
+        }
+
+        if (this.movePhase == true || this.skillPhase == true || this.enemyMovePhase == true) {
             this.graphics.clear();
         }
 
