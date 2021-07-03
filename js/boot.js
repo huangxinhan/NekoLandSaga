@@ -11,7 +11,7 @@ var BootScene = new Phaser.Class({
         console.log(data)
         if (jQuery.isEmptyObject(data)) {
             this.catParty = new catParty();
-            this.catParty.obtainCatFood(60);
+            this.catParty.obtainCatFood(75);
         } else {
             this.catParty = data.catParty;
         }
@@ -61,6 +61,12 @@ var BootScene = new Phaser.Class({
         this.load.image('billionaireCatCircle', 'assets/cats/billionaireCatCircle.png');
         this.load.image('sushiMasterCat', 'assets/cats/sushiMasterCat.png');
         this.load.image('sushiMasterCatCircle', 'assets/cats/sushiMasterCatCircle.png');
+        this.load.image('joggingCat', 'assets/cats/joggingCat.png');
+        this.load.image('joggingCatCircle', 'assets/cats/joggingCatCircle.png');
+        this.load.image('fishingCat', 'assets/cats/fishingCat.png');
+        this.load.image('fishingCatCircle', 'assets/cats/fishingCatCircle.png');
+        this.load.image('homeownerCats', 'assets/cats/homeownerCats.png');
+        this.load.image('homeownerCatsCircle', 'assets/cats/homeownerCatscircle.png'); 
     },
 
     create: function () {

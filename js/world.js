@@ -528,7 +528,7 @@ var WorldScene = new Phaser.Class({
                     this.resetText(this.unitInformation.lastTarget);
                 };
             case "Immovable Rock":
-                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 5);
+                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 5);
                 this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
                 if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                     this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
@@ -544,6 +544,23 @@ var WorldScene = new Phaser.Class({
                     this.currentCat.healText.visible = false;
                 });
                 break;
+            case "Home Sweet Home":
+                this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 1);
+                this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.25);
+                if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
+                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
+                } else {
+                    if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                        this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
+                        this.resetText(this.currentCat);
+                    }
+                }
+                this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
+                this.currentCat.healText.visible = true;
+                this.sleep(1000).then(() => {
+                    this.currentCat.healText.visible = false;
+                });
+                break;
             case "Tax Evasion":
                 //increase the catfood, not yet set. 
                 break;
@@ -552,25 +569,45 @@ var WorldScene = new Phaser.Class({
                 this.resetText(this.currentCat);
                 break;
             case "Bullet Hell":
+                var numberOfCats = 0;
+                for (var i = 0; i < this.allUnits.length; i++){
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500){
+                        numberOfCats++;
+                    }
+                }
                 for (var i = 0; i < this.allUnits.length; i++) {
                     if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
-                        this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * 2.21));
+                        this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * (numberOfCats * 1.21)));
                     }
                 };
                 break;
             case "Celestial Providence":
                 this.index--;
                 break;
+            case "Building up Stamina":
+                this.index--;
+                break;
             case "Dark Summoning Arts":
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat") {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 800) {
                         this.allUnits[i].unitInformation.energy += 5;
                     }
                 }
                 break;
             case "Have some Courage!":
+                var numberOfCats = 0;
+                for (var i = 0; i < this.allUnits.length; i++){
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500){
+                        numberOfCats++;
+                    }
+                }
                 if (this.currentCat.unitInformation.lastTarget != null) {
-                    this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
+                    if (numberOfCats < 2){
+                        this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
+                    }
+                    else if (numberOfCats >= 2){
+                        this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
+                    }
                 }
                 break;
             case "All You Can Eat":
@@ -600,6 +637,31 @@ var WorldScene = new Phaser.Class({
                     }
                 });
                 break;
+            case "Catch of the day?":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
+                        this.allUnits[i].unitInformation.name != "Fishing Cat") {
+
+                        this.allUnits[i].unitInformation.HP += Math.floor(this.currentCat.unitInformation.ATK * 0.5);
+                        if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                            this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                        } else {
+                            if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                this.healthBar.increase(difference);
+                                this.resetText(this.allUnits[i]);
+                            }
+                        }
+                        this.allUnits[i].healText.setText("+" + Math.floor(this.currentCat.unitInformation.ATK * 0.5));
+                        this.allUnits[i].healText.visible = true;
+                    };
+                };
+                this.sleep(1000).then(() => {
+                    for (var i = 0; i < this.allUnits.length; i++) {
+                        this.allUnits[i].healText.visible = false;
+                    }
+                });
+                break;
+
 
 
 
