@@ -306,14 +306,24 @@ var WorldScene = new Phaser.Class({
             if (this.movePhase === true) {
                 //if the player is moving, player deals dmg to enemy 
                 if (unit1.unitInformation.type === "cat") {
-                    //then deal dmg to unit2
-                    //then healthbar.decrease damage IF sidemenutext.text.contains(unit2.uninfo.name) 
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    if (unit1.unitInformation.status.name == "rage") {
+                        damage = Math.floor(damage * 1.5);
+                    }
+                    if (unit2.unitInformation.status.name == "Iron Wall") {
+                        damage = Math.floor(damage * 0.5);
+                    }
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    if (unit2.unitInformation.status.name == "rage") {
+                        damage = Math.floor(damage * 1.5);
+                    }
+                    if (unit1.unitInformation.status.name == "Iron Wall") {
+                        damage = Math.floor(damage * 0.5);
+                    }
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                     unit2.unitInformation.lastTarget = unit1;
                 }
@@ -324,11 +334,23 @@ var WorldScene = new Phaser.Class({
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    if (unit1.unitInformation.status.name == "rage") {
+                        damage = Math.floor(damage * 1.5);
+                    }
+                    if (unit2.unitInformation.status.name == "Iron Wall") {
+                        damage = Math.floor(damage * 0.5);
+                    }
                     this.damageDealingInteractions(unit2);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    if (unit2.unitInformation.status.name == "rage") {
+                        damage = Math.floor(damage * 1.5);
+                    }
+                    if (unit1.unitInformation.status.name == "Iron Wall") {
+                        damage = Math.floor(damage * 0.5);
+                    }
                     this.damageDealingInteractions(unit1);
                     unit2.unitInformation.lastTarget = unit1;
                 }
@@ -426,6 +448,14 @@ var WorldScene = new Phaser.Class({
         return distance;
     },
 
+    dealStatusEffectDamage: function(unit) {
+        if (unit.unitInformation.status.name == "Poisoned"){
+            console.log("delt poison damage");
+            var damage = Math.floor(unit.unitInformation.maxHP * 0.03);
+            this.damageDealingInteractions(unit, damage);
+        }
+    },
+
     nextTurn: function () {
         //main turn system function
         this.turnCounter++;
@@ -448,6 +478,7 @@ var WorldScene = new Phaser.Class({
         if (this.allUnits[this.index].unitInformation.type === "cat") {
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
+            this.dealStatusEffectDamage(this.currentCat);
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
             this.allUnits[this.index].unitInformation.energy++;
@@ -464,6 +495,7 @@ var WorldScene = new Phaser.Class({
             this.graphics.clear();
             this.hideLine = true;
             this.currentEnemy = this.allUnits[this.index];
+            this.dealStatusEffectDamage(this.currentEnemy);
             //temporarily forget about enemy AI, make enemy phase true; 
             this.enemyPhase = true;
             this.enemyPhase = false;
@@ -524,9 +556,10 @@ var WorldScene = new Phaser.Class({
                 break;
             case "Toxic Chemicals":
                 if (this.currentCat.unitInformation.lastTarget != null) {
-                    this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's current HP each turn.", 3);
-                    this.resetText(this.unitInformation.lastTarget);
+                    this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's max HP each turn.", 3);
+                    this.resetText(this.currentCat.unitInformation.lastTarget);
                 };
+                break;
             case "Immovable Rock":
                 this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 5);
                 this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
@@ -570,8 +603,8 @@ var WorldScene = new Phaser.Class({
                 break;
             case "Bullet Hell":
                 var numberOfCats = 0;
-                for (var i = 0; i < this.allUnits.length; i++){
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500){
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
                         numberOfCats++;
                     }
                 }
@@ -596,16 +629,15 @@ var WorldScene = new Phaser.Class({
                 break;
             case "Have some Courage!":
                 var numberOfCats = 0;
-                for (var i = 0; i < this.allUnits.length; i++){
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500){
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
                         numberOfCats++;
                     }
                 }
                 if (this.currentCat.unitInformation.lastTarget != null) {
-                    if (numberOfCats < 2){
+                    if (numberOfCats < 2) {
                         this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
-                    }
-                    else if (numberOfCats >= 2){
+                    } else if (numberOfCats >= 2) {
                         this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
                     }
                 }
