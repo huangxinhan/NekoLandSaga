@@ -70,7 +70,7 @@ class Enemy {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT; //weights affects movement speed etc. 
-        this.AIType = AIType; //AI type can be "normal", "immovable", "immovableSkill", "normalSkill", "escapeSkill", "boss(editable for unique bosses)"
+        this.AIType = AIType; //AI type can be "normal", "immovable", "immovableSkill", "seeker","normalSkill", "escapeSkill", "boss(editable for unique bosses)"
         this.status = new Status("None", "", "∞");
         this.type = "enemy";
         this.lastTarget = null;

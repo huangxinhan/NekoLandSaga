@@ -33,7 +33,7 @@ var WorldScene = new Phaser.Class({
 
         this.buttonLock = false;
         this.turnCounter = 0;
-        this.physics.world.setFPS(60);
+        this.physics.world.setFPS(120);
     },
 
     preload: function () {
@@ -73,7 +73,7 @@ var WorldScene = new Phaser.Class({
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [
                 new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 100, 50, 60, 3, "immovableSkill");
+            ], 100, 50, 60, 3, "seeker");
             this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
 
             this.setup();
@@ -559,6 +559,22 @@ var WorldScene = new Phaser.Class({
                     });
                 }
                 break;
+            case "seeker":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 300 &&
+                        this.allUnits[i].unitInformation.status.name != "dead") {
+                        selectedCat = this.allUnits[i];
+                        break;
+                    }
+                }
+                if (selectedCat != null) {
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.enemyMovePhase = true;
+                } else {
+                    this.physics.moveTo(this.currentEnemy, Math.floor(Math.random() * 1500), Math.floor(Math.random() * 1500), 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.enemyMovePhase = true;
+                }
+                break;
             
             case "normalSkill":
                 for (var i = 0; i < this.allUnits.length; i++) {
@@ -592,7 +608,7 @@ var WorldScene = new Phaser.Class({
                 this.enemyUseSkill();
                 break; 
             
-
+            
 
         }
 
@@ -605,6 +621,7 @@ var WorldScene = new Phaser.Class({
         console.log("enemy used skill");
         switch (this.currentEnemy.unitInformation.AIType) {
             case "normal":
+            case "seeker":
                 //then we don't use a skill
                 this.enemySkillPhase = false;
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
