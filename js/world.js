@@ -561,7 +561,7 @@ var WorldScene = new Phaser.Class({
                 break;
             case "seeker":
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 300 &&
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 450 &&
                         this.allUnits[i].unitInformation.status.name != "dead") {
                         selectedCat = this.allUnits[i];
                         break;
