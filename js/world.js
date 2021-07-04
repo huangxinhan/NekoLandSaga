@@ -33,7 +33,7 @@ var WorldScene = new Phaser.Class({
 
         this.buttonLock = false;
         this.turnCounter = 0;
-        this.physics.world.setFPS(200);
+        this.physics.world.setFPS(60);
     },
 
     preload: function () {
@@ -65,8 +65,15 @@ var WorldScene = new Phaser.Class({
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
 
+            //will have to make sure top menu follows the camera
+            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
+            this.topMenu.setInteractive();
+            this.topMenu.setImmovable(true);
+
             //enemy spawns for this current level
-            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [], 100, 50, 60, 3, "normal");
+            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [
+                new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+            ], 100, 50, 60, 3, "immovableSkill");
             this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
 
             this.setup();
@@ -75,9 +82,6 @@ var WorldScene = new Phaser.Class({
     },
 
     setup: function () {
-        this.topMenu = this.physics.add.image(480, 48, 'topMenu');
-        this.topMenu.setInteractive();
-        this.topMenu.setImmovable(true);
 
         this.spawnCats();
 
@@ -449,7 +453,7 @@ var WorldScene = new Phaser.Class({
     },
 
     ManhattanDistance: function (x1, y1, x2, y2) {
-        var distance  = Math.sqrt( Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2) );
+        var distance = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
         //var distance = Math.abs(x2 - x1) + Math.abs(y2 - y1);
         return distance;
     },
@@ -480,12 +484,12 @@ var WorldScene = new Phaser.Class({
         //     }
         // } while (!this.allUnits[this.index].unitInformation.status.name == "dead")
 
-        while(true) {
+        while (true) {
             this.index++;
             if (this.index >= this.allUnits.length) {
                 this.index = 0;
             }
-            if (this.allUnits[this.index].unitInformation.status.name != "dead"){
+            if (this.allUnits[this.index].unitInformation.status.name != "dead") {
                 break;
             }
         }
@@ -532,42 +536,113 @@ var WorldScene = new Phaser.Class({
 
     },
 
-    invokeEnemyAI: function() {
-        if (this.currentEnemy.unitInformation.AIType == "normal"){
-            //normal AIs will go max speed at the nearest cat 
-            var selectedCat = null 
-            for (var i = 0; i < this.allUnits.length; i++){
-                if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750
-                && this.allUnits[i].unitInformation.status.name != "dead"){
-                    selectedCat = this.allUnits[i];
-                    break;
+    invokeEnemyAI: function () {
+        switch (this.currentEnemy.unitInformation.AIType) {
+            case "normal":
+                //normal AIs will go max speed at the nearest cat 
+                var selectedCat = null
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750 &&
+                        this.allUnits[i].unitInformation.status.name != "dead") {
+                        selectedCat = this.allUnits[i];
+                        break;
+                    }
                 }
-            }
-            if (selectedCat != null){
-                this.physics.moveToObject(this.currentEnemy, selectedCat , 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
-                this.enemyMovePhase = true;
-            }
-            else{
+                if (selectedCat != null) {
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.enemyMovePhase = true;
+                } else {
+                    this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
+                    this.sleep(3000).then(() => {
+                        this.enemyPhase = false;
+                        this.nextTurn();
+                    });
+                }
+                break;
+            
+            case "normalSkill":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750 &&
+                        this.allUnits[i].unitInformation.status.name != "dead") {
+                        selectedCat = this.allUnits[i];
+                        break;
+                    }
+                }
+                if (selectedCat != null) {
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.enemyMovePhase = true;
+                } else {
+                    this.enemyMovePhase = false;
+                    this.enemySkillPhase = true;
+                    this.enemyUseSkill();
+                }
+                break;
+
+            case "immovable":
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+                break;
+
+            case "immovableSkill":
+                this.enemyMovePhase = false;
+                this.enemySkillPhase = true;
+                this.enemyUseSkill();
+                break; 
+            
+
+
+        }
+
+
+
+
+    },
+
+    enemyUseSkill: function () {
+        console.log("enemy used skill");
+        switch (this.currentEnemy.unitInformation.AIType) {
+            case "normal":
+                //then we don't use a skill
+                this.enemySkillPhase = false;
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
                 this.sleep(3000).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
-            }
+                break;
+            case "normalSkill":
+            case "escapeSkill":
+            case "immovableSkill":
+                this.enemySkillPhase = false;
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[0].name + "'!");
+                switch (this.currentEnemy.unitInformation.skill[0].name) {
+                    case "Ewige Freude":
+                        this.currentEnemy.unitInformation.HP += Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5);
+                        if (this.currentEnemy.unitInformation.HP > this.currentEnemy.unitInformation.maxHP) {
+                            this.currentEnemy.unitInformation.HP = this.currentEnemy.unitInformation.maxHP;
+                        } else {
+                            if (this.sideMenu.text.includes(this.currentEnemy.unitInformation.name)) {
+                                this.healthBar.increase(Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
+                                this.resetText(this.currentEnemy);
+                            }
+                        }
+                        this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
+                        this.currentEnemy.healText.visible = true;
+                        this.sleep(1000).then(() => {
+                            this.currentEnemy.healText.visible = false;
+                        });
+                        break;
+                }
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+                break; 
         }
-    },
 
-    enemyUseSkill: function () {
-        console.log("enemy used skill");
-        if (this.currentEnemy.unitInformation.AIType == "normal"){
-            //then we don't use a skill
-            this.enemySkillPhase = false;
-            this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
-            this.sleep(3000).then(() => {
-                this.enemyPhase = false;
-                this.nextTurn();
-            });
-        }
     },
 
     useSkill: function () {
@@ -842,10 +917,10 @@ var WorldScene = new Phaser.Class({
             this.isColliding = false;
         }
 
-        if (this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y))< 1)){
+        if (this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y)) < 1)) {
             console.log("enemy now slowed down to 0");
-            this.enemyMovePhase = false; 
-            this.enemySkillPhase = true; 
+            this.enemyMovePhase = false;
+            this.enemySkillPhase = true;
             this.enemyUseSkill();
             this.isColliding = false;
         }
