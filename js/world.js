@@ -71,9 +71,9 @@ var WorldScene = new Phaser.Class({
             this.topMenu.setImmovable(true);
 
             //enemy spawns for this current level
-            var enemyInformation = new Enemy("Mecha Cat", 5, "This cat does not know how to operate this machinery at all. Be careful.", [
+            var enemyInformation = new Enemy("Mecha Cat", 5, "Dark", "This cat does not know how to operate this machinery at all. Be careful.", [
                 new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 100, 50, 60, 3, "seeker");
+            ], 100, 50, 60, 3, "normalSkill");
             this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
 
             this.setup();
@@ -126,7 +126,7 @@ var WorldScene = new Phaser.Class({
             color: "#FFFFFF",
             align: "left",
             fontWeight: 'bold',
-            font: '15px Arial',
+            font: '18px Arial',
             wordWrap: {
                 width: 275,
                 useAdvancedWrap: true
@@ -237,7 +237,7 @@ var WorldScene = new Phaser.Class({
             }
         }
 
-        this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 150, 50);
+        this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 215, 50);
 
         this.healthBar.bar.visible = false;
     },
@@ -394,6 +394,7 @@ var WorldScene = new Phaser.Class({
     resetText: function (temp) {
         if (temp.unitInformation.type === "enemy") {
             this.sideMenuText.setText(temp.unitInformation.name + "\n" + "\n" +
+                "Element: " + temp.unitInformation.element + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -405,6 +406,7 @@ var WorldScene = new Phaser.Class({
                 "Status: " + temp.unitInformation.status.name + "\n" + "\n" + temp.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + temp.unitInformation.status.numberOfTurns);
         } else if (temp.unitInformation.type === "cat") {
             this.sideMenuText.setText(temp.unitInformation.name + "\n" + "\n" +
+                "Element: " + temp.unitInformation.element + "\n" + "\n" +
                 "Level: " + temp.unitInformation.level + "\n" + "\n" +
                 "EXP: " + temp.unitInformation.exp + "\n" + "\n" +
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -503,7 +505,7 @@ var WorldScene = new Phaser.Class({
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
             this.allUnits[this.index].unitInformation.energy++;
-            //this.resetText(this.currentCat);
+            this.resetText(this.currentCat);
             if (this.currentCat.unitInformation.status.name != "None") {
                 this.currentCat.unitInformation.status.numberOfTurns--;
                 if (this.currentCat.unitInformation.status.numberOfTurns == 0) {
@@ -575,7 +577,7 @@ var WorldScene = new Phaser.Class({
                     this.enemyMovePhase = true;
                 }
                 break;
-            
+
             case "normalSkill":
                 for (var i = 0; i < this.allUnits.length; i++) {
                     if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750 &&
@@ -606,9 +608,9 @@ var WorldScene = new Phaser.Class({
                 this.enemyMovePhase = false;
                 this.enemySkillPhase = true;
                 this.enemyUseSkill();
-                break; 
-            
-            
+                break;
+
+
 
         }
 
@@ -657,7 +659,7 @@ var WorldScene = new Phaser.Class({
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
-                break; 
+                break;
         }
 
     },
@@ -777,7 +779,7 @@ var WorldScene = new Phaser.Class({
                     }
                     break;
                 case "Have some Courage!":
-                    var numberOfCats = 0;
+                    var numberOfCats = -1;
                     for (var i = 0; i < this.allUnits.length; i++) {
                         if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
                             numberOfCats++;
@@ -973,6 +975,7 @@ var WorldScene = new Phaser.Class({
             this.healthBar.bar.visible = true;
             this.healthBar.draw2(tempEnemy.unitInformation.HP, tempEnemy.unitInformation.maxHP);
             this.sideMenuText.setText("Name: " + tempEnemy.unitInformation.name + "\n" + "\n" +
+            "Element: " + tempEnemy.unitInformation.element + "\n" + "\n" +
                 "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" +
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1032,6 +1035,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat0.unitInformation.HP, tempCat0.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat0.unitInformation.name + "\n" + "\n" +
+                    "Element: " + tempCat0.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat0.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1085,6 +1089,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat1.unitInformation.HP, tempCat1.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat1.unitInformation.name + "\n" + "\n" +
+                    "Element: " + tempCat1.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat1.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1138,6 +1143,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat2.unitInformation.HP, tempCat2.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat2.unitInformation.name + "\n" + "\n" +
+                    "Element: " + tempCat2.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat2.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1191,6 +1197,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat3.unitInformation.HP, tempCat3.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat3.unitInformation.name + "\n" + "\n" +
+                    "Element: " + tempCat3.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat3.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +

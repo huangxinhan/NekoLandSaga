@@ -29,9 +29,10 @@ class catParty {
 }
 
 class Cat {
-    constructor(name, level, description, rarity, skill, HP, ATK, DEF, WT, photo, photoCircle) {
+    constructor(name, level, element, description, rarity, skill, HP, ATK, DEF, WT, photo, photoCircle) {
         this.name = name;
         this.level = level;
+        this.element = element; //elements are Anemo, Aqua, Terra, Light, Dark, and Void
         this.description = description;
         this.rarity = rarity;
         this.skill = skill;
@@ -60,9 +61,10 @@ class Cat {
 }
 
 class Enemy {
-    constructor(name, level, description, skill, HP, ATK, DEF, WT, AIType) {
+    constructor(name, level, element, description, skill, HP, ATK, DEF, WT, AIType) {
         this.name = name;
         this.level = level;
+        this.element = element;
         this.description = description;
         this.skill = skill;
         this.maxHP = HP;
