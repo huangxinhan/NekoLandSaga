@@ -315,23 +315,13 @@ var WorldScene = new Phaser.Class({
                 //if the player is moving, player deals dmg to enemy 
                 if (unit1.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
-                    if (unit1.unitInformation.status.name == "rage") {
-                        damage = Math.floor(damage * 1.5);
-                    }
-                    if (unit2.unitInformation.status.name == "Iron Wall") {
-                        damage = Math.floor(damage * 0.5);
-                    }
+                    damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "cat") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                    if (unit2.unitInformation.status.name == "rage") {
-                        damage = Math.floor(damage * 1.5);
-                    }
-                    if (unit1.unitInformation.status.name == "Iron Wall") {
-                        damage = Math.floor(damage * 0.5);
-                    }
+                    damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                     unit2.unitInformation.lastTarget = unit1;
                 }
@@ -342,25 +332,13 @@ var WorldScene = new Phaser.Class({
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
-                    console.log(damage);
-                    if (unit1.unitInformation.status.name == "rage") {
-                        damage = Math.floor(damage * 1.5);
-                    }
-                    if (unit2.unitInformation.status.name == "Iron Wall") {
-                        damage = Math.floor(damage * 0.5);
-                    }
+                    damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.damageDealingInteractions(unit2, damage);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "enemy") {
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
-                    console.log(damage);
-                    if (unit2.unitInformation.status.name == "rage") {
-                        damage = Math.floor(damage * 1.5);
-                    }
-                    if (unit1.unitInformation.status.name == "Iron Wall") {
-                        damage = Math.floor(damage * 0.5);
-                    }
+                    damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.damageDealingInteractions(unit1, damage);
                     unit2.unitInformation.lastTarget = unit1;
                 }
@@ -369,6 +347,47 @@ var WorldScene = new Phaser.Class({
                 this.checkEndBattleVictory();
             }
         }
+    },
+
+    calculateStatusAndElementalDamage: function (unit1, unit2, damage) {
+        if (unit1.unitInformation.status.name == "rage") {
+            damage = Math.floor(damage * 1.5);
+        }
+        if (unit2.unitInformation.status.name == "Iron Wall") {
+            damage = Math.floor(damage * 0.5);
+        }
+        if (unit1.unitInformation.element == "Anemo" && unit2.unitInformation.element == "Aqua") {
+            damage = Math.floor(damage * 1.5);
+        }
+        if (unit1.unitInformation.element == "Anemo" && unit2.unitInformation.element == "Terra") {
+            damage = Math.floor(damage * 0.75);
+        }
+        if (unit1.unitInformation.element == "Aqua" && unit2.unitInformation.element == "Terra") {
+            damage = Math.floor(damage * 1.5);
+        }
+        if (unit1.unitInformation.element == "Aqua" && unit2.unitInformation.element == "Anemo") {
+            damage = Math.floor(damage * 0.75);
+        }
+        if (unit1.unitInformation.element == "Terra" && unit2.unitInformation.element == "Anemo") {
+            damage = Math.floor(damage * 1.5);
+        }
+        if (unit1.unitInformation.element == "Terra" && unit2.unitInformation.element == "Aqua") {
+            damage = Math.floor(damage * 0.75);
+        }
+        if (unit1.unitInformation.element == "Dark" && unit2.unitInformation.element == "Light") {
+            damage = Math.floor(damage * 2);
+        }
+        if (unit1.unitInformation.element == "Light" && unit2.unitInformation.element == "Dark") {
+            damage = Math.floor(damage * 2);
+        }
+        if (unit1.unitInformation.element == "Dark" && unit2.unitInformation.element == "Dark"){
+            damage = Math.floor(damage * 0.5);
+        }
+        if (unit1.unitInformation.element == "Light" && unit1.unitInformation.element == "Light"){
+            damage = Math.floor(damage * 0.5);
+        }
+
+        return damage;
     },
 
     dealEffectDamage: function (unit1, unit2, damage) {
@@ -975,7 +994,7 @@ var WorldScene = new Phaser.Class({
             this.healthBar.bar.visible = true;
             this.healthBar.draw2(tempEnemy.unitInformation.HP, tempEnemy.unitInformation.maxHP);
             this.sideMenuText.setText("Name: " + tempEnemy.unitInformation.name + "\n" + "\n" +
-            "Element: " + tempEnemy.unitInformation.element + "\n" + "\n" +
+                "Element: " + tempEnemy.unitInformation.element + "\n" + "\n" +
                 "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" +
                 "EXP: MAX" + "\n" + "\n" +
                 "HP: " + tempEnemy.unitInformation.HP + "/" + tempEnemy.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1035,7 +1054,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat0.unitInformation.HP, tempCat0.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat0.unitInformation.name + "\n" + "\n" +
-                    "Element: " + tempCat0.unitInformation.element + "\n" + "\n" +
+                        "Element: " + tempCat0.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat0.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat0.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1089,7 +1108,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat1.unitInformation.HP, tempCat1.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat1.unitInformation.name + "\n" + "\n" +
-                    "Element: " + tempCat1.unitInformation.element + "\n" + "\n" +
+                        "Element: " + tempCat1.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat1.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat1.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1143,7 +1162,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat2.unitInformation.HP, tempCat2.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat2.unitInformation.name + "\n" + "\n" +
-                    "Element: " + tempCat2.unitInformation.element + "\n" + "\n" +
+                        "Element: " + tempCat2.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat2.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat2.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
@@ -1197,7 +1216,7 @@ var WorldScene = new Phaser.Class({
                     this.healthBar.bar.visible = true;
                     this.healthBar.draw2(tempCat3.unitInformation.HP, tempCat3.unitInformation.maxHP);
                     this.sideMenuText.setText(tempCat3.unitInformation.name + "\n" + "\n" +
-                    "Element: " + tempCat3.unitInformation.element + "\n" + "\n" +
+                        "Element: " + tempCat3.unitInformation.element + "\n" + "\n" +
                         "Level: " + tempCat3.unitInformation.level + "\n" + "\n" +
                         "EXP: " + tempCat3.unitInformation.exp + "\n" + "\n" +
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
