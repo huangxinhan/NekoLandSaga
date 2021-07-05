@@ -49,15 +49,9 @@ class Cat {
         this.energy = 0;
         this.enhanced = 0;
         this.lastTarget = null; //the last enemy hit 
+        this.isHit = false;
     }
 
-    removeStatus() {
-        this.status = null;
-    }
-
-    inflictStatus(status) {
-        this.status = status;
-    }
 }
 
 class Enemy {
@@ -76,6 +70,7 @@ class Enemy {
         this.status = new Status("None", "", "∞");
         this.type = "enemy";
         this.lastTarget = null;
+        this.isHit = false;
     }
 }
 

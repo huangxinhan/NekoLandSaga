@@ -28,8 +28,6 @@ var WorldScene = new Phaser.Class({
         this.enemySkillPhase = false;
         //amount of catfood 
         this.catFoodGained = 0;
-        //whether or not unit is colliding, limits the amount of damage delt at one time 
-        this.isColliding = false;
 
         this.buttonLock = false;
         this.turnCounter = 0;
@@ -73,8 +71,12 @@ var WorldScene = new Phaser.Class({
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Mecha Cat", 5, "Dark", "This cat does not know how to operate this machinery at all. Be careful.", [
                 new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 100, 50, 60, 3, "normalSkill");
+            ], 30, 30, 30, 5, "normalSkill");
             this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
+            var enemyInformation = new Enemy("Mecha Cat", 5, "Dark", "This cat does not know how to operate this machinery at all. Be careful.", [
+                new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+            ], 30, 30, 30, 5, "normalSkill");
+            this.spawnEnemies(enemyInformation, 350, 350, "mechaCatCircle");
 
             this.setup();
             this.nextTurn();
@@ -309,40 +311,42 @@ var WorldScene = new Phaser.Class({
     unitCollision: function (unit1, unit2) {
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
             return; //nothing happens 
-        } else if (this.isColliding === false) {
+        } else {
             //we do calculations here for damage delt 
             if (this.movePhase === true) {
                 //if the player is moving, player deals dmg to enemy 
-                if (unit1.unitInformation.type === "cat") {
+                if (unit1.unitInformation.type === "cat" && unit2.unitInformation.isHit == false) {
+                    unit2.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
                     unit1.unitInformation.lastTarget = unit2;
 
-                } else if (unit2.unitInformation.type === "cat") {
+                } else if (unit2.unitInformation.type === "cat" && unit1.unitInformation.isHit == false) {
+                    unit1.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                     unit2.unitInformation.lastTarget = unit1;
                 }
-                this.isColliding = true;
                 this.checkEndBattle();
                 this.checkEndBattleVictory();
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
-                if (unit1.unitInformation.type === "enemy") {
+                if (unit1.unitInformation.type === "enemy" && unit2.unitInformation.isHit == false) {
+                    unit2.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.damageDealingInteractions(unit2, damage);
                     unit1.unitInformation.lastTarget = unit2;
 
-                } else if (unit2.unitInformation.type === "enemy") {
+                } else if (unit2.unitInformation.type === "enemy" && unit1.unitInformation.isHit == false) {
+                    unit1.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.damageDealingInteractions(unit1, damage);
                     unit2.unitInformation.lastTarget = unit1;
                 }
-                this.isColliding = true;
                 this.checkEndBattle();
                 this.checkEndBattleVictory();
             }
@@ -952,7 +956,9 @@ var WorldScene = new Phaser.Class({
             this.announcementText.setText(this.currentCat.unitInformation.name + " 's skill is ready");
             this.movePhase = false;
             this.skillPhase = true;
-            this.isColliding = false;
+            for (var i = 0; i < this.allUnits.length; i++){
+                this.allUnits[i].unitInformation.isHit = false;
+            }
         }
 
         if (this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y)) < 1)) {
@@ -960,7 +966,9 @@ var WorldScene = new Phaser.Class({
             this.enemyMovePhase = false;
             this.enemySkillPhase = true;
             this.enemyUseSkill();
-            this.isColliding = false;
+            for (var i = 0; i < this.allUnits.length; i++){
+                this.allUnits[i].unitInformation.isHit = false;
+            }
         }
 
         if (this.movePhase == true || this.skillPhase == true || this.enemyMovePhase == true) {
