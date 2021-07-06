@@ -47,7 +47,7 @@ var WorldScene = new Phaser.Class({
             // this.catParty.swapCat(1, 1);
 
             this.bossStage = false;
-            this.enemyCount = 1;
+            this.enemyCount = 2;
         }
 
     },
@@ -96,7 +96,7 @@ var WorldScene = new Phaser.Class({
         this.currentCat = this.allUnits[0];
         this.currentEnemy = null;
         this.input.on('pointerdown', () => {
-            console.log(this.allUnits[this.index].unitInformation.name);
+            console.log(this.allUnits[this.index].unitInformation);
             if (this.movePhase === false && this.skillPhase === false && this.enemyPhase === false) {
                 this.fireCat(); //will be changed to this.fireCat();
             }
@@ -274,7 +274,7 @@ var WorldScene = new Phaser.Class({
 
     gainExp: function (success, level) {
         if (success == true) {
-            var expGain = 20 * (level - this.currentCat.unitInformation.level);
+            var expGain = 20 * (level - (this.currentCat.unitInformation.level-1));
             if (expGain <= 0) {
                 expGain = 1;
             }
@@ -286,10 +286,10 @@ var WorldScene = new Phaser.Class({
                 console.log("leveld up!")
                 if (this.currentCat.unitInformation.level < 40) {
                     console.log("level up!")
-                    this.currentCat.unitInformation.level = this.currentCat.unitInformation.level + 1;
-                    this.currentCat.unitInformation.ATK = this.currentCat.unitInformation.ATK + 1;
-                    this.currentCat.unitInformation.DEF = this.currentCat.unitInformation.DEF + 1;
-                    this.currentCat.unitInformation.HP = this.currentCat.unitInformation.HP + 1;
+                    this.currentCat.unitInformation.level += 1;
+                    this.currentCat.unitInformation.ATK += 1;
+                    this.currentCat.unitInformation.DEF += 1;
+                    this.currentCat.unitInformation.HP += 1;
                     this.currentCat.healText.visible = true;
                     this.currentCat.healText.setText("Level up!");
                     this.sleep(1000).then(() => {
@@ -303,7 +303,7 @@ var WorldScene = new Phaser.Class({
                 this.sleep(1000).then(() => {
                     this.currentCat.healText.visible = false;
                 });
-                this.currentCat.unitInformation.exp = expGain + this.currentCat.unitInformation.exp;
+                this.currentCat.unitInformation.exp += expGain;
             }
         }
     },
@@ -666,7 +666,7 @@ var WorldScene = new Phaser.Class({
                         if (this.currentEnemy.unitInformation.HP > this.currentEnemy.unitInformation.maxHP) {
                             this.currentEnemy.unitInformation.HP = this.currentEnemy.unitInformation.maxHP;
                         } else {
-                            if (this.sideMenu.text.includes(this.currentEnemy.unitInformation.name)) {
+                            if (this.sideMenuText.text.includes(this.currentEnemy.unitInformation.name)) {
                                 this.healthBar.increase(Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
                                 this.resetText(this.currentEnemy);
                             }
@@ -740,7 +740,7 @@ var WorldScene = new Phaser.Class({
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
                     } else {
-                        if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                        if (this.sideMenuText.text.includes(this.currentCat.unitInformation.name)) {
                             this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
                             this.resetText(this.currentCat);
                         }
@@ -757,7 +757,7 @@ var WorldScene = new Phaser.Class({
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
                     } else {
-                        if (this.sideMenu.text.includes(this.currentCat.unitInformation.name)) {
+                        if (this.sideMenuText.text.includes(this.currentCat.unitInformation.name)) {
                             this.healthBar.increase(Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
                             this.resetText(this.currentCat);
                         }

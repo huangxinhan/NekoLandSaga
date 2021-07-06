@@ -33,6 +33,14 @@ var BootScene = new Phaser.Class({
         this.load.image('manageTeam', 'assets/text/manageTeam.png');
         this.load.image('removeFromParty', 'assets/text/removeFromParty.png');
         this.load.image('returnToMainMenu', 'assets/text/returnToMainMenu.png');
+        this.load.image('arc1', 'assets/text/arc1.png');
+        this.load.image('arc1level1', 'assets/text/arc1level1.png');
+        this.load.image('arc1level2', 'assets/text/arc1level2.png');
+        this.load.image('arc1level3', 'assets/text/arc1level3.png');
+        this.load.image('arc1level4', 'assets/text/arc1level4.png');
+        this.load.image('arc1level5', 'assets/text/arc1level5.png');
+        this.load.image('arc1level6', 'assets/text/arc1level6.png');
+        this.load.image('arc1level7', 'assets/text/arc1level7.png');
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
         this.load.image('skipTurn', 'assets/text/skipTurn.png');
@@ -80,7 +88,7 @@ var BootScene = new Phaser.Class({
 
         var levelSelection = this.physics.add.image(400, 350, 'levelSelection').setInteractive();
         levelSelection.on('pointerdown', () => {
-            this.scene.start('WorldScene', {
+            this.scene.start('LevelSelectionScene', {
                 "catParty": this.catParty,
                 "level": 0
             });

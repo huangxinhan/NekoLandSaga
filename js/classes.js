@@ -3,6 +3,7 @@ class catParty {
         this.allCats = [];
         this.currentTeam = [];
         this.totalCatFood = 0;
+        this.levelsPassed = 0; //keeps track of how many levels are unlocked
     }
 
     //search for a cat reference inside the all cats array and place it inside the current cat array
@@ -21,7 +22,7 @@ class catParty {
     resetCats() {
         for (var i = 0; i < this.allCats.length; i++) {
             this.allCats[i].HP = this.allCats[i].maxHP;
-            this.allCats[i].status = "none";
+            this.allCats[i].status = new Status("None", "", "∞");
         }
     }
 
@@ -41,7 +42,7 @@ class Cat {
         this.ATK = ATK;
         this.DEF = DEF;
         this.WT = WT;
-        this.status = new Status("None", "", "∞");; //current status being affected 
+        this.status = new Status("None", "", "∞"); //current status being affected 
         this.photo = photo;
         this.photoCircle = photoCircle;
         this.type = "cat";

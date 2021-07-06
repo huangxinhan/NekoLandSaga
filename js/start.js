@@ -15,7 +15,9 @@ var config = {
         BootScene,
         WorldScene,
         GachaScene,
-        PartyScene
+        PartyScene,
+        LevelSelectionScene,
+        ancientCivilizationScene
     ]
 };
 var game = new Phaser.Game(config);
