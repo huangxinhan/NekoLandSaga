@@ -75,7 +75,7 @@ var WorldScene = new Phaser.Class({
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Warrior Dog", 5, "Anemo", "", [
                 new EnemySkill("Recover", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 15, 10, 15, 5, "normalSkill");
+            ], 30, 15, 30, 5, "normalSkill");
             this.spawnEnemies(enemyInformation, 750, 350, "warriorDogCircle");
 
             this.setUnitCollisionAndLine();
@@ -998,7 +998,7 @@ var WorldScene = new Phaser.Class({
             console.log(tempEnemy.unitInformation);
             this.healthBar.bar.visible = true;
             this.healthBar.draw2(tempEnemy.unitInformation.HP, tempEnemy.unitInformation.maxHP);
-            this.sideMenuText.setText("Name: " + tempEnemy.unitInformation.name + "\n" + "\n" +
+            this.sideMenuText.setText(tempEnemy.unitInformation.name + "\n" + "\n" +
                 "Element: " + tempEnemy.unitInformation.element + "\n" + "\n" +
                 "Level: " + tempEnemy.unitInformation.level + "\n" + "\n" +
                 "EXP: MAX" + "\n" + "\n" +
