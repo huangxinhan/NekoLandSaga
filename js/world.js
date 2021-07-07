@@ -28,10 +28,12 @@ var WorldScene = new Phaser.Class({
         this.enemySkillPhase = false;
         //amount of catfood 
         this.catFoodGained = 0;
+        //current team of cats
+        this.currentTeam = [];
 
         //locks skill if victory
         this.victory = false;
-        this.defeat  = false;
+        this.defeat = false;
 
         this.buttonLock = false;
         this.turnCounter = 0;
@@ -67,25 +69,27 @@ var WorldScene = new Phaser.Class({
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
 
-            //will have to make sure top menu follows the camera
-            this.topMenu = this.physics.add.image(480, 48, 'topMenu');
-            this.topMenu.setInteractive();
-            this.topMenu.setImmovable(true);
-            this.topMenu.setScrollFactor(0);
-
             this.catParty.currentTeam.push(new Cat('Knight Cat', 1, "Terra", "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", new Skill("Piercing Sword", "Inflicts 'Rage' status on itself for 1 turn.", 1), 25, 25, 25, 7, "knightCat", "knightCatCircle"));
+
+            //enemy spawns for this current level
+            this.enemiesInfo = [];
+
+            var enemyInformation = {
+                info: new Enemy("Warrior Dog", 5, "Anemo", "", [
+                    new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+                ], 30, 15, 30, 5, "normalSkill"),
+                spawnX: 750,
+                spawnY: 350,
+                image: "warriorDogCircle"
+            };
+            this.enemiesInfo.push(enemyInformation);
+
+            this.cameras.main.setBounds(0, 0, testground.widthInPixels, testground.heightInPixels);
 
             this.setup();
 
-            //enemy spawns for this current level
-            var enemyInformation = new Enemy("Warrior Dog", 5, "Anemo", "", [
-                new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 30, 15, 30, 5, "normalSkill");
-            this.spawnEnemies(enemyInformation, 750, 350, "warriorDogCircle");
-
             this.setUnitCollisionAndLine();
-            this.cameras.main.setBounds(0, 0, testground.widthInPixels, testground.heightInPixels);
-            this.cameras.main.roundPixels = true; // avoid tile bleed
+
             this.nextTurn();
         }
     },
@@ -93,6 +97,10 @@ var WorldScene = new Phaser.Class({
     setup: function () {
 
         this.spawnCats();
+
+        for (var i = 0; i < this.enemiesInfo.length; i++) {
+            this.spawnEnemies(this.enemiesInfo[i].info, this.enemiesInfo[i].spawnX, this.enemiesInfo[i].spawnY, this.enemiesInfo[i].image);
+        }
 
         console.log(this.allUnits);
         //turn counter
@@ -105,6 +113,22 @@ var WorldScene = new Phaser.Class({
                 this.fireCat(); //will be changed to this.fireCat();
             }
         });
+
+        this.hideLine = false;
+        this.graphics = this.add.graphics({
+            lineStyle: {
+                width: 4,
+                color: 0xaa00aa
+            }
+        });
+        this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
+        this.input.on('pointermove', (pointer) => {
+            this.line.x2 = this.input.mousePointer.worldX;
+            this.line.y2 = this.input.mousePointer.worldY;
+            this.redraw();
+        });
+
+        this.redraw();
 
 
         this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
@@ -128,6 +152,7 @@ var WorldScene = new Phaser.Class({
         this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
         this.useSkillButton.setInteractive();
         this.useSkillButton.visible = false;
+        this.useSkillButton.setScrollFactor(0);
         this.useSkillButton.on('pointerdown', () => {
             if (this.skillPhase === true) {
                 this.useSkill();
@@ -145,6 +170,7 @@ var WorldScene = new Phaser.Class({
         this.skipTurnButton = this.physics.add.image(1430, 900, 'skipTurn');
         this.skipTurnButton.setInteractive();
         this.skipTurnButton.visible = false;
+        this.skipTurnButton.setScrollFactor(0);
         this.skipTurnButton.on('pointerdown', () => {
             if (this.skillPhase === true) {
                 this.skipTurn();
@@ -158,6 +184,12 @@ var WorldScene = new Phaser.Class({
         this.skipTurnButton.on('pointerout', () => {
             this.skipTurnButton.clearTint();
         });
+
+        //will have to make sure top menu follows the camera
+        this.topMenu = this.physics.add.image(480, 48, 'topMenu');
+        this.topMenu.setInteractive();
+        this.topMenu.setImmovable(true);
+        this.topMenu.setScrollFactor(0);
 
         this.announcementText = this.add.text(550, 30, "", {
             color: "#ffffff",
@@ -179,6 +211,7 @@ var WorldScene = new Phaser.Class({
 
         this.highlight = this.physics.add.image(0, 0, 'highlight').setInteractive();
         this.highlight.setScale(0.7, 0.7);
+        this.highlight.setScrollFactor(0);
         this.highlight.visible = false;
         this.catIcons = []; //associative array
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
@@ -198,6 +231,11 @@ var WorldScene = new Phaser.Class({
                     this.catIcons[0].on('pointerout', () => {
                         this.highlight.visible = false;
                     });
+                    this.catIcons[0].on('pointerdown', () => {
+                        if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
+                            this.cameras.main.startFollow(this.currentTeam[0])
+                        }
+                    });
                     break;
                 case 1:
                     this.catIcons[1].on('pointerover', () => {
@@ -207,6 +245,11 @@ var WorldScene = new Phaser.Class({
                     });
                     this.catIcons[1].on('pointerout', () => {
                         this.highlight.visible = false;
+                    });
+                    this.catIcons[1].on('pointerdown', () => {
+                        if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
+                            this.cameras.main.startFollow(this.currentTeam[1])
+                        }
                     });
                     break;
                 case 2:
@@ -218,6 +261,11 @@ var WorldScene = new Phaser.Class({
                     this.catIcons[2].on('pointerout', () => {
                         this.highlight.visible = false;
                     });
+                    this.catIcons[2].on('pointerdown', () => {
+                        if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
+                            this.cameras.main.startFollow(this.currentTeam[2])
+                        }
+                    });
                     break;
                 case 3:
                     this.catIcons[3].on('pointerover', () => {
@@ -227,6 +275,11 @@ var WorldScene = new Phaser.Class({
                     });
                     this.catIcons[3].on('pointerout', () => {
                         this.highlight.visible = false;
+                    });
+                    this.catIcons[3].on('pointerdown', () => {
+                        if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
+                            this.cameras.main.startFollow(this.currentTeam[3])
+                        }
                     });
                     break;
             }
@@ -238,6 +291,25 @@ var WorldScene = new Phaser.Class({
 
         this.healthBar.bar.setScrollFactor(0);
 
+        this.cameras.main.roundPixels = true; // avoid tile bleed
+        var cursors = this.input.keyboard.createCursorKeys();
+
+        this.input.keyboard.on('keydown', () => {
+            this.cameras.main.stopFollow();
+        });
+
+        var controlConfig = {
+            camera: this.cameras.main,
+            left: cursors.left,
+            right: cursors.right,
+            up: cursors.up,
+            down: cursors.down,
+            acceleration: 0.06,
+            drag: 0.003,
+            maxSpeed: 1.0
+        };
+
+        controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
     },
 
 
@@ -449,21 +521,6 @@ var WorldScene = new Phaser.Class({
                 this.physics.add.collider(this.allUnits[i], this.allUnits[j], this.unitCollision, false, this); //need an event handler method here for damage calcs
             }
         }
-        this.hideLine = false;
-        this.graphics = this.add.graphics({
-            lineStyle: {
-                width: 4,
-                color: 0xaa00aa
-            }
-        });
-        this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
-        this.input.on('pointermove', (pointer) => {
-            this.line.x2 = this.input.mousePointer.worldX;
-            this.line.y2 = this.input.mousePointer.worldY;
-            this.redraw();
-        });
-
-        this.redraw();
     },
 
 
@@ -485,6 +542,7 @@ var WorldScene = new Phaser.Class({
         }
         var power = manhattanDistance;
         this.physics.moveToObject(this.currentCat, this.input.activePointer, power * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+        this.cameras.main.startFollow(this.currentCat);
         //update checking if taking turn
         this.movePhase = true;
     },
@@ -949,8 +1007,8 @@ var WorldScene = new Phaser.Class({
     endBattleVictory: function () {
         this.victory = true;
         this.catParty.resetCats();
-        if (this.currentLevel == 0){
-            this.catParty.currentTeam = []; 
+        if (this.currentLevel == 0) {
+            this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
         }
         this.sleep(5000).then(() => {
@@ -964,7 +1022,8 @@ var WorldScene = new Phaser.Class({
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    update: function () {
+    update: function (time, delta) {
+        controls.update(delta);
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
         for (var i = 0; i < this.allUnits.length; i++) {
             this.allUnits[i].damageText.x = this.allUnits[i].body.position.x + 40;
@@ -1121,6 +1180,7 @@ var WorldScene = new Phaser.Class({
                 });
                 tempCat0.healText.visible = false;
                 this.allUnits.push(tempCat0);
+                this.currentTeam.push(tempCat0);
             }
             if (i === 1) {
                 var tempCat1 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
@@ -1175,6 +1235,7 @@ var WorldScene = new Phaser.Class({
                 });
                 tempCat1.healText.visible = false;
                 this.allUnits.push(tempCat1);
+                this.currentTeam.push(tempCat1);
             }
             if (i === 2) {
                 var tempCat2 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
@@ -1229,6 +1290,7 @@ var WorldScene = new Phaser.Class({
                 });
                 tempCat2.healText.visible = false;
                 this.allUnits.push(tempCat2);
+                this.currentTeam.push(tempCat2);
             }
             if (i === 3) {
                 var tempCat3 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
@@ -1283,6 +1345,7 @@ var WorldScene = new Phaser.Class({
                 });
                 tempCat3.healText.visible = false;
                 this.allUnits.push(tempCat3);
+                this.currentTeam.push(tempCat3);
             }
         }
     }
