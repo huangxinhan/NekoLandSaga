@@ -41,6 +41,7 @@ var BootScene = new Phaser.Class({
         this.load.image('arc1level5', 'assets/text/arc1level5.png');
         this.load.image('arc1level6', 'assets/text/arc1level6.png');
         this.load.image('arc1level7', 'assets/text/arc1level7.png');
+        this.load.image('dialogBox', 'assets/text/dialogBox.png');
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
         this.load.image('skipTurn', 'assets/text/skipTurn.png');

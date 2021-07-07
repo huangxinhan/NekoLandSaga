@@ -19,6 +19,7 @@ var config = {
         GachaScene,
         PartyScene,
         LevelSelectionScene,
+        DialogScene,
         ancientCivilizationScene
     ]
 };

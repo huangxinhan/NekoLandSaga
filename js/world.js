@@ -565,6 +565,16 @@ var WorldScene = new Phaser.Class({
         //main turn system function
         this.turnCounter++;
 
+        if (this.currentLevel == 0) {
+            switch (this.turnCounter) {
+                case 1:
+                    this.scene.pause('WorldScene');
+                    this.scene.run('DialogScene', {
+                        "dialogStatus": "tutorial1"
+                    })
+            }
+        }
+
 
         this.checkEndBattle()
 
@@ -1007,6 +1017,7 @@ var WorldScene = new Phaser.Class({
     endBattleVictory: function () {
         this.victory = true;
         this.catParty.resetCats();
+        this.announcementText.setText("Victory!!");
         if (this.currentLevel == 0) {
             this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
@@ -1077,7 +1088,7 @@ var WorldScene = new Phaser.Class({
         tempEnemy.setDrag(100);
         tempEnemy.unitInformation = enemyInformation;
         this.physics.add.collider(tempEnemy, this.blockedLayer);
-        this.physics.add.collider(tempEnemy, this.topMenu);
+        //this.physics.add.collider(tempEnemy, this.topMenu);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
             this.healthBar.bar.visible = true;
@@ -1137,7 +1148,7 @@ var WorldScene = new Phaser.Class({
                 tempCat0.setDrag(100);
                 tempCat0.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat0, this.blockedLayer, this.wallCollision, false, this);
-                this.physics.add.collider(tempCat0, this.topMenu);
+                //this.physics.add.collider(tempCat0, this.topMenu);
                 tempCat0.on('pointerover', () => {
                     console.log(tempCat0.unitInformation);
                     this.healthBar.bar.visible = true;
@@ -1192,7 +1203,7 @@ var WorldScene = new Phaser.Class({
                 tempCat1.setDrag(100);
                 tempCat1.unitInformation = this.catParty.currentTeam[i];
                 this.physics.add.collider(tempCat1, this.blockedLayer, this.wallCollision, false, this);
-                this.physics.add.collider(tempCat1, this.topMenu);
+                //this.physics.add.collider(tempCat1, this.topMenu);
                 tempCat1.on('pointerover', () => {
                     console.log(tempCat1.unitInformation);
                     this.healthBar.bar.visible = true;
@@ -1247,7 +1258,7 @@ var WorldScene = new Phaser.Class({
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
                 tempCat2.setDrag(100);
                 this.physics.add.collider(tempCat2, this.blockedLayer, this.wallCollision, false, this);
-                this.physics.add.collider(tempCat2, this.topMenu);
+                //this.physics.add.collider(tempCat2, this.topMenu);
                 tempCat2.on('pointerover', () => {
                     console.log(tempCat2.unitInformation);
                     this.healthBar.bar.visible = true;
@@ -1302,7 +1313,7 @@ var WorldScene = new Phaser.Class({
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
                 tempCat3.setDrag(100);
                 this.physics.add.collider(tempCat3, this.blockedLayer, this.wallCollision, false, this);
-                this.physics.add.collider(tempCat3, this.topMenu);
+                //this.physics.add.collider(tempCat3, this.topMenu);
                 tempCat3.on('pointerover', () => {
                     console.log(tempCat3.unitInformation);
                     this.healthBar.bar.visible = true;
