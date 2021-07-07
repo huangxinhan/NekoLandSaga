@@ -71,6 +71,7 @@ var WorldScene = new Phaser.Class({
             this.topMenu = this.physics.add.image(480, 48, 'topMenu');
             this.topMenu.setInteractive();
             this.topMenu.setImmovable(true);
+            this.topMenu.setScrollFactor(0);
 
             this.catParty.currentTeam.push(new Cat('Knight Cat', 1, "Terra", "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", new Skill("Piercing Sword", "Inflicts 'Rage' status on itself for 1 turn.", 1), 25, 25, 25, 7, "knightCat", "knightCatCircle"));
 
@@ -83,6 +84,8 @@ var WorldScene = new Phaser.Class({
             this.spawnEnemies(enemyInformation, 750, 350, "warriorDogCircle");
 
             this.setUnitCollisionAndLine();
+            this.cameras.main.setBounds(0, 0, testground.widthInPixels, testground.heightInPixels);
+            this.cameras.main.roundPixels = true; // avoid tile bleed
             this.nextTurn();
         }
     },
@@ -107,6 +110,7 @@ var WorldScene = new Phaser.Class({
         this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
         this.sideMenu.setInteractive();
         this.sideMenu.setImmovable(true);
+        this.sideMenu.setScrollFactor(0);
 
         this.sideMenuText = this.add.text(1300, 25, "", {
             color: "#FFFFFF",
@@ -118,6 +122,8 @@ var WorldScene = new Phaser.Class({
                 useAdvancedWrap: true
             }
         });
+
+        this.sideMenuText.setScrollFactor(0);
 
         this.useSkillButton = this.physics.add.image(1430, 805, 'useSkill');
         this.useSkillButton.setInteractive();
@@ -164,6 +170,8 @@ var WorldScene = new Phaser.Class({
             }
         });
 
+        this.announcementText.setScrollFactor(0);
+
         this.position1 = [60, 45];
         this.position2 = [185, 45];
         this.position3 = [310, 45];
@@ -176,6 +184,7 @@ var WorldScene = new Phaser.Class({
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
             this.catIcons[i] = this.physics.add.image(60 + ((i % 5) * 125), 45, this.catParty.currentTeam[i].photoCircle).setInteractive();
             this.catIcons[i].setScale(0.7, 0.7);
+            this.catIcons[i].setScrollFactor(0);
         }
 
         for (var i = 0; i < this.catIcons.length; i++) {
@@ -226,6 +235,8 @@ var WorldScene = new Phaser.Class({
         this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 215, 50);
 
         this.healthBar.bar.visible = false;
+
+        this.healthBar.bar.setScrollFactor(0);
 
     },
 
@@ -447,8 +458,8 @@ var WorldScene = new Phaser.Class({
         });
         this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
         this.input.on('pointermove', (pointer) => {
-            this.line.x2 = pointer.x;
-            this.line.y2 = pointer.y;
+            this.line.x2 = this.input.mousePointer.worldX;
+            this.line.y2 = this.input.mousePointer.worldY;
             this.redraw();
         });
 
@@ -457,17 +468,17 @@ var WorldScene = new Phaser.Class({
 
 
     redraw: function () {
-        if (this.hideLine === false && this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) <= 500) {
+        if (this.hideLine === false && this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) <= 500) {
             this.graphics.clear();
             this.graphics.strokeLineShape(this.line);
         }
-        if (this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y) > 500) {
+        if (this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) > 500) {
             this.graphics.clear();
         }
     },
 
     fireCat: function () {
-        var manhattanDistance = this.ManhattanDistance(this.input.activePointer.x, this.input.activePointer.y, this.currentCat.x, this.currentCat.y);
+        var manhattanDistance = this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y);
         //can reach up to 250 speed in total 
         if (manhattanDistance > 500) {
             return; //don't fire if that is the acase
@@ -520,6 +531,7 @@ var WorldScene = new Phaser.Class({
             }
         }
 
+        this.cameras.main.startFollow(this.allUnits[this.index]);
         //if player
         if (this.allUnits[this.index].unitInformation.type === "cat") {
             //camera focus zoom onto the player
