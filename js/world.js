@@ -43,7 +43,7 @@ var WorldScene = new Phaser.Class({
     preload: function () {
         //load based on the level
         if (this.currentLevel === 0) {
-            this.load.tilemapTiledJSON('testground', 'assets/map/testground.json');
+            this.load.tilemapTiledJSON('tutorial', 'assets/map/tutorial.json');
             // var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle");
             // this.catParty.obtainNewCat(chefCat);
             // this.catParty.swapCat(0, 0);
@@ -60,12 +60,12 @@ var WorldScene = new Phaser.Class({
 
     create: function () {
         if (this.currentLevel === 0) {
-            var testground = this.make.tilemap({
-                key: 'testground'
+            var tutorial = this.make.tilemap({
+                key: 'tutorial'
             });
-            var tiles = testground.addTilesetImage('Mapset', 'tiles');
-            this.traverseLayer = testground.createLayer('traverseLayer', tiles, 0, 0);
-            this.blockedLayer = testground.createLayer('blockedLayer', tiles, 0, 0);
+            var tiles = tutorial.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = tutorial.createLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = tutorial.createLayer('blockedLayer', tiles, 0, 0);
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
 
@@ -78,13 +78,13 @@ var WorldScene = new Phaser.Class({
                 info: new Enemy("Warrior Dog", 5, "Anemo", "", [
                     new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
                 ], 30, 15, 30, 5, "normalSkill"),
-                spawnX: 750,
-                spawnY: 350,
+                spawnX: 1280,
+                spawnY: 980,
                 image: "warriorDogCircle"
             };
             this.enemiesInfo.push(enemyInformation);
 
-            this.cameras.main.setBounds(0, 0, testground.widthInPixels, testground.heightInPixels);
+            this.cameras.main.setBounds(0, 0, tutorial.widthInPixels, tutorial.heightInPixels);
 
             this.setup();
 
@@ -96,7 +96,9 @@ var WorldScene = new Phaser.Class({
 
     setup: function () {
 
-        this.spawnCats();
+        if (this.currentLevel == 0) {
+            this.spawnCats(1280, 1380);
+        }
 
         for (var i = 0; i < this.enemiesInfo.length; i++) {
             this.spawnEnemies(this.enemiesInfo[i].info, this.enemiesInfo[i].spawnX, this.enemiesInfo[i].spawnY, this.enemiesInfo[i].image);
@@ -541,7 +543,7 @@ var WorldScene = new Phaser.Class({
             return; //don't fire if that is the acase
         }
         var power = manhattanDistance;
-        this.physics.moveToObject(this.currentCat, this.input.activePointer, power * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+        this.physics.moveTo(this.currentCat, this.input.mousePointer.worldX, this.input.mousePointer.worldY, power * (2 - (this.currentCat.unitInformation.WT * 0.1)));
         this.cameras.main.startFollow(this.currentCat);
         //update checking if taking turn
         this.movePhase = true;
@@ -1094,7 +1096,7 @@ var WorldScene = new Phaser.Class({
 
         var tempEnemy = this.physics.add.image(x, y, name);
         tempEnemy.setCircle(64);
-        tempEnemy.setCollideWorldBounds(true);
+        //tempEnemy.setCollideWorldBounds(true);
         tempEnemy.setBounce(1);
         tempEnemy.setInteractive();
         tempEnemy.setMass(enemyInformation.WT)
@@ -1149,12 +1151,12 @@ var WorldScene = new Phaser.Class({
     },
 
 
-    spawnCats: function () {
+    spawnCats: function (x, y) {
         for (var i = 0; i < this.catParty.currentTeam.length; i++) {
             if (i === 0) {
-                var tempCat0 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat0 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat0.setCircle(64);
-                tempCat0.setCollideWorldBounds(true);
+                //tempCat0.setCollideWorldBounds(true);
                 tempCat0.setBounce(1);
                 tempCat0.setInteractive();
                 tempCat0.setMass(this.catParty.currentTeam[i].WT)
@@ -1207,9 +1209,9 @@ var WorldScene = new Phaser.Class({
                 this.currentTeam.push(tempCat0);
             }
             if (i === 1) {
-                var tempCat1 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat1 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat1.setCircle(64);
-                tempCat1.setCollideWorldBounds(true);
+                //tempCat1.setCollideWorldBounds(true);
                 tempCat1.setBounce(1);
                 tempCat1.setInteractive();
                 tempCat1.setMass(this.catParty.currentTeam[i].WT);
@@ -1262,9 +1264,9 @@ var WorldScene = new Phaser.Class({
                 this.currentTeam.push(tempCat1);
             }
             if (i === 2) {
-                var tempCat2 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat2 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat2.setCircle(64);
-                tempCat2.setCollideWorldBounds(true);
+                //tempCat2.setCollideWorldBounds(true);
                 tempCat2.setBounce(1);
                 tempCat2.setInteractive();
                 tempCat2.setMass(this.catParty.currentTeam[i].WT)
@@ -1317,9 +1319,9 @@ var WorldScene = new Phaser.Class({
                 this.currentTeam.push(tempCat2);
             }
             if (i === 3) {
-                var tempCat3 = this.physics.add.image(350 + i * 200, 800, this.catParty.currentTeam[i].photoCircle);
+                var tempCat3 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat3.setCircle(64);
-                tempCat3.setCollideWorldBounds(true);
+                //tempCat3.setCollideWorldBounds(true);
                 tempCat3.setBounce(1);
                 tempCat3.setInteractive();
                 tempCat3.setMass(this.catParty.currentTeam[i].WT)
