@@ -29,6 +29,10 @@ var WorldScene = new Phaser.Class({
         //amount of catfood 
         this.catFoodGained = 0;
 
+        //locks skill if victory
+        this.victory = false;
+        this.defeat  = false;
+
         this.buttonLock = false;
         this.turnCounter = 0;
         this.physics.world.setFPS(120);
@@ -47,7 +51,7 @@ var WorldScene = new Phaser.Class({
             // this.catParty.swapCat(1, 1);
 
             this.bossStage = false;
-            this.enemyCount = 2;
+            this.enemyCount = 1;
         }
 
     },
@@ -74,7 +78,7 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             var enemyInformation = new Enemy("Warrior Dog", 5, "Anemo", "", [
-                new EnemySkill("Recover", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+                new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
             ], 30, 15, 30, 5, "normalSkill");
             this.spawnEnemies(enemyInformation, 750, 350, "warriorDogCircle");
 
@@ -659,16 +663,16 @@ var WorldScene = new Phaser.Class({
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[0].name + "'!");
                 switch (this.currentEnemy.unitInformation.skill[0].name) {
                     case "Recover":
-                        this.currentEnemy.unitInformation.HP += Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5);
+                        this.currentEnemy.unitInformation.HP += Math.floor(this.currentEnemy.unitInformation.maxHP * 0.25);
                         if (this.currentEnemy.unitInformation.HP > this.currentEnemy.unitInformation.maxHP) {
                             this.currentEnemy.unitInformation.HP = this.currentEnemy.unitInformation.maxHP;
                         } else {
                             if (this.sideMenuText.text.includes(this.currentEnemy.unitInformation.name)) {
-                                this.healthBar.increase(Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
+                                this.healthBar.increase(Math.floor(this.currentEnemy.unitInformation.maxHP * 0.25));
                                 this.resetText(this.currentEnemy);
                             }
                         }
-                        this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
+                        this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.25));
                         this.currentEnemy.healText.visible = true;
                         this.sleep(1000).then(() => {
                             this.currentEnemy.healText.visible = false;
@@ -931,8 +935,17 @@ var WorldScene = new Phaser.Class({
     },
 
     endBattleVictory: function () {
-        console.log("victory!");
+        this.victory = true;
         this.catParty.resetCats();
+        if (this.currentLevel == 0){
+            this.catParty.currentTeam = []; 
+            this.catParty.tutorialCompleted = true;
+        }
+        this.sleep(5000).then(() => {
+            this.scene.start('BootScene', {
+                "catParty": this.catParty
+            })
+        });
     },
 
     sleep: function (ms) {
@@ -948,7 +961,7 @@ var WorldScene = new Phaser.Class({
             this.allUnits[i].healText.y = this.allUnits[i].body.position.y - 20;
         }
 
-        if (this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
+        if (this.victory == false && this.defeat == false && this.movePhase == true && (Math.abs(Math.floor(this.currentCat.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentCat.body.velocity.y)) < 1)) {
             console.log("its now zero");
             this.announcementText.setText(this.currentCat.unitInformation.name + " 's skill is ready");
             this.movePhase = false;
@@ -958,7 +971,7 @@ var WorldScene = new Phaser.Class({
             }
         }
 
-        if (this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y)) < 1)) {
+        if (this.victory == false && this.defeat == false && this.enemyMovePhase == true && (Math.abs(Math.floor(this.currentEnemy.body.velocity.x)) < 1) && (Math.abs(Math.floor(this.currentEnemy.body.velocity.y)) < 1)) {
             console.log("enemy now slowed down to 0");
             this.enemyMovePhase = false;
             this.enemySkillPhase = true;

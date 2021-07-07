@@ -45,7 +45,7 @@ var ancientCivilizationScene = new Phaser.Class({
             } else {
                 this.scene.start('WorldScene', {
                     "catParty": this.catParty,
-                    "level": 0
+                    "level": 1
                 });
             }
         });
