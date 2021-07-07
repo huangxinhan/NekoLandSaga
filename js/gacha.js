@@ -126,7 +126,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -140,13 +140,12 @@ var GachaScene = new Phaser.Class({
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
-                        this.catParty.obtainCatFood(5);
                     }
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -159,7 +158,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -173,13 +172,12 @@ var GachaScene = new Phaser.Class({
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
-                        this.catParty.obtainCatFood(5);
                     }
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);
@@ -192,7 +190,7 @@ var GachaScene = new Phaser.Class({
                     if (obtainedCat.name === this.catParty.allCats[i].name) {
                         this.dictionary[obtainedCat.name].image.visible = true;
                         this.sleep(200).then(() => {
-                            //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
+                            alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!" + " Your " + obtainedCat.name + "'s enhance level has increased by 1, and its stats has increased!");
                             this.dictionary[obtainedCat.name].image.visible = false;
                         })
                         this.catParty.allCats[i].enhanced++;
@@ -206,13 +204,12 @@ var GachaScene = new Phaser.Class({
                             this.catParty.allCats[i].DEF++;
                         }
                         alreadyHas = true;
-                        this.catParty.obtainCatFood(5);
                     }
                 }
                 if (alreadyHas === false) {
                     this.dictionary[obtainedCat.name].image.visible = true;
                     this.sleep(200).then(() => {
-                        //alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
+                        alert("Congratulations! You got: " + obtainedCat.name + " " + obtainedCat.rarity + "!");
                         this.dictionary[obtainedCat.name].image.visible = false;
                     });
                     this.catParty.obtainNewCat(obtainedCat);

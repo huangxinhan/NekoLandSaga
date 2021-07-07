@@ -570,8 +570,21 @@ var WorldScene = new Phaser.Class({
                 case 1:
                     this.scene.pause('WorldScene');
                     this.scene.run('DialogScene', {
+                        "dialogStatus": "tutorial0"
+                    });
+                    break;
+                case 2:
+                    this.scene.pause('WorldScene');
+                    this.scene.run('DialogScene', {
                         "dialogStatus": "tutorial1"
-                    })
+                    });
+                    break;
+                case 3:
+                    this.scene.pause('WorldScene');
+                    this.scene.run('DialogScene', {
+                        "dialogStatus": "tutorial2"
+                    });
+
             }
         }
 
