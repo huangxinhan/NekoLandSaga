@@ -3,6 +3,7 @@ class catParty {
         this.allCats = [];
         this.currentTeam = [];
         this.totalCatFood = 0;
+        this.tutorialCompleted = false;
         this.levelsPassed = 0; //keeps track of how many levels are unlocked
     }
 
@@ -84,8 +85,8 @@ class Skill {
 }
 
 class EnemySkill {
-    constructor(name, description){
-        this.name = name; 
+    constructor(name, description) {
+        this.name = name;
         this.description = description;
     }
 }

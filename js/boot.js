@@ -74,10 +74,42 @@ var BootScene = new Phaser.Class({
         this.load.image('fishingCat', 'assets/cats/fishingCat.png');
         this.load.image('fishingCatCircle', 'assets/cats/fishingCatCircle.png');
         this.load.image('homeownerCats', 'assets/cats/homeownerCats.png');
-        this.load.image('homeownerCatsCircle', 'assets/cats/homeownerCatscircle.png'); 
+        this.load.image('homeownerCatsCircle', 'assets/cats/homeownerCatscircle.png');
+
+        //enemies
+        this.load.image('oddAnteater', 'assets/enemies/oddAnteater.png');
+        this.load.image('oddAnteaterCircle', 'assets/enemies/oddAnteaterCircle.png');
+        this.load.image('oddBird', 'assets/enemies/oddBird.png');
+        this.load.image('oddBirdCircle', 'assets/enemies/oddBirdCircle.png');
+        this.load.image('oddCat', 'assets/enemies/oddCat.png');
+        this.load.image('oddCatCircle', 'assets/enemies/oddCatCircle.png');
+        this.load.image('oddSnake', 'assets/enemies/oddSnake.png');
+        this.load.image('oddSnakeCircle', 'assets/enemies/oddSnakeCircle.png');
+        this.load.image('oddRabbit', 'assets/enemies/oddRabbit.png');
+        this.load.image('oddRabbitCircle', 'assets/enemies/oddRabbitCircle.png');
+        this.load.image('oddFox', 'assets/enemies/oddFox.png');
+        this.load.image('oddFoxCircle', 'assets/enemies/oddFoxCircle.png');
+        this.load.image('oddGoat', 'assets/enemies/oddGoat.png');
+        this.load.image('oddGoatCircle', 'assets/enemies/oddGoatCircle.png');
+        this.load.image('restingDog', 'assets/enemies/restingDog.png');
+        this.load.image('restingDogCircle', 'assets/enemies/restingDogCircle.png');
+        this.load.image('sageDog', 'assets/enemies/sageDog.png');
+        this.load.image('sageDogCircle', 'assets/enemies/sageDogCircle.png');
+        this.load.image('warriorDog', 'assets/enemies/warriorDog.png');
+        this.load.image('warriorDogCircle', 'assets/enemies/warriorDogCircle.png');
+        this.load.image('spyDog', 'assets/enemies/spyDog.png');
+        this.load.image('spyDogCircle', 'assets/enemies/spyDogCircle.png');
     },
 
     create: function () {
+        if (this.catParty.tutorialCompleted == false){
+            this.scene.start('WorldScene', {
+                "catParty": this.catParty,
+                "level": 0
+            });
+        }
+
+
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
         this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();

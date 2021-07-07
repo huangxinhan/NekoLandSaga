@@ -68,17 +68,17 @@ var WorldScene = new Phaser.Class({
             this.topMenu.setInteractive();
             this.topMenu.setImmovable(true);
 
-            //enemy spawns for this current level
-            var enemyInformation = new Enemy("Mecha Cat", 5, "Dark", "This cat does not know how to operate this machinery at all. Be careful.", [
-                new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 30, 30, 30, 5, "normalSkill");
-            this.spawnEnemies(enemyInformation, 750, 350, "mechaCatCircle");
-            var enemyInformation = new Enemy("Mecha Cat", 5, "Dark", "This cat does not know how to operate this machinery at all. Be careful.", [
-                new EnemySkill("Ewige Freude", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-            ], 30, 30, 30, 5, "normalSkill");
-            this.spawnEnemies(enemyInformation, 350, 350, "mechaCatCircle");
+            this.catParty.currentTeam.push(new Cat('Knight Cat', 1, "Terra", "This cat somehow found some knight armor and a sword, then believed that it is a knight...", "☆☆☆☆", new Skill("Piercing Sword", "Inflicts 'Rage' status on itself for 1 turn.", 1), 25, 25, 25, 7, "knightCat", "knightCatCircle"));
 
             this.setup();
+
+            //enemy spawns for this current level
+            var enemyInformation = new Enemy("Warrior Dog", 5, "Anemo", "", [
+                new EnemySkill("Recover", "recovers 50% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+            ], 15, 10, 15, 5, "normalSkill");
+            this.spawnEnemies(enemyInformation, 750, 350, "warriorDogCircle");
+
+            this.setUnitCollisionAndLine();
             this.nextTurn();
         }
     },
@@ -86,9 +86,6 @@ var WorldScene = new Phaser.Class({
     setup: function () {
 
         this.spawnCats();
-
-        //collide with all other units 
-        this.setUnitCollision();
 
         console.log(this.allUnits);
         //turn counter
@@ -102,23 +99,6 @@ var WorldScene = new Phaser.Class({
             }
         });
 
-
-
-        this.hideLine = false;
-        this.graphics = this.add.graphics({
-            lineStyle: {
-                width: 4,
-                color: 0xaa00aa
-            }
-        });
-        this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
-        this.input.on('pointermove', (pointer) => {
-            this.line.x2 = pointer.x;
-            this.line.y2 = pointer.y;
-            this.redraw();
-        });
-
-        this.redraw();
 
         this.sideMenu = this.physics.add.image(1430, 480, 'sideMenu');
         this.sideMenu.setInteractive();
@@ -242,6 +222,7 @@ var WorldScene = new Phaser.Class({
         this.healthBar = new HealthBar(this.scene.get("WorldScene"), 1300, 215, 50);
 
         this.healthBar.bar.visible = false;
+
     },
 
 
@@ -274,7 +255,7 @@ var WorldScene = new Phaser.Class({
 
     gainExp: function (success, level) {
         if (success == true) {
-            var expGain = 20 * (level - (this.currentCat.unitInformation.level-1));
+            var expGain = 20 * (level - (this.currentCat.unitInformation.level - 1));
             if (expGain <= 0) {
                 expGain = 1;
             }
@@ -290,6 +271,7 @@ var WorldScene = new Phaser.Class({
                     this.currentCat.unitInformation.ATK += 1;
                     this.currentCat.unitInformation.DEF += 1;
                     this.currentCat.unitInformation.HP += 1;
+                    this.currentCat.unitInformation.maxHP += 1;
                     this.currentCat.healText.visible = true;
                     this.currentCat.healText.setText("Level up!");
                     this.sleep(1000).then(() => {
@@ -384,10 +366,10 @@ var WorldScene = new Phaser.Class({
         if (unit1.unitInformation.element == "Light" && unit2.unitInformation.element == "Dark") {
             damage = Math.floor(damage * 2);
         }
-        if (unit1.unitInformation.element == "Dark" && unit2.unitInformation.element == "Dark"){
+        if (unit1.unitInformation.element == "Dark" && unit2.unitInformation.element == "Dark") {
             damage = Math.floor(damage * 0.5);
         }
-        if (unit1.unitInformation.element == "Light" && unit1.unitInformation.element == "Light"){
+        if (unit1.unitInformation.element == "Light" && unit1.unitInformation.element == "Light") {
             damage = Math.floor(damage * 0.5);
         }
 
@@ -445,13 +427,28 @@ var WorldScene = new Phaser.Class({
 
     },
 
-    setUnitCollision: function () {
+    setUnitCollisionAndLine: function () {
         //collide with all other units 
         for (var i = 0; i < this.allUnits.length; i++) {
             for (j = i; j < this.allUnits.length; j++) {
                 this.physics.add.collider(this.allUnits[i], this.allUnits[j], this.unitCollision, false, this); //need an event handler method here for damage calcs
             }
         }
+        this.hideLine = false;
+        this.graphics = this.add.graphics({
+            lineStyle: {
+                width: 4,
+                color: 0xaa00aa
+            }
+        });
+        this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
+        this.input.on('pointermove', (pointer) => {
+            this.line.x2 = pointer.x;
+            this.line.y2 = pointer.y;
+            this.redraw();
+        });
+
+        this.redraw();
     },
 
 
@@ -661,7 +658,7 @@ var WorldScene = new Phaser.Class({
                 this.enemySkillPhase = false;
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[0].name + "'!");
                 switch (this.currentEnemy.unitInformation.skill[0].name) {
-                    case "Ewige Freude":
+                    case "Recover":
                         this.currentEnemy.unitInformation.HP += Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5);
                         if (this.currentEnemy.unitInformation.HP > this.currentEnemy.unitInformation.maxHP) {
                             this.currentEnemy.unitInformation.HP = this.currentEnemy.unitInformation.maxHP;
@@ -956,7 +953,7 @@ var WorldScene = new Phaser.Class({
             this.announcementText.setText(this.currentCat.unitInformation.name + " 's skill is ready");
             this.movePhase = false;
             this.skillPhase = true;
-            for (var i = 0; i < this.allUnits.length; i++){
+            for (var i = 0; i < this.allUnits.length; i++) {
                 this.allUnits[i].unitInformation.isHit = false;
             }
         }
@@ -966,7 +963,7 @@ var WorldScene = new Phaser.Class({
             this.enemyMovePhase = false;
             this.enemySkillPhase = true;
             this.enemyUseSkill();
-            for (var i = 0; i < this.allUnits.length; i++){
+            for (var i = 0; i < this.allUnits.length; i++) {
                 this.allUnits[i].unitInformation.isHit = false;
             }
         }

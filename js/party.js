@@ -290,7 +290,7 @@ var PartyScene = new Phaser.Class({
                 "Enhance Level: " + temp.enhanced + "\n" + "\n" +
                 "EXP: " + temp.exp + "\n" + "\n" +
                 "HP: " + temp.HP + "/" + temp.maxHP + "\n" + "\n" +
-                "Skill: " + temp.skill.name + "\n" + "\n" + temp.skill.description + "\n" + "\n" + "\n"  + "\n" + "\n" + "Energy Cost: " + temp.skill.energyCost + "\n" + "\n" +
+                "Skill: " + temp.skill.name + "\n" + "\n" + temp.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.skill.energyCost + "\n" + "\n" +
                 "Attack: " + temp.ATK + "\n" + "\n" +
                 "Defense: " + temp.DEF + "\n" + "\n" +
                 "Weight: " + temp.WT + "\n" + "\n" +

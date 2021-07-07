@@ -22,13 +22,32 @@ var ancientCivilizationScene = new Phaser.Class({
         this.graphics.fillStyle(0x031f4c, 1);
 
         var nekolandsagaText = this.physics.add.image(400, 120, 'nekolandsagaText');
+        var promotionOddCat = this.physics.add.image(1270, 650, 'oddCat');
+        promotionOddCat.alpha = 0.3;
+        promotionOddCat.scale = 0.7;
+
+        this.rateText = this.add.text(1050, 330, "Clear all levels in Arc 1 to obtain" + "\n" +
+            "Odd Cat ★★★★★", {
+                color: "#000000",
+                align: "center",
+                fontWeight: 'bold',
+                font: '28px Arial',
+                wordWrap: {
+                    width: 500,
+                    useAdvancedWrap: true
+                }
+            }).setInteractive();
 
         var arc1level1 = this.physics.add.image(400, 250, 'arc1level1').setInteractive();
         arc1level1.on('pointerdown', () => {
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 0
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 0
+                });
+            }
         });
 
         arc1level1.on('pointerover', () => {

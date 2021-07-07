@@ -12,8 +12,7 @@ var LevelSelectionScene = new Phaser.Class({
         console.log(this.catParty);
     },
 
-    preload: function () {
-    },
+    preload: function () {},
 
     create: function () {
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
