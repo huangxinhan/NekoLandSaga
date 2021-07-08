@@ -1,20 +1,24 @@
-var LevelSelectionScene = new Phaser.Class({
+var HelpScene = new Phaser.Class({
+
     Extends: Phaser.Scene,
-    initialize: function LevelSelectionScene() {
+
+    initialize: function HelpScene() {
         Phaser.Scene.call(this, {
-            key: 'LevelSelectionScene'
+            key: 'HelpScene'
         });
 
     },
 
     init: function (data) {
+        console.log(data)
         this.catParty = data.catParty;
-        console.log(this.catParty);
+
     },
 
     preload: function () {},
 
     create: function () {
+
         this.buttonHover = this.sound.add('buttonHover');
         this.buttonClick = this.sound.add('buttonClick');
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
@@ -25,25 +29,36 @@ var LevelSelectionScene = new Phaser.Class({
 
         var nekolandsagaText = this.physics.add.image(400, 210, 'nekolandsagaText');
 
-        var levelSelection = this.physics.add.image(400, 350, 'arc1').setInteractive();
-        levelSelection.on('pointerdown', () => {
+        var catGallery = this.physics.add.image(400, 350, 'catGallery').setInteractive();
+        catGallery.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('ancientCivilizationScene', {
-                "catParty": this.catParty,
-                "level": this.catParty.levelsPassed
-            });
+            //to be implemented
         });
 
-        levelSelection.on('pointerover', () => {
+        catGallery.on('pointerover', () => {
             this.buttonHover.play();
-            levelSelection.setTint("0xf2b3ff");
+            catGallery.setTint("0xf2b3ff");
+        });
+
+        catGallery.on('pointerout', () => {
+            catGallery.clearTint();
+        });
+
+        var enemyGallery = this.physics.add.image(400, 450, 'enemyGallery').setInteractive();
+        enemyGallery.on('pointerdown', () => {
+            this.buttonClick.play();
+        });
+
+        enemyGallery.on('pointerover', () => {
+            this.buttonHover.play();
+            enemyGallery.setTint("0xf2b3ff");
         })
 
-        levelSelection.on('pointerout', () => {
-            levelSelection.clearTint();
-        })
+        enemyGallery.on('pointerout', () => {
+            enemyGallery.clearTint();
+        });
 
-        var returnToMainMenu = this.physics.add.image(400, 450, 'returnToMainMenu').setInteractive();
+        var returnToMainMenu = this.physics.add.image(400, 550, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
             this.buttonClick.play();
             this.scene.start('BootScene', {
@@ -60,6 +75,7 @@ var LevelSelectionScene = new Phaser.Class({
             returnToMainMenu.clearTint();
         });
 
+ 
     }
 
 });

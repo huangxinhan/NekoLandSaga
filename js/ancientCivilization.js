@@ -1,6 +1,6 @@
 var ancientCivilizationScene = new Phaser.Class({
     Extends: Phaser.Scene,
-    initialize: function BootScene() {
+    initialize: function ancientCivlizationScene() {
         Phaser.Scene.call(this, {
             key: 'ancientCivilizationScene'
         });

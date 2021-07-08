@@ -8,12 +8,17 @@ var BootScene = new Phaser.Class({
     },
 
     init: function (data) {
-        console.log(data)
-        if (jQuery.isEmptyObject(data)) {
-            this.catParty = new catParty();
-            this.catParty.obtainCatFood(25);
+        if (!jQuery.isEmptyObject(data)) {
+            this.catParty = data.catParty
         } else {
-            this.catParty = data.catParty;
+            var tempCatParty = JSON.parse(localStorage.getItem('catParty'));
+            if (tempCatParty) {
+                this.catParty = tempCatParty
+            } else {
+                //new Game, initialize cat party
+                this.catParty = new catParty();
+                this.catParty.obtainCatFood(25);
+            }
         }
         console.log(this.catParty);
     },
@@ -45,6 +50,11 @@ var BootScene = new Phaser.Class({
         this.load.image('tiles', 'assets/map/Mapset.png');
         this.load.image('useSkill', 'assets/text/useSkill.png');
         this.load.image('skipTurn', 'assets/text/skipTurn.png');
+        this.load.image('saveGame', 'assets/text/saveGame.png');
+        this.load.image('catGallery', 'assets/text/catGallery.png');
+        this.load.image('enemyGallery', 'assets/text/enemyGallery.png');
+
+        //Cats
         this.load.image('chefCat', 'assets/cats/chefCat.png');
         this.load.image('chefCatCircle', 'assets/cats/chefCatCircle.png');
         this.load.image('knightCat', 'assets/cats/knightCat.png');
@@ -108,7 +118,7 @@ var BootScene = new Phaser.Class({
     },
 
     create: function () {
-        if (this.catParty.tutorialCompleted == false){
+        if (this.catParty.tutorialCompleted == false) {
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 0
@@ -179,15 +189,38 @@ var BootScene = new Phaser.Class({
 
         var help = this.physics.add.image(400, 650, 'help').setInteractive();
 
+        help.on('pointerdown', () => {
+            this.buttonClick.play();
+            this.scene.start("HelpScene", {
+                "catParty": this.catParty
+            })
+        });
+
         help.on('pointerover', () => {
             this.buttonHover.play();
             help.setTint("0xf2b3ff");
-        })
+        });
 
         help.on('pointerout', () => {
             help.clearTint();
         });
 
+        var saveGame = this.physics.add.image(1350, 150, 'saveGame').setInteractive();
+
+        saveGame.on('pointerdown', () => {
+            localStorage.setItem('catParty', JSON.stringify(this.catParty));
+            this.buttonClick.play();
+
+        });
+
+        saveGame.on('pointerover', () => {
+            this.buttonHover.play();
+            saveGame.setTint("0xf2b3ff");
+        });
+
+        saveGame.on('pointerout', () => {
+            saveGame.clearTint();
+        })
     }
 
 });

@@ -20,7 +20,8 @@ var config = {
         PartyScene,
         LevelSelectionScene,
         DialogScene,
-        ancientCivilizationScene
+        ancientCivilizationScene,
+        HelpScene
     ]
 };
 var game = new Phaser.Game(config);
