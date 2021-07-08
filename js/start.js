@@ -5,7 +5,7 @@ var config = {
     height: 964,
     roundPixels: true,
     physics: {
-        default: 'arcade',
+        default: 'arcade', //using matter in this branch
         arcade: {
             gravity: {
                 y: 0
