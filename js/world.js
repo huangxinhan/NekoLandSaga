@@ -97,6 +97,8 @@ var WorldScene = new Phaser.Class({
     setup: function () {
 
         this.coinCollide = this.sound.add('coinCollide');
+        this.buttonHover = this.sound.add('buttonHover');
+        this.buttonClick = this.sound.add('buttonClick');
 
         if (this.currentLevel == 0) {
             this.spawnCats(1280, 1580);
@@ -158,12 +160,14 @@ var WorldScene = new Phaser.Class({
         this.useSkillButton.visible = false;
         this.useSkillButton.setScrollFactor(0);
         this.useSkillButton.on('pointerdown', () => {
+            this.buttonClick.play();
             if (this.skillPhase === true) {
                 this.useSkill();
             }
         });
 
         this.useSkillButton.on('pointerover', () => {
+            this.buttonHover.play();
             this.useSkillButton.setTint("0xf2b3ff");
         })
 
@@ -176,12 +180,14 @@ var WorldScene = new Phaser.Class({
         this.skipTurnButton.visible = false;
         this.skipTurnButton.setScrollFactor(0);
         this.skipTurnButton.on('pointerdown', () => {
+            this.buttonClick.play();
             if (this.skillPhase === true) {
                 this.skipTurn();
             }
         });
 
         this.skipTurnButton.on('pointerover', () => {
+            this.buttonHover.play();
             this.skipTurnButton.setTint("0xf2b3ff");
         })
 
@@ -228,6 +234,7 @@ var WorldScene = new Phaser.Class({
             switch (i) {
                 case 0:
                     this.catIcons[0].on('pointerover', () => {
+                        this.buttonHover.play();
                         this.highlight.visible = true;
                         this.highlight.x = this.position1[0];
                         this.highlight.y = this.position1[1];
@@ -236,6 +243,7 @@ var WorldScene = new Phaser.Class({
                         this.highlight.visible = false;
                     });
                     this.catIcons[0].on('pointerdown', () => {
+                        this.buttonClick.play();
                         if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
                             this.cameras.main.startFollow(this.currentTeam[0])
                         }
@@ -243,6 +251,7 @@ var WorldScene = new Phaser.Class({
                     break;
                 case 1:
                     this.catIcons[1].on('pointerover', () => {
+                        this.buttonHover.play();
                         this.highlight.visible = true;
                         this.highlight.x = this.position2[0];
                         this.highlight.y = this.position2[1];
@@ -251,6 +260,7 @@ var WorldScene = new Phaser.Class({
                         this.highlight.visible = false;
                     });
                     this.catIcons[1].on('pointerdown', () => {
+                        this.buttonClick.play();
                         if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
                             this.cameras.main.startFollow(this.currentTeam[1])
                         }
@@ -258,6 +268,7 @@ var WorldScene = new Phaser.Class({
                     break;
                 case 2:
                     this.catIcons[2].on('pointerover', () => {
+                        this.buttonHover.play();
                         this.highlight.visible = true;
                         this.highlight.x = this.position3[0];
                         this.highlight.y = this.position3[1];
@@ -266,6 +277,7 @@ var WorldScene = new Phaser.Class({
                         this.highlight.visible = false;
                     });
                     this.catIcons[2].on('pointerdown', () => {
+                        this.buttonClick.play();
                         if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
                             this.cameras.main.startFollow(this.currentTeam[2])
                         }
@@ -273,6 +285,7 @@ var WorldScene = new Phaser.Class({
                     break;
                 case 3:
                     this.catIcons[3].on('pointerover', () => {
+                        this.buttonHover.play();
                         this.highlight.visible = true;
                         this.highlight.x = this.position4[0];
                         this.highlight.y = this.position4[1];
@@ -281,6 +294,7 @@ var WorldScene = new Phaser.Class({
                         this.highlight.visible = false;
                     });
                     this.catIcons[3].on('pointerdown', () => {
+                        this.buttonClick.play();
                         if (this.movePhase === false && this.enemyMovePhase === false && this.enemyPhase === false) {
                             this.cameras.main.startFollow(this.currentTeam[3])
                         }

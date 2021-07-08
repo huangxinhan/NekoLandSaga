@@ -103,6 +103,8 @@ var BootScene = new Phaser.Class({
 
         //audio
         this.load.audio('coinCollide', 'assets/sfx/coinCollide.mp3');
+        this.load.audio('buttonHover', 'assets/sfx/buttonHover.mp3');
+        this.load.audio('buttonClick', 'assets/sfx/buttonClick.mp3');
     },
 
     create: function () {
@@ -113,7 +115,8 @@ var BootScene = new Phaser.Class({
             });
         }
 
-
+        this.buttonHover = this.sound.add('buttonHover');
+        this.buttonClick = this.sound.add('buttonClick');
         this.cameras.main.setBackgroundColor('rgba(250, 218, 94, 1)');
         this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
@@ -124,6 +127,7 @@ var BootScene = new Phaser.Class({
 
         var levelSelection = this.physics.add.image(400, 350, 'levelSelection').setInteractive();
         levelSelection.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('LevelSelectionScene', {
                 "catParty": this.catParty,
                 "level": 0
@@ -131,6 +135,7 @@ var BootScene = new Phaser.Class({
         });
 
         levelSelection.on('pointerover', () => {
+            this.buttonHover.play();
             levelSelection.setTint("0xf2b3ff");
         })
 
@@ -140,12 +145,14 @@ var BootScene = new Phaser.Class({
 
         var catGacha = this.physics.add.image(400, 450, 'catGacha').setInteractive();
         catGacha.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('GachaScene', {
                 "catParty": this.catParty
             })
         });
 
         catGacha.on('pointerover', () => {
+            this.buttonHover.play();
             catGacha.setTint("0xf2b3ff");
         })
 
@@ -155,12 +162,14 @@ var BootScene = new Phaser.Class({
 
         var manageTeam = this.physics.add.image(400, 550, 'manageTeam').setInteractive();
         manageTeam.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start("PartyScene", {
                 "catParty": this.catParty
             })
         });
 
         manageTeam.on('pointerover', () => {
+            this.buttonHover.play();
             manageTeam.setTint("0xf2b3ff");
         })
 
@@ -171,6 +180,7 @@ var BootScene = new Phaser.Class({
         var help = this.physics.add.image(400, 650, 'help').setInteractive();
 
         help.on('pointerover', () => {
+            this.buttonHover.play();
             help.setTint("0xf2b3ff");
         })
 

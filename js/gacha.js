@@ -15,6 +15,8 @@ var GachaScene = new Phaser.Class({
     preload: function () {},
 
     create: function () {
+        this.buttonHover = this.sound.add('buttonHover');
+        this.buttonClick = this.sound.add('buttonClick');
         this.cameras.main.setBackgroundColor('rgba(250, 255, 219, 1)');
         //this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
@@ -25,10 +27,12 @@ var GachaScene = new Phaser.Class({
 
         var lureCat = this.physics.add.image(240, 350, 'lureCat').setInteractive();
         lureCat.on('pointerdown', () => {
+            this.buttonClick.play();
             this.playGacha();
         });
 
         lureCat.on('pointerover', () => {
+            this.buttonHover.play();
             lureCat.setTint("0xf2b3ff");
         })
 
@@ -38,12 +42,14 @@ var GachaScene = new Phaser.Class({
 
         var returnToMainMenu = this.physics.add.image(240, 450, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
         });
 
         returnToMainMenu.on('pointerover', () => {
+            this.buttonHover.play();
             returnToMainMenu.setTint("0xf2b3ff");
         })
 

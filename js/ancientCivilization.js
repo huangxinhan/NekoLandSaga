@@ -16,6 +16,8 @@ var ancientCivilizationScene = new Phaser.Class({
 
     create: function () {
         this.cameras.main.setBackgroundColor('rgba(250, 255, 219, 1)');
+        this.buttonHover = this.sound.add('buttonHover');
+        this.buttonClick = this.sound.add('buttonClick');
 
         this.graphics = this.add.graphics();
         this.graphics.lineStyle(1, 0xffffff);
@@ -40,6 +42,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level1 = this.physics.add.image(400, 250, 'arc1level1').setInteractive();
         arc1level1.on('pointerdown', () => {
+            this.buttonClick.play();
             if (this.catParty.currentTeam.length == 0) {
                 alert("Must have at least one cat on your team to proceed!");
             } else {
@@ -51,6 +54,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level1.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level1.setTint("0xf2b3ff");
         })
 
@@ -60,6 +64,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level2 = this.physics.add.image(400, 350, 'arc1level2');
         arc1level2.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 2
@@ -67,6 +72,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level2.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level2.setTint("0xf2b3ff");
         })
 
@@ -76,6 +82,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level3 = this.physics.add.image(400, 450, 'arc1level3');
         arc1level3.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 3
@@ -83,6 +90,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level3.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level3.setTint("0xf2b3ff");
         })
 
@@ -92,6 +100,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level4 = this.physics.add.image(400, 550, 'arc1level4');
         arc1level4.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 4
@@ -99,6 +108,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level4.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level4.setTint("0xf2b3ff");
         })
 
@@ -108,6 +118,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level5 = this.physics.add.image(400, 650, 'arc1level5');
         arc1level5.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 2
@@ -115,6 +126,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level5.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level5.setTint("0xf2b3ff");
         })
 
@@ -124,6 +136,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level6 = this.physics.add.image(400, 750, 'arc1level6');
         arc1level6.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 6
@@ -131,6 +144,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level6.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level6.setTint("0xf2b3ff");
         })
 
@@ -140,6 +154,7 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var arc1level7 = this.physics.add.image(400, 850, 'arc1level7');
         arc1level7.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('WorldScene', {
                 "catParty": this.catParty,
                 "level": 7
@@ -147,6 +162,7 @@ var ancientCivilizationScene = new Phaser.Class({
         });
 
         arc1level7.on('pointerover', () => {
+            this.buttonHover.play();
             arc1level7.setTint("0xf2b3ff");
         })
 
@@ -156,12 +172,14 @@ var ancientCivilizationScene = new Phaser.Class({
 
         var returnToMainMenu = this.physics.add.image(1250, 250, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
+            this.buttonClick.play();
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
         });
 
         returnToMainMenu.on('pointerover', () => {
+            this.buttonHover.play();
             returnToMainMenu.setTint("0xf2b3ff");
         })
 

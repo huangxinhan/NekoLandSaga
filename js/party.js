@@ -29,6 +29,8 @@ var PartyScene = new Phaser.Class({
     preload: function () {},
 
     create: function () {
+        this.buttonHover = this.sound.add('buttonHover');
+        this.buttonClick = this.sound.add('buttonClick');
         this.cameras.main.setBackgroundColor('rgba(250, 255, 219, 1)');
         //this.backgroundImage = this.physics.add.image(790, 482, 'nekolandsaga');
         this.graphics = this.add.graphics();
@@ -64,6 +66,7 @@ var PartyScene = new Phaser.Class({
         });
 
         this.placeholder1.on('pointerdown', () => {
+            this.buttonClick.play();
             this.highlight.visible = true;
             this.highlight.x = this.position1[0];
             this.highlight.y = this.position1[1];
@@ -72,6 +75,7 @@ var PartyScene = new Phaser.Class({
             console.log(this.currentSlot)
         });
         this.placeholder2.on('pointerdown', () => {
+            this.buttonClick.play();
             this.highlight.visible = true;
             this.highlight.x = this.position2[0];
             this.highlight.y = this.position2[1];
@@ -80,6 +84,7 @@ var PartyScene = new Phaser.Class({
             console.log(this.currentSlot)
         });
         this.placeholder3.on('pointerdown', () => {
+            this.buttonClick.play();
             this.highlight.visible = true;
             this.highlight.x = this.position3[0];
             this.highlight.y = this.position3[1];
@@ -88,6 +93,7 @@ var PartyScene = new Phaser.Class({
             console.log(this.currentSlot)
         });
         this.placeholder4.on('pointerdown', () => {
+            this.buttonClick.play();
             this.highlight.visible = true;
             this.highlight.x = this.position4[0];
             this.highlight.y = this.position4[1];
@@ -225,6 +231,7 @@ var PartyScene = new Phaser.Class({
 
         var returnToMainMenu = this.physics.add.image(1070, 60, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
+            this.buttonClick.play();
             this.organizeTeam();
             this.scene.start('BootScene', {
                 "catParty": this.catParty
@@ -232,6 +239,7 @@ var PartyScene = new Phaser.Class({
         });
 
         returnToMainMenu.on('pointerover', () => {
+            this.buttonHover.play();
             returnToMainMenu.setTint("0xf2b3ff");
         })
 
@@ -241,6 +249,7 @@ var PartyScene = new Phaser.Class({
 
         var removeFromParty = this.physics.add.image(1070, 250, 'removeFromParty').setInteractive();
         removeFromParty.on('pointerdown', () => {
+            this.buttonClick.play();
             if (this.selectionMode === true) {
                 this.catParty.currentTeam[this.currentSlot] = null; //empty out that cat
                 this.partyImages[this.currentSlot].destroy();
@@ -250,6 +259,7 @@ var PartyScene = new Phaser.Class({
         });
 
         removeFromParty.on('pointerover', () => {
+            this.buttonHover.play();
             removeFromParty.setTint("0xf2b3ff");
         })
 
@@ -264,6 +274,7 @@ var PartyScene = new Phaser.Class({
             this.resetText(this.catParty.allCats[index]);
         })
         this.dictionary[index].image.on('pointerdown', () => {
+            this.buttonClick.play();
             if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[index])) {
                 this.catParty.swapCat(this.currentSlot, index);
                 if (this.partyImages[this.currentSlot] != null) {
