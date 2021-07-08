@@ -96,6 +96,8 @@ var WorldScene = new Phaser.Class({
 
     setup: function () {
 
+        this.coinCollide = this.sound.add('coinCollide');
+
         if (this.currentLevel == 0) {
             this.spawnCats(1280, 1580);
         }
@@ -380,6 +382,7 @@ var WorldScene = new Phaser.Class({
     },
 
     unitCollision: function (unit1, unit2) {
+        this.coinCollide.play();
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
             return; //nothing happens 
         } else {
@@ -799,7 +802,7 @@ var WorldScene = new Phaser.Class({
                     }
                     break;
                 case "It's a real chainsaw!":
-                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 2);
                     this.resetText(this.currentCat);
                     break;
                 case "Some catfood for you!":
@@ -868,7 +871,7 @@ var WorldScene = new Phaser.Class({
                     //increase the catfood, not yet set. 
                     break;
                 case "Piercing Sword":
-                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 1);
+                    this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 2);
                     this.resetText(this.currentCat);
                     break;
                 case "Bullet Hell":
