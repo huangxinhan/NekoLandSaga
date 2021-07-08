@@ -12,8 +12,14 @@ var BootScene = new Phaser.Class({
             this.catParty = data.catParty
         } else {
             var tempCatParty = JSON.parse(localStorage.getItem('catParty'));
+            console.log(tempCatParty);
             if (tempCatParty) {
-                this.catParty = tempCatParty
+                this.catParty = new catParty();
+                this.catParty.allCats = tempCatParty.allCats;
+                this.catParty.currentTeam = tempCatParty.currentTeam;
+                this.catParty.totalCatFood = tempCatParty.totalCatFood;
+                this.catParty.tutorialCompleted = tempCatParty.tutorialCompleted;
+                this.catParty.levelsPassed = tempCatParty.levelsPassed;
             } else {
                 //new Game, initialize cat party
                 this.catParty = new catParty();

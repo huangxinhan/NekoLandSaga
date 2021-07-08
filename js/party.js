@@ -275,19 +275,29 @@ var PartyScene = new Phaser.Class({
         })
         this.dictionary[index].image.on('pointerdown', () => {
             this.buttonClick.play();
-            if (this.selectionMode === true && !this.catParty.currentTeam.includes(this.catParty.allCats[index])) {
-                this.catParty.swapCat(this.currentSlot, index);
-                if (this.partyImages[this.currentSlot] != null) {
-                    this.partyImages[this.currentSlot].destroy();
+            if (this.selectionMode === true) {
+                var sameCat = false;
+                for (var i = 0; i < this.catParty.currentTeam.length; i++){
+                    if (this.catParty.currentTeam[i] != null && this.catParty.currentTeam[i].name === this.catParty.allCats[index].name){
+                        sameCat = true;
+                        break;
+                    }
                 }
-                this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
-                    this.catParty.allCats[index].photoCircle);
-                this.selectionMode = false;
-                this.highlight.visible = false;
-            } else {
-                this.selectionMode = false;
-                this.highlight.visible = false;
-                alert("Team slot not selected or cat is already in party!");
+                if (sameCat == true){
+                    this.selectionMode = false;
+                    this.highlight.visible = false;
+                    alert("Team slot not selected or cat is already in party!");
+                }
+                else{
+                    this.catParty.swapCat(this.currentSlot, index);
+                    if (this.partyImages[this.currentSlot] != null) {
+                        this.partyImages[this.currentSlot].destroy();
+                    }
+                    this.partyImages[this.currentSlot] = this.physics.add.image(this.positions[this.currentSlot][0], this.positions[this.currentSlot][1],
+                        this.catParty.allCats[index].photoCircle);
+                    this.selectionMode = false;
+                    this.highlight.visible = false;
+                }
             }
         })
     },
