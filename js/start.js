@@ -1,5 +1,5 @@
 var config = {
-    type: Phaser.GRAPHICS,
+    type: Phaser.WEBGL,
     parent: 'content',
     width: 1580,
     height: 964,

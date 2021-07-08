@@ -79,7 +79,7 @@ var WorldScene = new Phaser.Class({
                     new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
                 ], 30, 15, 30, 5, "normalSkill"),
                 spawnX: 1280,
-                spawnY: 980,
+                spawnY: 1300,
                 image: "warriorDogCircle"
             };
             this.enemiesInfo.push(enemyInformation);
@@ -97,7 +97,7 @@ var WorldScene = new Phaser.Class({
     setup: function () {
 
         if (this.currentLevel == 0) {
-            this.spawnCats(1280, 1380);
+            this.spawnCats(1280, 1580);
         }
 
         for (var i = 0; i < this.enemiesInfo.length; i++) {
@@ -527,7 +527,7 @@ var WorldScene = new Phaser.Class({
 
 
     redraw: function () {
-        if (this.hideLine === false && this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) <= 500) {
+        if (this.hideLine === false && this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) <= 800) {
             this.graphics.clear();
             this.graphics.strokeLineShape(this.line);
         }
@@ -663,7 +663,7 @@ var WorldScene = new Phaser.Class({
                 //normal AIs will go max speed at the nearest cat 
                 var selectedCat = null
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750 &&
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 1200 &&
                         this.allUnits[i].unitInformation.status.name != "dead") {
                         selectedCat = this.allUnits[i];
                         break;
@@ -682,7 +682,7 @@ var WorldScene = new Phaser.Class({
                 break;
             case "seeker":
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 450 &&
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 900 &&
                         this.allUnits[i].unitInformation.status.name != "dead") {
                         selectedCat = this.allUnits[i];
                         break;
@@ -699,7 +699,7 @@ var WorldScene = new Phaser.Class({
 
             case "normalSkill":
                 for (var i = 0; i < this.allUnits.length; i++) {
-                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 750 &&
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 1250 &&
                         this.allUnits[i].unitInformation.status.name != "dead") {
                         selectedCat = this.allUnits[i];
                         break;
