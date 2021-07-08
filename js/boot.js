@@ -208,6 +208,7 @@ var BootScene = new Phaser.Class({
         var saveGame = this.physics.add.image(1350, 150, 'saveGame').setInteractive();
 
         saveGame.on('pointerdown', () => {
+            alert("Game Saved!");
             localStorage.setItem('catParty', JSON.stringify(this.catParty));
             this.buttonClick.play();
 

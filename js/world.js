@@ -327,7 +327,7 @@ var WorldScene = new Phaser.Class({
             maxSpeed: 1.0
         };
 
-        controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+        this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
     },
 
 
@@ -1066,7 +1066,7 @@ var WorldScene = new Phaser.Class({
     },
 
     update: function (time, delta) {
-        controls.update(delta);
+        this.controls.update(delta);
         // //some core logic goes in here, requires to be updated frame by frame such as cameras
         for (var i = 0; i < this.allUnits.length; i++) {
             this.allUnits[i].damageText.x = this.allUnits[i].body.position.x + 40;
