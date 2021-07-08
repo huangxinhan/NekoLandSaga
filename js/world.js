@@ -64,8 +64,8 @@ var WorldScene = new Phaser.Class({
                 key: 'tutorial'
             });
             var tiles = tutorial.addTilesetImage('Mapset', 'tiles');
-            this.traverseLayer = tutorial.createLayer('traverseLayer', tiles, 0, 0);
-            this.blockedLayer = tutorial.createLayer('blockedLayer', tiles, 0, 0);
+            this.traverseLayer = tutorial.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = tutorial.createStaticLayer('blockedLayer', tiles, 0, 0);
             this.blockedLayer.setCollisionByExclusion([-1]);
             this.cameras.main.roundPixels = true;
 
@@ -77,7 +77,7 @@ var WorldScene = new Phaser.Class({
             var enemyInformation = {
                 info: new Enemy("Warrior Dog", 5, "Anemo", "", [
                     new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-                ], 30, 15, 30, 5, "normalSkill"),
+                ], 30, 15, 20, 5, "normalSkill"),
                 spawnX: 1280,
                 spawnY: 1300,
                 image: "warriorDogCircle"
@@ -388,14 +388,14 @@ var WorldScene = new Phaser.Class({
                 //if the player is moving, player deals dmg to enemy 
                 if (unit1.unitInformation.type === "cat" && unit2.unitInformation.isHit == false) {
                     unit2.unitInformation.isHit = true;
-                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "cat" && unit1.unitInformation.isHit == false) {
                     unit1.unitInformation.isHit = true;
-                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.gainExp(this.damageDealingInteractions(unit1, damage), unit2.unitInformation.level);
                     unit2.unitInformation.lastTarget = unit1;
@@ -406,14 +406,14 @@ var WorldScene = new Phaser.Class({
                 //if the enemy is moving, dmg to be delt to the player
                 if (unit1.unitInformation.type === "enemy" && unit2.unitInformation.isHit == false) {
                     unit2.unitInformation.isHit = true;
-                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y);
+                    var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.damageDealingInteractions(unit2, damage);
                     unit1.unitInformation.lastTarget = unit2;
 
                 } else if (unit2.unitInformation.type === "enemy" && unit1.unitInformation.isHit == false) {
                     unit1.unitInformation.isHit = true;
-                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y);
+                    var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
                     this.damageDealingInteractions(unit1, damage);
                     unit2.unitInformation.lastTarget = unit1;
@@ -475,8 +475,8 @@ var WorldScene = new Phaser.Class({
         this.checkEndBattleVictory();
     },
 
-    calculateDamage: function (attack, defense, velocityX, velocityY) {
-        var totalVelocity = Math.abs(velocityX) + Math.abs(velocityY);
+    calculateDamage: function (attack, defense, velocityX, velocityY, velocity2X, velocity2Y) {
+        var totalVelocity = Math.abs(velocityX) + Math.abs(velocityY) + Math.abs(velocity2X) + Math.abs(velocity2Y);
         var damageDelt = Math.floor((2 * attack - defense) * (totalVelocity / 1000));
         if (damageDelt < 0) {
             damageDelt = 0;
@@ -1097,7 +1097,7 @@ var WorldScene = new Phaser.Class({
         var tempEnemy = this.physics.add.image(x, y, name);
         tempEnemy.setCircle(64);
         //tempEnemy.setCollideWorldBounds(true);
-        tempEnemy.setBounce(1);
+        tempEnemy.setBounce(0.5);
         tempEnemy.setInteractive();
         tempEnemy.setMass(enemyInformation.WT)
         tempEnemy.setDrag(100);
@@ -1157,7 +1157,7 @@ var WorldScene = new Phaser.Class({
                 var tempCat0 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat0.setCircle(64);
                 //tempCat0.setCollideWorldBounds(true);
-                tempCat0.setBounce(1);
+                tempCat0.setBounce(0.5);
                 tempCat0.setInteractive();
                 tempCat0.setMass(this.catParty.currentTeam[i].WT)
                 tempCat0.setDrag(100);
@@ -1212,7 +1212,7 @@ var WorldScene = new Phaser.Class({
                 var tempCat1 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat1.setCircle(64);
                 //tempCat1.setCollideWorldBounds(true);
-                tempCat1.setBounce(1);
+                tempCat1.setBounce(0.5);
                 tempCat1.setInteractive();
                 tempCat1.setMass(this.catParty.currentTeam[i].WT);
                 tempCat1.setDrag(100);
@@ -1267,7 +1267,7 @@ var WorldScene = new Phaser.Class({
                 var tempCat2 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat2.setCircle(64);
                 //tempCat2.setCollideWorldBounds(true);
-                tempCat2.setBounce(1);
+                tempCat2.setBounce(0.5);
                 tempCat2.setInteractive();
                 tempCat2.setMass(this.catParty.currentTeam[i].WT)
                 tempCat2.unitInformation = this.catParty.currentTeam[i];
@@ -1322,7 +1322,7 @@ var WorldScene = new Phaser.Class({
                 var tempCat3 = this.physics.add.image(x + i * 200, y, this.catParty.currentTeam[i].photoCircle);
                 tempCat3.setCircle(64);
                 //tempCat3.setCollideWorldBounds(true);
-                tempCat3.setBounce(1);
+                tempCat3.setBounce(0.5);
                 tempCat3.setInteractive();
                 tempCat3.setMass(this.catParty.currentTeam[i].WT)
                 tempCat3.unitInformation = this.catParty.currentTeam[i];
