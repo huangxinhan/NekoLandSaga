@@ -3,7 +3,7 @@ class catParty {
         this.allCats = [];
         this.currentTeam = [];
         this.totalCatFood = 0;
-        this.tutorialCompleted = true;
+        this.tutorialCompleted = false;
         this.levelsPassed = 0; //keeps track of how many levels are unlocked
     }
 

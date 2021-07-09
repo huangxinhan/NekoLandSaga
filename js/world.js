@@ -44,16 +44,13 @@ var WorldScene = new Phaser.Class({
         //load based on the level
         if (this.currentLevel === 0) {
             this.load.tilemapTiledJSON('tutorial', 'assets/map/tutorial.json');
-            // var chefCat = new Cat("Chef Cat", 1, "The best chef in town, makes the best cat food!", 4, [], 49, 132, 26, 5, "chefCat", "chefCatCircle");
-            // this.catParty.obtainNewCat(chefCat);
-            // this.catParty.swapCat(0, 0);
-
-            // var knightCat = new Cat('Knight Cat', 1, "This cat somehow found some knight armor and a sword, then believed that it is a knight...", 4, [], 30, 50, 50, 6, "knightCat", "knightCatCircle");
-            // this.catParty.obtainNewCat(knightCat);
-            // this.catParty.swapCat(1, 1);
-
             this.bossStage = false;
             this.enemyCount = 1;
+        }
+        else if (this.currentLevel === 1){
+            this.load.tilemapTiledJSON('level1', 'assets/map/level1.json');
+            this.bossStage = false;
+            this.enemyCount = 10;
         }
 
     },
@@ -92,6 +89,37 @@ var WorldScene = new Phaser.Class({
 
             this.nextTurn();
         }
+        else if (this.currentLevel === 1){
+            var level1 = this.make.tilemap({
+                key: 'level1'
+            });
+            var tiles = level1.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level1.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level1.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            //enemy spawns for this current level
+            this.enemiesInfo = [];
+
+            var enemyInformation = {
+                info: new Enemy("Warrior Dog", 5, "Anemo", "", [
+                    new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
+                ], 30, 15, 20, 5, "normalSkill"),
+                spawnX: 1280,
+                spawnY: 1300,
+                image: "warriorDogCircle"
+            };
+            this.enemiesInfo.push(enemyInformation);
+
+            this.cameras.main.setBounds(0, 0, level1.widthInPixels, level1.heightInPixels);
+
+            this.setup();
+
+            this.setUnitCollisionAndLine();
+
+            this.nextTurn();
+        }
     },
 
     setup: function () {
@@ -102,6 +130,10 @@ var WorldScene = new Phaser.Class({
 
         if (this.currentLevel == 0) {
             this.spawnCats(1280, 1580);
+        }
+
+        if (this.currentLevel == 1){
+            this.spawnCats(1180, 4500);
         }
 
         for (var i = 0; i < this.enemiesInfo.length; i++) {
@@ -559,7 +591,7 @@ var WorldScene = new Phaser.Class({
         if (manhattanDistance > 500) {
             return; //don't fire if that is the acase
         }
-        var power = manhattanDistance;
+        var power = manhattanDistance * 1.35;
         this.physics.moveTo(this.currentCat, this.input.mousePointer.worldX, this.input.mousePointer.worldY, power * (2 - (this.currentCat.unitInformation.WT * 0.1)));
         this.cameras.main.startFollow(this.currentCat);
         //update checking if taking turn
@@ -687,7 +719,7 @@ var WorldScene = new Phaser.Class({
                     }
                 }
                 if (selectedCat != null) {
-                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2.2 - (this.currentCat.unitInformation.WT * 0.1)));
                     this.enemyMovePhase = true;
                 } else {
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
@@ -706,7 +738,7 @@ var WorldScene = new Phaser.Class({
                     }
                 }
                 if (selectedCat != null) {
-                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2.2 - (this.currentCat.unitInformation.WT * 0.1)));
                     this.enemyMovePhase = true;
                 } else {
                     this.physics.moveTo(this.currentEnemy, Math.floor(Math.random() * 1500), Math.floor(Math.random() * 1500), 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
@@ -723,7 +755,7 @@ var WorldScene = new Phaser.Class({
                     }
                 }
                 if (selectedCat != null) {
-                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2.2 - (this.currentCat.unitInformation.WT * 0.1)));
                     this.enemyMovePhase = true;
                 } else {
                     this.enemyMovePhase = false;
@@ -1119,7 +1151,7 @@ var WorldScene = new Phaser.Class({
         tempEnemy.setMass(enemyInformation.WT)
         tempEnemy.setDrag(100);
         tempEnemy.unitInformation = enemyInformation;
-        this.physics.add.collider(tempEnemy, this.blockedLayer);
+        this.physics.add.collider(tempEnemy, this.blockedLayer,this.wallCollision, false, this);
         //this.physics.add.collider(tempEnemy, this.topMenu);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
@@ -1164,6 +1196,7 @@ var WorldScene = new Phaser.Class({
     },
 
     wallCollision: function () {
+        this.coinCollide.play();
         //console.log(this.currentCat.body.velocity);
     },
 
