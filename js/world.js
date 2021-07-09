@@ -118,6 +118,8 @@ var WorldScene = new Phaser.Class({
 
             this.setUnitCollisionAndLine();
 
+
+
             this.nextTurn();
         }
     },
@@ -360,6 +362,48 @@ var WorldScene = new Phaser.Class({
         };
 
         this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+
+        this.minimap = this.cameras.add(-125, -220, 400, 850).setZoom(0.1).setName('mini');
+        this.minimap.scrollX  = 500;
+        this.minimap.scrollY  = 500;
+        this.minimap.ignore(this.announcementText);
+        this.minimap.ignore(this.topMenu);
+        this.minimap.ignore(this.sideMenu);
+        this.minimap.ignore(this.sideMenuText);
+        this.minimap.ignore(this.useSkillButton);
+        this.minimap.ignore(this.skipTurnButton);
+        for (var i = 0; i < this.catIcons.length; i++){
+            this.minimap.ignore(this.catIcons[i]);
+        }
+        this.minimap.visible = false;
+
+        this.minimapON = false;
+
+        this.minimapButton = this.physics.add.image(1200, 50, 'minimapButton').setInteractive();
+        this.minimapButton.setScrollFactor(0);
+        this.minimapButton.on("pointerover", () => {
+            this.buttonHover.play();
+            this.minimapButton.setTint("0xf2b3ff");
+        });
+
+        this.minimapButton.on("pointerout", () => {
+            this.minimapButton.clearTint();
+        });
+
+        this.minimapButton.on('pointerdown', () => {
+            if (this.minimapON == false){
+                this.minimap.visible = true;
+                this.minimapON = true;
+            }
+            else{
+                this.minimap.visible = false;
+                this.minimapON = false;
+            }
+            this.buttonClick.play();
+        })
+
+        this.minimap.ignore(this.minimapButton);
+        
     },
 
 
