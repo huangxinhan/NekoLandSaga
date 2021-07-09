@@ -60,6 +60,7 @@ var BootScene = new Phaser.Class({
         this.load.image('catGallery', 'assets/text/catGallery.png');
         this.load.image('enemyGallery', 'assets/text/enemyGallery.png');
         this.load.image('minimapButton', 'assets/text/minimapButton.png');
+        this.load.image('rectangle', 'assets/text/rectangle.png');
 
         //Cats
         this.load.image('chefCat', 'assets/cats/chefCat.png');

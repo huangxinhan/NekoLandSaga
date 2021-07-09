@@ -118,8 +118,6 @@ var WorldScene = new Phaser.Class({
 
             this.setUnitCollisionAndLine();
 
-
-
             this.nextTurn();
         }
     },
@@ -403,6 +401,10 @@ var WorldScene = new Phaser.Class({
         })
 
         this.minimap.ignore(this.minimapButton);
+
+        this.rectangle = this.physics.add.image(790, 482, 'rectangle').setInteractive();
+
+        this.cameras.main.ignore(this.rectangle);
         
     },
 
@@ -1182,6 +1184,8 @@ var WorldScene = new Phaser.Class({
             this.useSkillButton.visible = false;
             this.skipTurnButton.visible = false;
         }
+
+        this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
 
     },
 
