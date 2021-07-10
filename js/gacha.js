@@ -225,6 +225,8 @@ var GachaScene = new Phaser.Class({
             alert("not enough cat food! 5x Cat Foods per roll! You current have: " + this.catParty.totalCatFood + " cat food!");
         }
         this.catFoodText.setText("Cat Food Left: " + this.catParty.totalCatFood);
+        //save the game every time a cat is rolled
+        localStorage.setItem('catParty', JSON.stringify(this.catParty));
     },
 
     sleep: function (ms) {

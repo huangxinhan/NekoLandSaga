@@ -48,11 +48,14 @@ var WorldScene = new Phaser.Class({
             this.load.tilemapTiledJSON('tutorial', 'assets/map/tutorial.json');
             this.bossStage = false;
             this.enemyCount = 1;
-        }
-        else if (this.currentLevel === 1){
+        } else if (this.currentLevel === 1) {
             this.load.tilemapTiledJSON('level1', 'assets/map/level1.json');
             this.bossStage = true;
-            this.enemyCount = 10;
+            this.enemyCount = 9;
+        } else if (this.currentLevel === 2) {
+            this.load.tilemapTiledJSON('level2', 'assets/map/level2.json');
+            this.bossStage = true;
+            this.enemyCount = 12;
         }
 
     },
@@ -79,7 +82,7 @@ var WorldScene = new Phaser.Class({
             var enemyInformation = {
                 info: new Enemy("Warrior Dog", 5, "Anemo", "", [
                     new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-                ], 30, 15, 20, 5, "normalSkill"),
+                ], 30, 15, 25, 5, "normalSkill"),
                 spawnX: 1280,
                 spawnY: 1300,
                 image: "warriorDogCircle"
@@ -93,8 +96,7 @@ var WorldScene = new Phaser.Class({
             this.setUnitCollisionAndLine();
 
             this.nextTurn();
-        }
-        else if (this.currentLevel === 1){
+        } else if (this.currentLevel === 1) {
             var level1 = this.make.tilemap({
                 key: 'level1'
             });
@@ -106,15 +108,15 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Anteater", 10, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 35, 15, 20, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 13, 15, 8, "normal",  1280, 1300, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 14, 13, 2, "seeker",  896 - 128 - 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 12, 17, 5, "seeker",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 15, 13, 17, 8, "normal",  896 - 128 - 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 12, 13, 2, "normal",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 9, 13, 3, "seeker",  1280, 3000, "spyDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 8, 10, 2, "normal",  896 - 128 - 128, 3800, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 8, 10, 2, "normal",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Odd Anteater", 10, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 35, 15, 20, 7, "normalSkill", 1280, 356, "oddAnteaterCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 13, 15, 8, "normal", 1280, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 14, 13, 2, "seeker", 896 - 128 - 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 12, 17, 5, "seeker", 1554 + 128 + 128 + 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 15, 13, 17, 8, "normal", 896 - 128 - 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 12, 13, 2, "normal", 1554 + 128 + 128 + 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 9, 13, 3, "seeker", 1280, 3000, "spyDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 8, 10, 2, "normal", 896 - 128 - 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 8, 10, 2, "normal", 1554 + 128 + 128 + 128, 3800, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, level1.widthInPixels, level1.heightInPixels);
 
@@ -123,8 +125,36 @@ var WorldScene = new Phaser.Class({
             this.setUnitCollisionAndLine();
 
             //identify the boss
-            for (var i = 0; i < this.allUnits.length; i++){
-                if (this.allUnits[i].unitInformation.name == "Odd Anteater"){
+            for (var i = 0; i < this.allUnits.length; i++) {
+                if (this.allUnits[i].unitInformation.name == "Odd Anteater") {
+                    this.boss = this.allUnits[i];
+                }
+            }
+
+            console.log(this.boss.unitInformation);
+
+            this.nextTurn();
+
+        } else if (this.currentLevel === 2) {
+            var level2 = this.make.tilemap({
+                key: 'level2'
+            });
+            var tiles = level2.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level2.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level2.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Odd Rabbit", 10, "Light", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 42, 25, 16, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
+
+            this.cameras.main.setBounds(0, 0, level2.widthInPixels, level2.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            for (var i = 0; i < this.allUnits.length; i++) {
+                if (this.allUnits[i].unitInformation.name == "Odd Rabbit") {
                     this.boss = this.allUnits[i];
                 }
             }
@@ -135,11 +165,11 @@ var WorldScene = new Phaser.Class({
         }
     },
 
-    generateEnemyInfo: function(name, level, type, description, skillArray, HP, ATK, DEF, WT, AIType, spawnX, spawnY, image){
+    generateEnemyInfo: function (name, level, type, description, skillArray, HP, ATK, DEF, WT, AIType, spawnX, spawnY, image) {
         var enemyInformation = {
             info: new Enemy(name, level, type, description, skillArray, HP, ATK, DEF, WT, AIType),
-            spawnX: spawnX, 
-            spawnY: spawnY, 
+            spawnX: spawnX,
+            spawnY: spawnY,
             image: image
         }
         this.enemiesInfo.push(enemyInformation);
@@ -155,9 +185,10 @@ var WorldScene = new Phaser.Class({
             this.spawnCats(1280, 1580);
         }
 
-        if (this.currentLevel == 1){
+        if (this.currentLevel == 1 || this.currentLevel == 2) {
             this.spawnCats(1180, 4500);
         }
+
 
         for (var i = 0; i < this.enemiesInfo.length; i++) {
             this.spawnEnemies(this.enemiesInfo[i].info, this.enemiesInfo[i].spawnX, this.enemiesInfo[i].spawnY, this.enemiesInfo[i].image);
@@ -385,15 +416,15 @@ var WorldScene = new Phaser.Class({
         this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
         this.minimap = this.cameras.add(-125, -220, 400, 850).setZoom(0.1).setName('mini');
-        this.minimap.scrollX  = 500;
-        this.minimap.scrollY  = 500;
+        this.minimap.scrollX = 500;
+        this.minimap.scrollY = 500;
         this.minimap.ignore(this.announcementText);
         this.minimap.ignore(this.topMenu);
         this.minimap.ignore(this.sideMenu);
         this.minimap.ignore(this.sideMenuText);
         this.minimap.ignore(this.useSkillButton);
         this.minimap.ignore(this.skipTurnButton);
-        for (var i = 0; i < this.catIcons.length; i++){
+        for (var i = 0; i < this.catIcons.length; i++) {
             this.minimap.ignore(this.catIcons[i]);
         }
         this.minimap.visible = false;
@@ -412,11 +443,10 @@ var WorldScene = new Phaser.Class({
         });
 
         this.minimapButton.on('pointerdown', () => {
-            if (this.minimapON == false){
+            if (this.minimapON == false) {
                 this.minimap.visible = true;
                 this.minimapON = true;
-            }
-            else{
+            } else {
                 this.minimap.visible = false;
                 this.minimapON = false;
             }
@@ -428,7 +458,21 @@ var WorldScene = new Phaser.Class({
         this.rectangle = this.physics.add.image(790, 482, 'rectangle').setInteractive();
 
         this.cameras.main.ignore(this.rectangle);
-        
+
+        this.quitButton = this.physics.add.image(1550, 20, 'quitButton').setInteractive();
+        this.quitButton.setScrollFactor(0);
+        this.quitButton.on('pointerover', () => {
+            this.buttonHover.play();
+            this.quitButton.setTint("0xf2b3ff");
+        })
+        this.quitButton.on('pointerout', () => {
+            this.quitButton.clearTint();
+        })
+        this.quitButton.on('pointerdown', () => {
+            this.buttonClick.play();
+            this.endBattle();
+        })
+
     },
 
 
@@ -497,7 +541,7 @@ var WorldScene = new Phaser.Class({
     },
 
     unitCollision: function (unit1, unit2) {
-        if (unit1.unitInformation.status.name != "dead" && unit2.unitInformation.status.name != "dead"){
+        if (unit1.unitInformation.status.name != "dead" && unit2.unitInformation.status.name != "dead") {
             this.coinCollide.play();
         }
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
@@ -586,7 +630,7 @@ var WorldScene = new Phaser.Class({
     },
 
     dealEffectDamage: function (unit1, unit2, damage) {
-        if (unit2.unitInformation.status.name != "dead"){
+        if (unit2.unitInformation.status.name != "dead") {
             if (unit1.unitInformation.type === "cat") {
                 this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
             } else {
@@ -594,8 +638,7 @@ var WorldScene = new Phaser.Class({
             }
             this.checkEndBattle();
             this.checkEndBattleVictory();
-        }
-        else{
+        } else {
             console.log("turn skipped");
             this.announcementText.setText("Target not found!");
         }
@@ -953,13 +996,16 @@ var WorldScene = new Phaser.Class({
                     });
                     break;
                 case "Toxic Chemicals":
-                    if (this.currentCat.unitInformation.lastTarget != null) {
+                    if (this.currentCat.unitInformation.lastTarget != null && this.currentCat.unitInformation.lastTarget.unitInformation.status.name != "dead") {
                         this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's max HP each turn.", 3);
                         this.resetText(this.currentCat.unitInformation.lastTarget);
-                    };
+                    }
+                    else{
+                        this.announcementText.setText("No Target Found!");
+                    }
                     break;
                 case "Immovable Rock":
-                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 5);
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 5);
                     this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
@@ -976,7 +1022,7 @@ var WorldScene = new Phaser.Class({
                     });
                     break;
                 case "Home Sweet Home":
-                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical/effect (excluding status effects) damage delt to unit is decreased by 50%", 1);
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 1);
                     this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.25);
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
@@ -1156,10 +1202,21 @@ var WorldScene = new Phaser.Class({
         console.log("battle ends");
         this.announcementText.setText("Defeated...");
         this.catParty.resetCats();
+        for (var i = 0; i < this.allUnits.length; i++){
+            if (this.allUnits[i].unitInformation.type === "cat"){
+                for (var j = 0; j < this.catParty.allCats.length; j++){
+                    if (this.catParty.allCats[j].name  === this.allUnits[i].unitInformation.name){
+                        console.log("changed cat party!")
+                        this.catParty.allCats[j] = this.allUnits[i].unitInformation;
+                    }
+                }
+            }
+        }
         if (this.currentLevel == 0) {
             this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
         }
+        localStorage.setItem('catParty', JSON.stringify(this.catParty));
         this.sleep(5000).then(() => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
@@ -1171,17 +1228,64 @@ var WorldScene = new Phaser.Class({
     endBattleVictory: function () {
         this.victory = true;
         this.catParty.resetCats();
+        for (var i = 0; i < this.allUnits.length; i++){
+            if (this.allUnits[i].unitInformation.type === "cat"){
+                for (var j = 0; j < this.catParty.allCats.length; j++){
+                    if (this.catParty.allCats[j].name  === this.allUnits[i].unitInformation.name){
+                        this.catParty.allCats[j] = this.allUnits[i].unitInformation;
+                    }
+                }
+            }
+        }
+
         this.announcementText.setText("Victory!!");
         if (this.currentLevel == 0) {
             this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
         }
-        if (this.currentLevel == 1 && this.catParty.levelsPassed == 0){
-            this.catParty.obtainCatFood(5);
-            if (this.catParty.levelsPassed < 1){
+        if (this.currentLevel == 1 && this.catParty.levelsPassed == 0) {
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 1) {
                 this.catParty.levelsPassed = 1;
             }
         }
+        if (this.currentLevel == 2 && this.catParty.levelsPassed == 1){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 2) {
+                this.catParty.levelsPassed = 2;
+            }
+        }
+        if (this.currentLevel == 3 && this.catParty.levelsPassed == 2){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 3) {
+                this.catParty.levelsPassed = 3;
+            }
+        }
+        if (this.currentLevel == 4 && this.catParty.levelsPassed == 3){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 4) {
+                this.catParty.levelsPassed = 4;
+            }
+        }
+        if (this.currentLevel == 5 && this.catParty.levelsPassed == 4){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 5) {
+                this.catParty.levelsPassed = 5;
+            }
+        }
+        if (this.currentLevel == 6 && this.catParty.levelsPassed == 5){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 6) {
+                this.catParty.levelsPassed = 6;
+            }
+        }
+        if (this.currentLevel == 7 && this.catParty.levelsPassed == 6){
+            this.catParty.obtainCatFood(10);
+            if (this.catParty.levelsPassed < 7) {
+                this.catParty.levelsPassed = 7;
+            }
+        }
+        localStorage.setItem('catParty', JSON.stringify(this.catParty));
         this.sleep(5000).then(() => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
@@ -1235,7 +1339,7 @@ var WorldScene = new Phaser.Class({
             this.skipTurnButton.visible = false;
         }
 
-        if(this.boxGenerated == true){
+        if (this.boxGenerated == true) {
             this.rectangle.x = this.cameras.main.scrollX + 790;
             this.rectangle.y = this.cameras.main.scrollY + 482;
             //this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
@@ -1253,7 +1357,7 @@ var WorldScene = new Phaser.Class({
         tempEnemy.setMass(enemyInformation.WT)
         tempEnemy.setDrag(100);
         tempEnemy.unitInformation = enemyInformation;
-        this.physics.add.collider(tempEnemy, this.blockedLayer,this.wallCollision, false, this);
+        this.physics.add.collider(tempEnemy, this.blockedLayer, this.wallCollision, false, this);
         //this.physics.add.collider(tempEnemy, this.topMenu);
         tempEnemy.on('pointerover', () => {
             console.log(tempEnemy.unitInformation);
@@ -1299,7 +1403,7 @@ var WorldScene = new Phaser.Class({
 
     wallCollision: function (cat) {
         console.log(cat.unitInformation);
-        if (cat.unitInformation.status.name != "dead"){
+        if (cat.unitInformation.status.name != "dead") {
             this.coinCollide.play();
         }
         //console.log(this.currentCat.body.velocity);

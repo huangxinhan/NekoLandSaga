@@ -24,6 +24,12 @@ class catParty {
         for (var i = 0; i < this.allCats.length; i++) {
             this.allCats[i].HP = this.allCats[i].maxHP;
             this.allCats[i].status = new Status("None", "", "∞");
+            this.allCats[i].energy = 0;
+        }
+        for (var i = 0; i < this.currentTeam.length; i++){
+            this.currentTeam[i].HP = this.currentTeam[i].maxHP;
+            this.currentTeam[i].status = new Status("None", "", "∞");
+            this.currentTeam[i].energy = 0;
         }
     }
 
