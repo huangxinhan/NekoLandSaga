@@ -106,7 +106,7 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Anteater", 10, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 50, 25, 25, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
+            this.generateEnemyInfo("Odd Anteater", 10, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 35, 15, 20, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
             this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 13, 15, 8, "normal",  1280, 1300, "warriorDogCircle");
             this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 14, 13, 2, "seeker",  896 - 128 - 128, 980, "warriorDogCircle");
             this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 12, 17, 5, "seeker",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
