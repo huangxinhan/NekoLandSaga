@@ -101,15 +101,15 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Anteater", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 40, 23, 35, 8, "normalSkill",  1280, 356, "oddAnteaterCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 40, 23, 35, 8, "normalSkill",  1280, 1300, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 32, 27, 20, 2, "normalSkill",  896 - 128 - 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 36, 27, 27, 5, "normalSkill",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 35, 22, 30, 8, "normalSkill",  896 - 128 - 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 28, 25, 20, 2, "normalSkill",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 20, 20, 20, 3, "normalSkill",  1280, 3000, "spyDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 32, 27, 20, 2, "normalSkill",  896 - 128 - 128, 3800, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 28, 25, 20, 2, "normalSkill",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Odd Anteater", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 50, 23, 20, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 22, 18, 17, 8, "normal",  1280, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 22, 17, 15, 2, "seeker",  896 - 128 - 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Aqua Warrior Dog", 3, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 23, 17, 17, 5, "seeker",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 3, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 25, 17, 20, 8, "normal",  896 - 128 - 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 2, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 16, 15, 2, "normal",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 20, 13, 3, "seeker",  1280, 3000, "spyDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 3, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 16, 16, 15, 2, "normal",  896 - 128 - 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 2, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 17, 15, 2, "normal",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, level1.widthInPixels, level1.heightInPixels);
 
@@ -501,14 +501,14 @@ var WorldScene = new Phaser.Class({
             //we do calculations here for damage delt 
             if (this.movePhase === true) {
                 //if the player is moving, player deals dmg to enemy 
-                if (unit1.unitInformation.type === "cat" && unit2.unitInformation.isHit == false) {
+                if (unit1.unitInformation.type === "cat" && unit2.unitInformation.isHit == false && unit2.unitInformation.status.name != "dead") {
                     unit2.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
                     unit1.unitInformation.lastTarget = unit2;
 
-                } else if (unit2.unitInformation.type === "cat" && unit1.unitInformation.isHit == false) {
+                } else if (unit2.unitInformation.type === "cat" && unit1.unitInformation.isHit == false && unit1.unitInformation.status.name != "dead") {
                     unit1.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
@@ -519,14 +519,14 @@ var WorldScene = new Phaser.Class({
                 this.checkEndBattleVictory();
             } else if (this.enemyPhase === true) {
                 //if the enemy is moving, dmg to be delt to the player
-                if (unit1.unitInformation.type === "enemy" && unit2.unitInformation.isHit == false) {
+                if (unit1.unitInformation.type === "enemy" && unit2.unitInformation.isHit == false && unit2.unitInformation.status.name != "dead") {
                     unit2.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit1.unitInformation.ATK, unit2.unitInformation.DEF, unit1.body.velocity.x, unit1.body.velocity.y, unit2.body.velocity.x, unit2.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit1, unit2, damage);
                     this.damageDealingInteractions(unit2, damage);
                     unit1.unitInformation.lastTarget = unit2;
 
-                } else if (unit2.unitInformation.type === "enemy" && unit1.unitInformation.isHit == false) {
+                } else if (unit2.unitInformation.type === "enemy" && unit1.unitInformation.isHit == false && unit1.unitInformation.status.name != "dead") {
                     unit1.unitInformation.isHit = true;
                     var damage = this.calculateDamage(unit2.unitInformation.ATK, unit1.unitInformation.DEF, unit2.body.velocity.x, unit2.body.velocity.y, unit1.body.velocity.x, unit1.body.velocity.y);
                     damage = this.calculateStatusAndElementalDamage(unit2, unit1, damage);
@@ -581,13 +581,20 @@ var WorldScene = new Phaser.Class({
     },
 
     dealEffectDamage: function (unit1, unit2, damage) {
-        if (unit1.unitInformation.type === "cat") {
-            this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
-        } else {
-            this.damageDealingInteractions(unit2);
+        if (unit2.unitInformation.status.name != "dead"){
+            if (unit1.unitInformation.type === "cat") {
+                this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
+            } else {
+                this.damageDealingInteractions(unit2);
+            }
+            this.checkEndBattle();
+            this.checkEndBattleVictory();
         }
-        this.checkEndBattle();
-        this.checkEndBattleVictory();
+        else{
+            console.log("turn skipped");
+            this.announcementText.setText("Target not found!");
+        }
+
     },
 
     calculateDamage: function (attack, defense, velocityX, velocityY, velocity2X, velocity2Y) {
@@ -718,13 +725,14 @@ var WorldScene = new Phaser.Class({
         //         this.index = 0;
         //     }
         // } while (!this.allUnits[this.index].unitInformation.status.name == "dead")
-
         while (true) {
             this.index++;
             if (this.index >= this.allUnits.length) {
                 this.index = 0;
             }
             if (this.allUnits[this.index].unitInformation.status.name != "dead") {
+                console.log(this.index)
+                console.log(this.allUnits[this.index].unitInformation.name);
                 break;
             }
         }
