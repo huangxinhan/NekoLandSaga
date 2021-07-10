@@ -13,6 +13,7 @@ var WorldScene = new Phaser.Class({
             this.currentLevel = data.level
         }
         console.log(data);
+        console.log(this.currentLevel);
         this.catParty = data.catParty;
         this.allUnits = []; //the all units array stores the enemy and the cats
 
@@ -35,9 +36,10 @@ var WorldScene = new Phaser.Class({
         this.victory = false;
         this.defeat = false;
 
+        this.boxGenerated = false;
         this.buttonLock = false;
         this.turnCounter = 0;
-        this.physics.world.setFPS(120);
+        this.physics.world.setFPS(60);
     },
 
     preload: function () {
@@ -56,6 +58,9 @@ var WorldScene = new Phaser.Class({
     },
 
     create: function () {
+        this.sleep(1000).then(() => {
+            this.boxGenerated = true;
+        });
         if (this.currentLevel === 0) {
             var tutorial = this.make.tilemap({
                 key: 'tutorial'
@@ -101,15 +106,15 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Anteater", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 50, 23, 20, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 22, 18, 17, 8, "normal",  1280, 1300, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 22, 17, 15, 2, "seeker",  896 - 128 - 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Aqua Warrior Dog", 3, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 23, 17, 17, 5, "seeker",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
-            this.generateEnemyInfo("Terra Warrior Dog", 3, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 25, 17, 20, 8, "normal",  896 - 128 - 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 2, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 16, 15, 2, "normal",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
-            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 20, 13, 3, "seeker",  1280, 3000, "spyDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 3, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 16, 16, 15, 2, "normal",  896 - 128 - 128, 3800, "warriorDogCircle");
-            this.generateEnemyInfo("Anemo Warrior Dog", 2, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 17, 15, 2, "normal",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Odd Anteater", 10, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 50, 25, 25, 7, "normalSkill",  1280, 356, "oddAnteaterCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 13, 15, 8, "normal",  1280, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 14, 13, 2, "seeker",  896 - 128 - 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 12, 17, 5, "seeker",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 15, 13, 17, 8, "normal",  896 - 128 - 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 12, 13, 2, "normal",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 9, 13, 3, "seeker",  1280, 3000, "spyDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 12, 8, 10, 2, "normal",  896 - 128 - 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 8, 10, 2, "normal",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, level1.widthInPixels, level1.heightInPixels);
 
@@ -1219,7 +1224,9 @@ var WorldScene = new Phaser.Class({
             this.skipTurnButton.visible = false;
         }
 
-        this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
+        if(this.boxGenerated == true){
+            this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
+        }
 
     },
 

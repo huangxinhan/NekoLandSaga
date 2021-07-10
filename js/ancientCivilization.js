@@ -65,10 +65,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level2 = this.physics.add.image(400, 350, 'arc1level2');
         arc1level2.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 2
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 2
+                });
+            }
         });
 
         arc1level2.on('pointerover', () => {
@@ -83,10 +87,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level3 = this.physics.add.image(400, 450, 'arc1level3');
         arc1level3.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 3
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 3
+                });
+            }
         });
 
         arc1level3.on('pointerover', () => {
@@ -101,10 +109,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level4 = this.physics.add.image(400, 550, 'arc1level4');
         arc1level4.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 4
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 4
+                });
+            }
         });
 
         arc1level4.on('pointerover', () => {
@@ -119,10 +131,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level5 = this.physics.add.image(400, 650, 'arc1level5');
         arc1level5.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 2
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 2
+                });
+            }
         });
 
         arc1level5.on('pointerover', () => {
@@ -137,10 +153,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level6 = this.physics.add.image(400, 750, 'arc1level6');
         arc1level6.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 6
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 6
+                });
+            }
         });
 
         arc1level6.on('pointerover', () => {
@@ -155,10 +175,14 @@ var ancientCivilizationScene = new Phaser.Class({
         var arc1level7 = this.physics.add.image(400, 850, 'arc1level7');
         arc1level7.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('WorldScene', {
-                "catParty": this.catParty,
-                "level": 7
-            });
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": 7
+                });
+            }
         });
 
         arc1level7.on('pointerover', () => {
