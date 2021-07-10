@@ -49,7 +49,7 @@ var WorldScene = new Phaser.Class({
         }
         else if (this.currentLevel === 1){
             this.load.tilemapTiledJSON('level1', 'assets/map/level1.json');
-            this.bossStage = false;
+            this.bossStage = true;
             this.enemyCount = 10;
         }
 
@@ -101,16 +101,15 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-
-            var enemyInformation = {
-                info: new Enemy("Warrior Dog", 5, "Anemo", "", [
-                    new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-                ], 30, 15, 20, 5, "normalSkill"),
-                spawnX: 1280,
-                spawnY: 1300,
-                image: "warriorDogCircle"
-            };
-            this.enemiesInfo.push(enemyInformation);
+            this.generateEnemyInfo("Odd Anteater", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 40, 23, 35, 8, "normalSkill",  1280, 356, "oddAnteaterCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 8, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 40, 23, 35, 8, "normalSkill",  1280, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 32, 27, 20, 2, "normalSkill",  896 - 128 - 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Aqua Warrior Dog", 8, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 36, 27, 27, 5, "normalSkill",  1554 + 128 + 128+ 128, 980, "warriorDogCircle");
+            this.generateEnemyInfo("Terra Warrior Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 35, 22, 30, 8, "normalSkill",  896 - 128 - 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 28, 25, 20, 2, "normalSkill",  1554 + 128 + 128+ 128, 2200, "warriorDogCircle");
+            this.generateEnemyInfo("Spy Dog", 5, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 20, 20, 20, 3, "normalSkill",  1280, 3000, "spyDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 8, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 32, 27, 20, 2, "normalSkill",  896 - 128 - 128, 3800, "warriorDogCircle");
+            this.generateEnemyInfo("Anemo Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 28, 25, 20, 2, "normalSkill",  1554 + 128 + 128+ 128, 3800, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, level1.widthInPixels, level1.heightInPixels);
 
@@ -118,8 +117,27 @@ var WorldScene = new Phaser.Class({
 
             this.setUnitCollisionAndLine();
 
+            //identify the boss
+            for (var i = 0; i < this.allUnits.length; i++){
+                if (this.allUnits[i].unitInformation.name == "Odd Anteater"){
+                    this.boss = this.allUnits[i];
+                }
+            }
+
+            console.log(this.boss.unitInformation);
+
             this.nextTurn();
         }
+    },
+
+    generateEnemyInfo: function(name, level, type, description, skillArray, HP, ATK, DEF, WT, AIType, spawnX, spawnY, image){
+        var enemyInformation = {
+            info: new Enemy(name, level, type, description, skillArray, HP, ATK, DEF, WT, AIType),
+            spawnX: spawnX, 
+            spawnY: spawnY, 
+            image: image
+        }
+        this.enemiesInfo.push(enemyInformation);
     },
 
     setup: function () {
@@ -474,7 +492,9 @@ var WorldScene = new Phaser.Class({
     },
 
     unitCollision: function (unit1, unit2) {
-        this.coinCollide.play();
+        if (unit1.unitInformation.status.name != "dead" && unit2.unitInformation.status.name != "dead"){
+            this.coinCollide.play();
+        }
         if (unit1.unitInformation.type === unit2.unitInformation.type) {
             return; //nothing happens 
         } else {
@@ -622,11 +642,11 @@ var WorldScene = new Phaser.Class({
 
 
     redraw: function () {
-        if (this.hideLine === false && this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) <= 800) {
+        if (this.hideLine === false && this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) <= 675) {
             this.graphics.clear();
             this.graphics.strokeLineShape(this.line);
         }
-        if (this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) > 500) {
+        if (this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y) > 675) {
             this.graphics.clear();
         }
     },
@@ -634,10 +654,10 @@ var WorldScene = new Phaser.Class({
     fireCat: function () {
         var manhattanDistance = this.ManhattanDistance(this.input.mousePointer.worldX, this.input.mousePointer.worldY, this.currentCat.x, this.currentCat.y);
         //can reach up to 250 speed in total 
-        if (manhattanDistance > 500) {
+        if (manhattanDistance > 675) {
             return; //don't fire if that is the acase
         }
-        var power = manhattanDistance * 1.35;
+        var power = manhattanDistance * 1.05;
         this.physics.moveTo(this.currentCat, this.input.mousePointer.worldX, this.input.mousePointer.worldY, power * (2 - (this.currentCat.unitInformation.WT * 0.1)));
         this.cameras.main.startFollow(this.currentCat);
         //update checking if taking turn
@@ -1132,6 +1152,12 @@ var WorldScene = new Phaser.Class({
             this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
         }
+        if (this.currentLevel == 1 && this.catParty.levelsPassed == 0){
+            this.catParty.obtainCatFood(5);
+            if (this.catParty.levelsPassed < 1){
+                this.catParty.levelsPassed = 1;
+            }
+        }
         this.sleep(5000).then(() => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
@@ -1243,8 +1269,11 @@ var WorldScene = new Phaser.Class({
         this.allUnits.push(tempEnemy);
     },
 
-    wallCollision: function () {
-        this.coinCollide.play();
+    wallCollision: function (cat) {
+        console.log(cat.unitInformation);
+        if (cat.unitInformation.status.name != "dead"){
+            this.coinCollide.play();
+        }
         //console.log(this.currentCat.body.velocity);
     },
 

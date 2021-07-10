@@ -73,6 +73,7 @@ class Enemy {
         this.type = "enemy";
         this.lastTarget = null;
         this.isHit = false;
+        this.isBoss = false;
     }
 }
 

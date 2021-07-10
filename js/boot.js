@@ -118,6 +118,8 @@ var BootScene = new Phaser.Class({
         this.load.image('warriorDogCircle', 'assets/enemies/warriorDogCircle.png');
         this.load.image('spyDog', 'assets/enemies/spyDog.png');
         this.load.image('spyDogCircle', 'assets/enemies/spyDogCircle.png');
+        this.load.image('stuffedDog', 'assets/enemies/stuffedDog.png');
+        this.load.image('stuffedDogCircle', 'assets/enemies/stuffedDogCircle.png');
 
         //audio
         this.load.audio('coinCollide', 'assets/sfx/coinCollide.mp3');
