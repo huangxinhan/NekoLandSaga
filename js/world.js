@@ -1154,7 +1154,18 @@ var WorldScene = new Phaser.Class({
 
     endBattle: function () {
         console.log("battle ends");
+        this.announcementText.setText("Defeated...");
         this.catParty.resetCats();
+        if (this.currentLevel == 0) {
+            this.catParty.currentTeam = [];
+            this.catParty.tutorialCompleted = true;
+        }
+        this.sleep(5000).then(() => {
+            this.scene.start('BootScene', {
+                "catParty": this.catParty
+            })
+        });
+
     },
 
     endBattleVictory: function () {
@@ -1225,7 +1236,9 @@ var WorldScene = new Phaser.Class({
         }
 
         if(this.boxGenerated == true){
-            this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
+            this.rectangle.x = this.cameras.main.scrollX + 790;
+            this.rectangle.y = this.cameras.main.scrollY + 482;
+            //this.physics.moveTo(this.rectangle, this.cameras.main.scrollX + 790, this.cameras.main.scrollY + 482, 3000);
         }
 
     },
