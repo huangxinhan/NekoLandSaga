@@ -233,6 +233,7 @@ var PartyScene = new Phaser.Class({
         returnToMainMenu.on('pointerdown', () => {
             this.buttonClick.play();
             this.organizeTeam();
+            localStorage.setItem('catParty', JSON.stringify(this.catParty));
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
