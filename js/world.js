@@ -1002,12 +1002,12 @@ var WorldScene = new Phaser.Class({
                 case "Bullet Hell":
                     var numberOfCats = 0;
                     for (var i = 0; i < this.allUnits.length; i++) {
-                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 850) {
                             numberOfCats++;
                         }
                     }
                     for (var i = 0; i < this.allUnits.length; i++) {
-                        if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                        if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 850) {
                             this.dealEffectDamage(this.currentCat, this.allUnits[i], Math.floor(this.currentCat.unitInformation.ATK * (numberOfCats * 1.21)));
                         }
                     };
@@ -1042,7 +1042,7 @@ var WorldScene = new Phaser.Class({
                     break;
                 case "All You Can Eat":
                     for (var i = 0; i < this.allUnits.length; i++) {
-                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500 &&
+                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 850 &&
                             this.allUnits[i].unitInformation.name != "Sushi Master Cat") {
                             this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
                             this.resetText(this.allUnits[i]);

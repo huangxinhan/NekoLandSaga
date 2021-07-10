@@ -49,6 +49,7 @@ var DialogScene = new Phaser.Class({
             "You will get one energy per turn, and using the skill will consume the same amount of energy as the 'energy cost' of the skill.",
             "You may also choose to skip your skill phase by clicking the 'Skip Turn' button.", "Notice that some skills may inflict status effects, look out for what they do!",
             "Lastly, move the camera by pressing up, down, left, right cursor buttons to navigate the map. To focus on a specific cat, click a cat icon on the top left corner.",
+            "You can also click on the minimap icon near the top of the screen to reveal a minimap.",
             "Now, use your mouse pointer to fling the cat coin in whichever direction you like. The longer the indication line, the higher your fling power.", null
         ];
 
