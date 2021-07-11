@@ -160,7 +160,7 @@ var WorldScene = new Phaser.Class({
 
             this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 - 760, 1300, "warriorDogCircle");
             this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 + 760, 1300, "warriorDogCircle");
-            
+
             this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 - 760, 800, "warriorDogCircle");
             this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 + 760, 800, "warriorDogCircle");
 
@@ -658,7 +658,7 @@ var WorldScene = new Phaser.Class({
             if (unit1.unitInformation.type === "cat") {
                 this.gainExp(this.damageDealingInteractions(unit2, damage), unit2.unitInformation.level);
             } else {
-                this.damageDealingInteractions(unit2);
+                this.damageDealingInteractions(unit2, damage);
             }
             this.checkEndBattle();
             this.checkEndBattleVictory();
@@ -753,6 +753,11 @@ var WorldScene = new Phaser.Class({
         if (unit.unitInformation.status.name == "Poisoned") {
             console.log("delt poison damage");
             var damage = Math.floor(unit.unitInformation.maxHP * 0.03);
+            this.damageDealingInteractions(unit, damage);
+        }
+        if (unit.unitInformation.status.name == "Burned") {
+            console.log("burnt!");
+            var damage = Math.floor(unit.unitInformation.maxHP * 0.08);
             this.damageDealingInteractions(unit, damage);
         }
     },
@@ -975,16 +980,38 @@ var WorldScene = new Phaser.Class({
                         break;
                     case "Odd Flame":
                         for (var i = 0; i < this.allUnits.length; i++) {
-                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 500) {
-                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.HP * 0.25));
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 800) {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
                                 this.allUnits[i].unitInformation.status = new Status("Burned", "Takes 8% burn damage each turn.", 1);
                             }
                         };
-                        break; 
+                        break;
                     case "Enraged":
-                        break; 
+                        this.currentEnemy.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 2);
+                        this.resetText(this.currentEnemy);
+                        break;
                     case "Wall of Healing":
-                        break; 
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 1000) {
+                                this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25);
+                                if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                                    this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                                } else {
+                                    if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                        this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                        this.resetText(this.allUnits[i]);
+                                    }
+                                }
+                                this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                this.allUnits[i].healText.visible = true;
+                            }
+                        }
+                        this.sleep(1800).then(() => {
+                            for (var i = 0; i < this.allUnits.length; i++) {
+                                this.allUnits[i].healText.visible = false;
+                            }
+                        });
+                        break;
 
                 }
                 this.sleep(3000).then(() => {
@@ -1031,7 +1058,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].healText.visible = true;
                         }
                     }
-                    this.sleep(1000).then(() => {
+                    this.sleep(1700).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
@@ -1058,7 +1085,7 @@ var WorldScene = new Phaser.Class({
                     }
                     this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
                     this.currentCat.healText.visible = true;
-                    this.sleep(1000).then(() => {
+                    this.sleep(1700).then(() => {
                         this.currentCat.healText.visible = false;
                     });
                     break;
@@ -1075,7 +1102,7 @@ var WorldScene = new Phaser.Class({
                     }
                     this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
                     this.currentCat.healText.visible = true;
-                    this.sleep(1000).then(() => {
+                    this.sleep(1700).then(() => {
                         this.currentCat.healText.visible = false;
                     });
                     break;
@@ -1148,7 +1175,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].healText.visible = true;
                         };
                     };
-                    this.sleep(1000).then(() => {
+                    this.sleep(1700).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
@@ -1172,7 +1199,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].healText.visible = true;
                         };
                     };
-                    this.sleep(1000).then(() => {
+                    this.sleep(1700).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
