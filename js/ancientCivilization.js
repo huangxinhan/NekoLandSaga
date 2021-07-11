@@ -24,18 +24,18 @@ var ancientCivilizationScene = new Phaser.Class({
         this.graphics.fillStyle(0x031f4c, 1);
 
         var nekolandsagaText = this.physics.add.image(400, 120, 'nekolandsagaText');
-        var promotionOddCat = this.physics.add.image(1270, 650, 'oddCat');
+        var promotionOddCat = this.physics.add.image(1250, 700, 'oddCat');
         promotionOddCat.alpha = 0.3;
-        promotionOddCat.scale = 0.7;
+        promotionOddCat.scale = 0.6;
 
-        this.rateText = this.add.text(1050, 330, "Clear all levels in Arc 1 to obtain" + "\n" +
+        this.rateText = this.add.text(970, 330, "Get Cat Food x10 for each 1st Time Clear!" + "\n" + "\n" +"Clear all levels in Arc 1 to obtain" + "\n" +
             "Odd Cat ★★★★★", {
                 color: "#000000",
                 align: "center",
                 fontWeight: 'bold',
                 font: '28px Arial',
                 wordWrap: {
-                    width: 500,
+                    width: 600,
                     useAdvancedWrap: true
                 }
             }).setInteractive();

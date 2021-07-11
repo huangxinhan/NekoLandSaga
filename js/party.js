@@ -228,7 +228,6 @@ var PartyScene = new Phaser.Class({
 
         var manageTeamText = this.physics.add.image(350, 60, 'manageTeamText');
 
-
         var returnToMainMenu = this.physics.add.image(1070, 60, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
             this.buttonClick.play();

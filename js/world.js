@@ -146,7 +146,16 @@ var WorldScene = new Phaser.Class({
             this.cameras.main.roundPixels = true;
 
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Rabbit", 10, "Light", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 42, 25, 16, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
+            this.generateEnemyInfo("Odd Rabbit", 12, "Light", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 46, 29, 18, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4200, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4200, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4800, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4800, "spyDogCircle");
+            this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 29, 13, 3, "immovableSkill", 1280, 4200, "sageDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 15, 35, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 25, 25, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
+
 
             this.cameras.main.setBounds(0, 0, level2.widthInPixels, level2.heightInPixels);
 
@@ -185,8 +194,12 @@ var WorldScene = new Phaser.Class({
             this.spawnCats(1280, 1580);
         }
 
-        if (this.currentLevel == 1 || this.currentLevel == 2) {
+        if (this.currentLevel == 1) {
             this.spawnCats(1180, 4500);
+        }
+
+        if (this.currentLevel == 2){
+            this.spawnCats(920, 4500);
         }
 
 
@@ -473,6 +486,8 @@ var WorldScene = new Phaser.Class({
             this.endBattle();
         })
 
+        this.minimap.ignore(this.quitButton);
+
     },
 
 
@@ -676,12 +691,12 @@ var WorldScene = new Phaser.Class({
                 "HP: " + temp.unitInformation.HP + "/" + temp.unitInformation.maxHP + "\n" + "\n" + "\n" +
                 //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                 "Skill: " + temp.unitInformation.skill.name + "\n" + "\n" + temp.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + temp.unitInformation.skill.energyCost + "\n" + "\n" +
+                "Current Energy: " + temp.unitInformation.energy + "\n" + "\n" +
                 "Attack: " + temp.unitInformation.ATK + "\n" + "\n" +
                 "Defense: " + temp.unitInformation.DEF + "\n" + "\n" +
                 "Weight: " + temp.unitInformation.WT + "\n" + "\n" +
                 "Status: " + temp.unitInformation.status.name + "\n" + "\n" + temp.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + temp.unitInformation.status.numberOfTurns + "\n" + "\n" +
-                "Enhance Level: " + temp.unitInformation.enhanced + "\n" + "\n" +
-                "Energy: " + temp.unitInformation.energy);
+                "Enhance Level: " + temp.unitInformation.enhanced);
         }
 
     },
@@ -999,8 +1014,7 @@ var WorldScene = new Phaser.Class({
                     if (this.currentCat.unitInformation.lastTarget != null && this.currentCat.unitInformation.lastTarget.unitInformation.status.name != "dead") {
                         this.currentCat.unitInformation.lastTarget.unitInformation.status = new Status("Poisoned", "Depletes 3% of the user's max HP each turn.", 3);
                         this.resetText(this.currentCat.unitInformation.lastTarget);
-                    }
-                    else{
+                    } else {
                         this.announcementText.setText("No Target Found!");
                     }
                     break;
@@ -1202,10 +1216,10 @@ var WorldScene = new Phaser.Class({
         console.log("battle ends");
         this.announcementText.setText("Defeated...");
         this.catParty.resetCats();
-        for (var i = 0; i < this.allUnits.length; i++){
-            if (this.allUnits[i].unitInformation.type === "cat"){
-                for (var j = 0; j < this.catParty.allCats.length; j++){
-                    if (this.catParty.allCats[j].name  === this.allUnits[i].unitInformation.name){
+        for (var i = 0; i < this.allUnits.length; i++) {
+            if (this.allUnits[i].unitInformation.type === "cat") {
+                for (var j = 0; j < this.catParty.allCats.length; j++) {
+                    if (this.catParty.allCats[j].name === this.allUnits[i].unitInformation.name) {
                         console.log("changed cat party!")
                         this.catParty.allCats[j] = this.allUnits[i].unitInformation;
                     }
@@ -1228,10 +1242,10 @@ var WorldScene = new Phaser.Class({
     endBattleVictory: function () {
         this.victory = true;
         this.catParty.resetCats();
-        for (var i = 0; i < this.allUnits.length; i++){
-            if (this.allUnits[i].unitInformation.type === "cat"){
-                for (var j = 0; j < this.catParty.allCats.length; j++){
-                    if (this.catParty.allCats[j].name  === this.allUnits[i].unitInformation.name){
+        for (var i = 0; i < this.allUnits.length; i++) {
+            if (this.allUnits[i].unitInformation.type === "cat") {
+                for (var j = 0; j < this.catParty.allCats.length; j++) {
+                    if (this.catParty.allCats[j].name === this.allUnits[i].unitInformation.name) {
                         this.catParty.allCats[j] = this.allUnits[i].unitInformation;
                     }
                 }
@@ -1249,37 +1263,37 @@ var WorldScene = new Phaser.Class({
                 this.catParty.levelsPassed = 1;
             }
         }
-        if (this.currentLevel == 2 && this.catParty.levelsPassed == 1){
+        if (this.currentLevel == 2 && this.catParty.levelsPassed == 1) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 2) {
                 this.catParty.levelsPassed = 2;
             }
         }
-        if (this.currentLevel == 3 && this.catParty.levelsPassed == 2){
+        if (this.currentLevel == 3 && this.catParty.levelsPassed == 2) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 3) {
                 this.catParty.levelsPassed = 3;
             }
         }
-        if (this.currentLevel == 4 && this.catParty.levelsPassed == 3){
+        if (this.currentLevel == 4 && this.catParty.levelsPassed == 3) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 4) {
                 this.catParty.levelsPassed = 4;
             }
         }
-        if (this.currentLevel == 5 && this.catParty.levelsPassed == 4){
+        if (this.currentLevel == 5 && this.catParty.levelsPassed == 4) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 5) {
                 this.catParty.levelsPassed = 5;
             }
         }
-        if (this.currentLevel == 6 && this.catParty.levelsPassed == 5){
+        if (this.currentLevel == 6 && this.catParty.levelsPassed == 5) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 6) {
                 this.catParty.levelsPassed = 6;
             }
         }
-        if (this.currentLevel == 7 && this.catParty.levelsPassed == 6){
+        if (this.currentLevel == 7 && this.catParty.levelsPassed == 6) {
             this.catParty.obtainCatFood(10);
             if (this.catParty.levelsPassed < 7) {
                 this.catParty.levelsPassed = 7;
@@ -1434,12 +1448,13 @@ var WorldScene = new Phaser.Class({
                         "HP: " + tempCat0.unitInformation.HP + "/" + tempCat0.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skill: " + tempCat0.unitInformation.skill.name + "\n" + "\n" + tempCat0.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat0.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Current Energy: " + tempCat0.unitInformation.energy + "\n" + "\n" +
                         "Attack: " + tempCat0.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat0.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat0.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat0.unitInformation.status.name + "\n" + "\n" + tempCat0.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat0.unitInformation.status.numberOfTurns + "\n" + "\n" +
-                        "Enhance Level: " + tempCat0.unitInformation.enhanced + "\n" + "\n" +
-                        "Energy: " + tempCat0.unitInformation.energy)
+                        "Enhance Level: " + tempCat0.unitInformation.enhanced
+                    )
                 });
                 tempCat0.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -1489,12 +1504,13 @@ var WorldScene = new Phaser.Class({
                         "HP: " + tempCat1.unitInformation.HP + "/" + tempCat1.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skill: " + tempCat1.unitInformation.skill.name + "\n" + "\n" + tempCat1.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat1.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Current Energy: " + tempCat1.unitInformation.energy + "\n" + "\n" +
                         "Attack: " + tempCat1.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat1.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat1.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat1.unitInformation.status.name + "\n" + "\n" + tempCat1.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat1.unitInformation.status.numberOfTurns + "\n" + "\n" +
-                        "Enhance Level: " + tempCat1.unitInformation.enhanced + "\n" + "\n" +
-                        "Energy: " + tempCat1.unitInformation.energy)
+                        "Enhance Level: " + tempCat1.unitInformation.enhanced
+                    )
                 });
                 tempCat1.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -1544,12 +1560,12 @@ var WorldScene = new Phaser.Class({
                         "HP: " + tempCat2.unitInformation.HP + "/" + tempCat2.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skill: " + tempCat2.unitInformation.skill.name + "\n" + "\n" + tempCat2.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat2.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Current Energy: " + tempCat2.unitInformation.energy + "\n" + "\n" +
                         "Attack: " + tempCat2.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat2.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat2.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat2.unitInformation.status.name + "\n" + "\n" + tempCat2.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat2.unitInformation.status.numberOfTurns + "\n" + "\n" +
-                        "Enhance Level: " + tempCat2.unitInformation.enhanced + "\n" + "\n" +
-                        "Energy: " + tempCat2.unitInformation.energy)
+                        "Enhance Level: " + tempCat2.unitInformation.enhanced)
                 })
                 tempCat2.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
@@ -1599,12 +1615,12 @@ var WorldScene = new Phaser.Class({
                         "HP: " + tempCat3.unitInformation.HP + "/" + tempCat3.unitInformation.maxHP + "\n" + "\n" + "\n" +
                         //"Description: " + tempEnemy.unitInformation.description + "\n" + "\n" + "\n" +"\n" +"\n" +"\n" +
                         "Skill: " + tempCat3.unitInformation.skill.name + "\n" + "\n" + tempCat3.unitInformation.skill.description + "\n" + "\n" + "\n" + "\n" + "\n" + "Energy Cost: " + tempCat3.unitInformation.skill.energyCost + "\n" + "\n" +
+                        "Current Energy: " + tempCat3.unitInformation.energy + "\n" + "\n" +
                         "Attack: " + tempCat3.unitInformation.ATK + "\n" + "\n" +
                         "Defense: " + tempCat3.unitInformation.DEF + "\n" + "\n" +
                         "Weight: " + tempCat3.unitInformation.WT + "\n" + "\n" +
                         "Status: " + tempCat3.unitInformation.status.name + "\n" + "\n" + tempCat3.unitInformation.status.description + "\n" + "\n" + "Turns Left: " + tempCat3.unitInformation.status.numberOfTurns + "\n" + "\n" +
-                        "Enhance Level: " + tempCat3.unitInformation.enhanced + "\n" + "\n" +
-                        "Energy: " + tempCat3.unitInformation.energy)
+                        "Enhance Level: " + tempCat3.unitInformation.enhanced)
                 });
                 tempCat3.damageText = this.add.text(500, 50, "234", {
                     color: "#FF0000",
