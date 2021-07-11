@@ -39,6 +39,7 @@ var WorldScene = new Phaser.Class({
         this.boxGenerated = false;
         this.buttonLock = false;
         this.turnCounter = 0;
+        this.richCatMultiplier = 1;
         this.physics.world.setFPS(60);
     },
 
@@ -1108,6 +1109,7 @@ var WorldScene = new Phaser.Class({
                     break;
                 case "Tax Evasion":
                     //increase the catfood, not yet set. 
+                    this.richCatMultiplier = this.richCatMultiplier * 1.2;
                     break;
                 case "Piercing Sword":
                     this.currentCat.unitInformation.status = new Status("Rage", "Increases normal attack damage delt to opponents by 50%", 2);
@@ -1312,43 +1314,43 @@ var WorldScene = new Phaser.Class({
             this.catParty.tutorialCompleted = true;
         }
         if (this.currentLevel == 1 && this.catParty.levelsPassed == 0) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 1) {
                 this.catParty.levelsPassed = 1;
             }
         }
         if (this.currentLevel == 2 && this.catParty.levelsPassed == 1) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 2) {
                 this.catParty.levelsPassed = 2;
             }
         }
         if (this.currentLevel == 3 && this.catParty.levelsPassed == 2) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 3) {
                 this.catParty.levelsPassed = 3;
             }
         }
         if (this.currentLevel == 4 && this.catParty.levelsPassed == 3) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 4) {
                 this.catParty.levelsPassed = 4;
             }
         }
         if (this.currentLevel == 5 && this.catParty.levelsPassed == 4) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 5) {
                 this.catParty.levelsPassed = 5;
             }
         }
         if (this.currentLevel == 6 && this.catParty.levelsPassed == 5) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 6) {
                 this.catParty.levelsPassed = 6;
             }
         }
         if (this.currentLevel == 7 && this.catParty.levelsPassed == 6) {
-            this.catParty.obtainCatFood(10);
+            this.catParty.obtainCatFood(Math.floor(10 * this.richCatMultiplier));
             if (this.catParty.levelsPassed < 7) {
                 this.catParty.levelsPassed = 7;
             }
