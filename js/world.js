@@ -147,14 +147,22 @@ var WorldScene = new Phaser.Class({
 
             this.enemiesInfo = [];
             this.generateEnemyInfo("Odd Rabbit", 12, "Light", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 46, 29, 18, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4200, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4200, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4800, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4800, "spyDogCircle");
-            this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 29, 13, 3, "immovableSkill", 1280, 4200, "sageDogCircle");
-            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 29, 13, 3, "immovableSkill", 1280, 3100, "sageDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280, 4200, "warriorDogCircle");
             this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 15, 35, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
             this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 25, 25, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 - 660, 2100, "warriorDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 + 660, 2100, "warriorDogCircle");
+
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 - 760, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 + 760, 1300, "warriorDogCircle");
+            
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 - 760, 800, "warriorDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280 + 760, 800, "warriorDogCircle");
 
 
             this.cameras.main.setBounds(0, 0, level2.widthInPixels, level2.heightInPixels);
@@ -198,7 +206,7 @@ var WorldScene = new Phaser.Class({
             this.spawnCats(1180, 4500);
         }
 
-        if (this.currentLevel == 2){
+        if (this.currentLevel == 2) {
             this.spawnCats(920, 4500);
         }
 
@@ -860,7 +868,7 @@ var WorldScene = new Phaser.Class({
                     this.enemyMovePhase = true;
                 } else {
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
-                    this.sleep(3000).then(() => {
+                    this.sleep(1000).then(() => {
                         this.enemyPhase = false;
                         this.nextTurn();
                     });
