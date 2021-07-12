@@ -148,22 +148,22 @@ var WorldScene = new Phaser.Class({
 
             this.enemiesInfo = [];
             this.generateEnemyInfo("Odd Rabbit", 12, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 500 Range. Inflicts burn on targets.")], 56, 29, 18, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4250, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4250, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 - 900, 4700, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 18, 13, 3, "normalSkill", 1280 + 900, 4700, "spyDogCircle");
-            this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 29, 13, 3, "immovableSkill", 1280, 3100, "sageDogCircle");
-            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 29, 13, 5, "normal", 1280, 4200, "warriorDogCircle");
-            this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 15, 35, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
-            this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 25, 25, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 - 660, 2100, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 + 660, 2100, "warriorDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 - 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 + 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 - 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 + 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 3, 23, 3, "immovableSkill", 1280, 3100, "sageDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 25, 11, 5, "normal", 1280, 4200, "warriorDogCircle");
+            this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 15, 25, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 25, 15, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 660, 2100, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 660, 2100, "warriorDogCircle");
 
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 - 760, 1300, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 + 760, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 760, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 760, 1300, "warriorDogCircle");
 
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 - 760, 800, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 23, 16, 4, "normal", 1280 + 760, 800, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 760, 800, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 760, 800, "warriorDogCircle");
 
 
             this.cameras.main.setBounds(0, 0, level2.widthInPixels, level2.heightInPixels);
@@ -1152,7 +1152,7 @@ var WorldScene = new Phaser.Class({
                         if (numberOfCats < 2) {
                             this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.18));
                         } else if (numberOfCats >= 2) {
-                            this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
+                            this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.5));
                         }
                     }
                     break;
