@@ -1238,7 +1238,7 @@ var WorldScene = new Phaser.Class({
     checkEndBattle: function () {
         var deathCounter = 0;
         for (var i = 0; i < this.allUnits.length; i++) {
-            if (this.allUnits[i].unitInformation.HP <= 0 && this.allUnits[i].unitInformation.type === "cat") {
+            if (this.allUnits[i].unitInformation.status.name == "dead" && this.allUnits[i].unitInformation.type === "cat") {
                 deathCounter++;
             }
         }
@@ -1286,6 +1286,7 @@ var WorldScene = new Phaser.Class({
             this.catParty.currentTeam = [];
             this.catParty.tutorialCompleted = true;
         }
+        this.scene.pause('WorldScene');
         localStorage.setItem('catParty', JSON.stringify(this.catParty));
         this.sleep(5000).then(() => {
             this.scene.start('BootScene', {
