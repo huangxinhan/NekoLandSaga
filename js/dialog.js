@@ -61,6 +61,10 @@ var DialogScene = new Phaser.Class({
             "Now, after completing this tutorial, head to 'Cat Gacha' on the main menu to lure more cats and have them join your team! You have been provided with 25 cat food as a new player bonus! Go on, try your luck!", null
         ]
 
+        this.convo3 = ["Reinforcements! In some levels, additional reinforcement enemies may appear during specific turns.",
+        "Be careful!", null
+    ]
+
         //click anywhere
         this.input.on("pointerdown", () => {
             switch (this.currentDialogStatus) {
@@ -89,6 +93,16 @@ var DialogScene = new Phaser.Class({
                     this.convoText.text = this.convo2[this.currentIndex];
                     this.convoName.text = "Neko Guide";
                     if (this.convo2[this.currentIndex] === null) {
+                        this.currentIndex = -1;
+                        this.scene.stop('DialogScene');
+                        this.scene.resume('WorldScene');
+                    } 
+                break; 
+                case "tutorial3":
+                    this.currentIndex++;
+                    this.convoText.text = this.convo3[this.currentIndex];
+                    this.convoName.text = "Neko Guide";
+                    if (this.convo3[this.currentIndex] === null) {
                         this.currentIndex = -1;
                         this.scene.stop('DialogScene');
                         this.scene.resume('WorldScene');
