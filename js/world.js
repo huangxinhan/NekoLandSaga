@@ -132,11 +132,7 @@ var WorldScene = new Phaser.Class({
             this.setUnitCollisionAndLine();
 
             //identify the boss
-            for (var i = 0; i < this.allUnits.length; i++) {
-                if (this.allUnits[i].unitInformation.name == "Odd Anteater") {
-                    this.boss = this.allUnits[i];
-                }
-            }
+            this.identifyBoss("Odd Anteater");
 
             console.log(this.boss.unitInformation);
 
@@ -177,11 +173,7 @@ var WorldScene = new Phaser.Class({
             this.setup();
             this.setUnitCollisionAndLine();
             //identify the boss
-            for (var i = 0; i < this.allUnits.length; i++) {
-                if (this.allUnits[i].unitInformation.name == "Odd Rabbit") {
-                    this.boss = this.allUnits[i];
-                }
-            }
+            this.identifyBoss("Odd Rabbit");
 
             console.log(this.boss.unitInformation);
 
@@ -213,11 +205,7 @@ var WorldScene = new Phaser.Class({
             this.setup();
             this.setUnitCollisionAndLine();
             //identify the boss
-            for (var i = 0; i < this.allUnits.length; i++) {
-                if (this.allUnits[i].unitInformation.name == "Odd Fox") {
-                    this.boss = this.allUnits[i];
-                }
-            }
+            this.identifyBoss("Odd Fox");
 
             for (var i = 0; i < this.allUnits.length; i++) {
                 if (this.allUnits[i].unitInformation.name == "Stuffed Dog") {
@@ -232,6 +220,14 @@ var WorldScene = new Phaser.Class({
 
             this.nextTurn();
 
+        }
+    },
+
+    identifyBoss: function (unitName) {
+        for (var i = 0; i < this.allUnits.length; i++) {
+            if (this.allUnits[i].unitInformation.name == unitName) {
+                this.boss = this.allUnits[i];
+            }
         }
     },
 
@@ -856,8 +852,8 @@ var WorldScene = new Phaser.Class({
                     "dialogStatus": "tutorial3"
                 });
                 var magic = 1;
-                for (var i = 0; i < this.allUnits.length; i++){
-                    if (this.allUnits[i].unitInformation.name == "Stuffed Dog"){
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.name == "Stuffed Dog") {
                         magic = magic * -1;
                         this.allUnits[i].setInteractive(true);
                         this.allUnits[i].setActive(true).setVisible(true);
@@ -866,7 +862,7 @@ var WorldScene = new Phaser.Class({
                         this.allUnits[i].unitInformation.status = new Status("None", "", "∞");
                     }
                 }
-                
+
             }
         }
 
@@ -1262,18 +1258,23 @@ var WorldScene = new Phaser.Class({
                     }
                     break;
                 case "Have some Courage!":
-                    var numberOfCats = -1;
-                    for (var i = 0; i < this.allUnits.length; i++) {
-                        if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
-                            numberOfCats++;
-                        }
-                    }
                     if (this.currentCat.unitInformation.lastTarget != null) {
+                        var numberOfCats = -1;
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentCat.x, this.currentCat.y) <= 500) {
+                                numberOfCats++;
+                            }
+                        }
+
                         if (numberOfCats < 2) {
                             this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.3));
                         } else if (numberOfCats >= 2) {
                             this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.5));
                         }
+
+                    }
+                    else {
+                        this.announcementText.setText("No Target Found!");
                     }
                     break;
                 case "All You Can Eat":
