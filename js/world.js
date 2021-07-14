@@ -62,8 +62,13 @@ var WorldScene = new Phaser.Class({
         } else if (this.currentLevel === 3) {
             this.load.tilemapTiledJSON('level3', 'assets/map/level3.json');
             this.bossStage = true;
-            this.enemyCount = 4;
+            this.enemyCount = 5;
+        } else if (this.currentLevel === 4) {
+            this.load.tilemapTiledJSON('level4', 'assets/map/level4.json');
+            this.bossStage = true;
+            this.enemyCount = 20;
         }
+
 
     },
 
@@ -191,11 +196,11 @@ var WorldScene = new Phaser.Class({
             this.enemiesInfo = [];
             this.generateEnemyInfo("Odd Fox", 18, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
                 new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
-            ], 74, 23, 25, 3, "normalSkill", 1280, 700, "oddFoxCircle");
+            ], 74, 23, 25, 3, "oddFox", 1280, 735, "oddFoxCircle");
             this.generateEnemyInfo("Sage Dog", 18, "Light", "", [new EnemySkill("Ruin", "Summons 'Warrior Dog'")], 22, 19, 29, 1, "immovableSkill", 1280 - 128, 250, "sageDogCircle");
             this.generateEnemyInfo("Wise Dog", 18, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 22, 19, 29, 1, "immovableSkill", 1280 + 128, 250, "sageDogCircle");
-            this.generateEnemyInfo("Odd Rabbit Shadow", 16, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 40, 29, 20, 1, "normalSkill", 1280 - 800, 1000, "oddRabbitCircle");
-            this.generateEnemyInfo("Odd Anteater Shadow", 16, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 48, 20, 25, 7, "normalSkill", 1280 + 800, 1000, "oddAnteaterCircle");
+            this.generateEnemyInfo("Incarnation of Greed", 16, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 40, 29, 20, 1, "normalSkill", 1280 - 800, 1000, "oddRabbitCircle");
+            this.generateEnemyInfo("Incarnation of Sloth", 16, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 48, 20, 25, 7, "normalSkill", 1280 + 800, 1000, "oddAnteaterCircle");
             this.generateEnemyInfo("Stuffed Dog", 15, "Dark", "", [new EnemySkill("Recover"), "Heals 25% of unit's max HP."], 50, 8, 48, 10, "normalSkill", 1280 - 800, 1600, "stuffedDogCircle");
             this.generateEnemyInfo("Stuffed Dog", 15, "Dark", "", [new EnemySkill("Recover"), "Heals 25% of unit's max HP."], 50, 8, 48, 10, "normalSkill", 1280 + 800, 1600, "stuffedDogCircle");
 
@@ -217,6 +222,46 @@ var WorldScene = new Phaser.Class({
                 }
             }
             console.log(this.boss.unitInformation);
+
+            this.nextTurn();
+
+        } else if (this.currentLevel === 4) {
+            var level4 = this.make.tilemap({
+                key: 'level4'
+            });
+            var tiles = level4.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level4.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level4.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Odd Bird", 27, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 136, 19, 29, 1, "oddBird", 1280, 635, "oddBirdCircle");
+            this.generateEnemyInfo("Incarnation of Delusion", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
+                new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
+            ], 90, 33, 26, 3, "oddFox", 1280 - 500, 735, "oddFoxCircle");
+            this.generateEnemyInfo("Incarnation of Delusion", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
+                new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
+            ], 90, 33, 26, 3, "oddFox", 1280 + 500, 735, "oddFoxCircle");
+
+            this.cameras.main.setBounds(0, 0, level4.widthInPixels, level4.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            this.identifyBoss("Odd Bird");
+
+            // for (var i = 0; i < this.allUnits.length; i++) {
+            //     if (this.allUnits[i].unitInformation.name == "Stuffed Dog") {
+            //         this.allUnits[i].unitInformation.status = new Status("backup", "waiting to be summoned", 1); //backup means to be summoned, count meant the turn it will be summoned
+            //         this.allUnits[i].setInteractive(false);
+            //         this.allUnits[i].setActive(false).setVisible(false);
+            //         this.allUnits[i].x = -9999;
+            //         this.allUnits[i].y = -9999;
+            //     }
+            // }
 
             this.nextTurn();
 
@@ -261,6 +306,10 @@ var WorldScene = new Phaser.Class({
 
         if (this.currentLevel == 3) {
             this.spawnCats(920, 2500);
+        }
+
+        if (this.currentLevel == 4) {
+            this.spawnCats(920, 4500);
         }
 
 
@@ -847,10 +896,6 @@ var WorldScene = new Phaser.Class({
 
         if (this.currentLevel == 3) {
             if (this.sideTurnCounter == 2) {
-                this.scene.pause('WorldScene');
-                this.scene.run('DialogScene', {
-                    "dialogStatus": "tutorial3"
-                });
                 var magic = 1;
                 for (var i = 0; i < this.allUnits.length; i++) {
                     if (this.allUnits[i].unitInformation.name == "Stuffed Dog") {
@@ -902,6 +947,9 @@ var WorldScene = new Phaser.Class({
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
             this.dealStatusEffectDamage(this.currentCat);
+            if (this.currentCat.unitInformation.status.name == "dead") {
+                this.nextTurn();
+            }
             this.line = new Phaser.Geom.Line(this.currentCat.x, this.currentCat.y, 550, 300);
             this.announcementText.setText(this.currentCat.unitInformation.name + "'s Turn");
             this.allUnits[this.index].unitInformation.energy++;
@@ -919,7 +967,9 @@ var WorldScene = new Phaser.Class({
             this.hideLine = true;
             this.currentEnemy = this.allUnits[this.index];
             this.dealStatusEffectDamage(this.currentEnemy);
-            //temporarily forget about enemy AI, make enemy phase true; 
+            if (this.currentEnemy.unitInformation.status.name == "dead") {
+                this.nextTurn();
+            }
             this.enemyPhase = true;
             this.announcementText.setText(this.currentEnemy.unitInformation.name + "'s Turn");
             if (this.currentEnemy.unitInformation.status.name != "None") {
@@ -1015,6 +1065,27 @@ var WorldScene = new Phaser.Class({
                 this.enemyUseSkill();
                 break;
 
+            case "oddBird":
+            case "oddFox":
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 1250 &&
+                        this.allUnits[i].unitInformation.status.name != "dead") {
+                        selectedCat = this.allUnits[i];
+                        break;
+                    }
+                }
+                if (selectedCat != null) {
+                    this.physics.moveToObject(this.currentEnemy, selectedCat, 500 * (2.2 - (this.currentCat.unitInformation.WT * 0.1)));
+                    this.enemyMovePhase = true;
+                } else {
+                    this.enemyMovePhase = false;
+                    this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
+                    this.sleep(3000).then(() => {
+                        this.enemyPhase = false;
+                        this.nextTurn();
+                    });
+                }
+                break;
 
 
         }
@@ -1032,6 +1103,81 @@ var WorldScene = new Phaser.Class({
                 //then we don't use a skill
                 this.enemySkillPhase = false;
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+                break;
+            case "oddBird":
+                this.enemySkillPhase = false;
+                var dualSkill = 1;
+                var random = Math.floor(Math.random() * 101);
+                if (random < 50) {
+                    dualSkill = 0;
+                }
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[dualSkill].name + "'!");
+                switch (this.currentEnemy.unitInformation.skill[dualSkill].name) {
+                    case "Odd Storm":
+                        this.index--;
+                        break;
+                    case "Ominous Tempest":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 800) {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.maxHP * 0.10));
+                                if (this.allUnits[i].unitInformation.status.name != "dead" && this.allUnits[i].unitInformation.energy > 0) {
+                                    this.allUnits[i].unitInformation.energy--;
+                                }
+                            }
+                        };
+                        break;
+                }
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+                break;
+            case "oddFox":
+                this.enemySkillPhase = false;
+                var dualSkill = 1;
+                var random = Math.floor(Math.random() * 101);
+                if (random < 50) {
+                    dualSkill = 0;
+                }
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[dualSkill].name + "'!");
+                switch (this.currentEnemy.unitInformation.skill[dualSkill].name) {
+                    case "Odd Waters":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "enemy" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 1000 &&
+                                this.allUnits[i].unitInformation.status.name != "dead") {
+                                this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25);
+                                if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
+                                    this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
+                                } else {
+                                    if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
+                                        this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                        this.resetText(this.allUnits[i]);
+                                    }
+                                }
+                                this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                this.allUnits[i].healText.visible = true;
+                            }
+                        }
+                        this.sleep(1800).then(() => {
+                            for (var i = 0; i < this.allUnits.length; i++) {
+                                this.allUnits[i].healText.visible = false;
+                            }
+                        });
+                        break;
+                    case "Odd Flame":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 800) {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                if (this.allUnits[i].unitInformation.status.name != "dead") {
+                                    this.allUnits[i].unitInformation.status = new Status("Burned", "Takes 8% burn damage each turn.", 1);
+                                }
+                            }
+                        };
+                }
                 this.sleep(3000).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
@@ -1272,8 +1418,7 @@ var WorldScene = new Phaser.Class({
                             this.dealEffectDamage(this.currentCat, this.currentCat.unitInformation.lastTarget, Math.floor(this.currentCat.unitInformation.lastTarget.unitInformation.HP * 0.5));
                         }
 
-                    }
-                    else {
+                    } else {
                         this.announcementText.setText("No Target Found!");
                     }
                     break;
