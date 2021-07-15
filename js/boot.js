@@ -23,7 +23,8 @@ var BootScene = new Phaser.Class({
             } else {
                 //new Game, initialize cat party
                 this.catParty = new catParty();
-                this.catParty.obtainCatFood(25);
+                this.catParty.obtainCatFood(50);
+                this.catParty.levelsPassed = 4;
             }
         }
         console.log(this.catParty);

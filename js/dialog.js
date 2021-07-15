@@ -58,7 +58,7 @@ var DialogScene = new Phaser.Class({
         ]
 
         this.convo2 = ["Very nice! You've mastered the basics of Neko Land Saga. Defeating an enemy will yield you EXP, and when you reach 100 EXP, you will level up! The stats of the cat will increase with each level up!",
-            "Now, after completing this tutorial, head to 'Cat Gacha' on the main menu to lure more cats and have them join your team! You have been provided with 25 cat food as a new player bonus! Go on, try your luck!", null
+            "Now, after completing this tutorial, head to 'Cat Gacha' on the main menu to lure more cats and have them join your team! You have been provided with 50 cat food as a new player bonus! Go on, try your luck!", null
         ]
 
         this.convo3 = ["Reinforcements! In some levels, additional reinforcement enemies may appear during specific turns.",
