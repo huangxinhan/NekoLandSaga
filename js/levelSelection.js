@@ -23,9 +23,9 @@ var LevelSelectionScene = new Phaser.Class({
         this.graphics.lineStyle(1, 0xffffff);
         this.graphics.fillStyle(0x031f4c, 1);
 
-        var nekolandsagaText = this.physics.add.image(400, 210, 'nekolandsagaText');
+        var nekolandsagaText = this.physics.add.image(400, 110, 'nekolandsagaText');
 
-        var levelSelection = this.physics.add.image(400, 350, 'arc1').setInteractive();
+        var levelSelection = this.physics.add.image(400, 200, 'arc1').setInteractive();
         levelSelection.on('pointerdown', () => {
             this.buttonClick.play();
             this.scene.start('ancientCivilizationScene', {
@@ -41,9 +41,50 @@ var LevelSelectionScene = new Phaser.Class({
 
         levelSelection.on('pointerout', () => {
             levelSelection.clearTint();
+        });
+
+        var trainingArena = this.physics.add.image(400, 300, 'trainingArena').setInteractive();
+        trainingArena.on('pointerdown', () => {
+            this.buttonClick.play();
+            if (this.catParty.currentTeam.length == 0) {
+                alert("Must have at least one cat on your team to proceed!");
+            } else {
+                this.scene.start('WorldScene', {
+                    "catParty": this.catParty,
+                    "level": "trainingArena"
+                });
+            }
+        });
+
+        trainingArena.on('pointerover', () => {
+            this.buttonHover.play();
+            trainingArena.setTint("0xf2b3ff");
         })
 
-        var returnToMainMenu = this.physics.add.image(400, 450, 'returnToMainMenu').setInteractive();
+        trainingArena.on('pointerout', () => {
+            trainingArena.clearTint();
+        });
+
+        var apotheosisChallenge = this.physics.add.image(400, 400, 'apotheosisChallenge').setInteractive();
+        apotheosisChallenge.on('pointerdown', () => {
+            this.buttonClick.play();
+            this.scene.start('BootScene', {
+                "catParty": this.catParty
+            })
+        });
+
+        apotheosisChallenge.on('pointerover', () => {
+            this.buttonHover.play();
+            apotheosisChallenge.setTint("0xf2b3ff");
+        })
+
+        apotheosisChallenge.on('pointerout', () => {
+            apotheosisChallenge.clearTint();
+        });
+
+
+
+        var returnToMainMenu = this.physics.add.image(400, 700, 'returnToMainMenu').setInteractive();
         returnToMainMenu.on('pointerdown', () => {
             this.buttonClick.play();
             this.scene.start('BootScene', {

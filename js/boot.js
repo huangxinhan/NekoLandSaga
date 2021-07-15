@@ -62,6 +62,8 @@ var BootScene = new Phaser.Class({
         this.load.image('minimapButton', 'assets/text/minimapButton.png');
         this.load.image('rectangle', 'assets/text/rectangle.png');
         this.load.image('quitButton', 'assets/text/quitButton.png');
+        this.load.image('trainingArena', 'assets/text/trainingArena.png');
+        this.load.image('apotheosisChallenge', 'assets/text/apotheosisChallenge.png');
 
         //Cats
         this.load.image('chefCat', 'assets/cats/chefCat.png');
@@ -121,6 +123,12 @@ var BootScene = new Phaser.Class({
         this.load.image('spyDogCircle', 'assets/enemies/spyDogCircle.png');
         this.load.image('stuffedDog', 'assets/enemies/stuffedDog.png');
         this.load.image('stuffedDogCircle', 'assets/enemies/stuffedDogCircle.png');
+        this.load.image('tankDog', 'assets/enemies/tankDog.png');
+        this.load.image('tankDogCircle', 'assets/enemies/tankDogCircle.png');
+        this.load.image('thiefDog', 'assets/enemies/thiefDog.png');
+        this.load.image('thiefDogCircle', 'assets/enemies/thiefDogCircle.png');
+        this.load.image('gangsterDog', 'assets/enemies/gangsterDog.png');
+        this.load.image('gangsterDogCircle', 'assets/enemies/gangsterDogCircle.png');
 
         //audio
         this.load.audio('coinCollide', 'assets/sfx/coinCollide.mp3');

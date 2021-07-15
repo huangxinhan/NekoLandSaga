@@ -67,6 +67,10 @@ var WorldScene = new Phaser.Class({
             this.load.tilemapTiledJSON('level4', 'assets/map/level4.json');
             this.bossStage = true;
             this.enemyCount = 20;
+        } else if (this.currentLevel === "trainingArena") {
+            this.load.tilemapTiledJSON('training', 'assets/map/training.json');
+            this.bossStage = false;
+            this.enemyCount = 12;
         }
 
 
@@ -102,6 +106,39 @@ var WorldScene = new Phaser.Class({
             this.enemiesInfo.push(enemyInformation);
 
             this.cameras.main.setBounds(0, 0, tutorial.widthInPixels, tutorial.heightInPixels);
+
+            this.setup();
+
+            this.setUnitCollisionAndLine();
+
+            this.nextTurn();
+        } else if (this.currentLevel === "trainingArena") {
+            var training = this.make.tilemap({
+                key: 'training'
+            });
+            var tiles = training.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = training.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = training.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            //enemy spawns for this current level
+            this.enemiesInfo = [];
+
+            this.generateEnemyInfo("Training Dog", 36, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 13, 12, 5, "normal", 1280 - 200, 300, "warriorDogCircle");
+            this.generateEnemyInfo("Training Dog", 37, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 16, 16, 12, 5, "normal", 1280 - 400, 500, "sageDogCircle");
+            this.generateEnemyInfo("Training Dog", 34, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 12, 13, 5, "normal", 1280 - 600, 800, "spyDogCircle");
+            this.generateEnemyInfo("Training Dog", 32, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 17, 18, 12, 5, "normal", 1280 - 800, 200, "stuffedDogCircle");
+            this.generateEnemyInfo("Training Dog", 37, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 13, 13, 13, 5, "normal", 1280 + 200, 900, "restingDogCircle");
+            this.generateEnemyInfo("Training Dog", 32, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 14, 12, 5, "normal", 1280 + 400, 1800, "gangsterDogCircle");
+            this.generateEnemyInfo("Training Dog", 34, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 16, 13, 5, "normal", 1280 + 600, 1500, "warriorDogCircle");
+            this.generateEnemyInfo("Training Dog", 34, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 19, 13, 13, 5, "normal", 1280 + 800, 1300, "restingDogCircle");
+            this.generateEnemyInfo("Training Dog", 35, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 17, 18, 12, 5, "normal", 1280 + 300, 2800, "thiefDogCircle");
+            this.generateEnemyInfo("Training Dog", 36, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 16, 19, 12, 5, "normal", 1280 + 600, 3200, "thiefDogCircle");
+            this.generateEnemyInfo("Training Dog", 38, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 18, 14, 13, 5, "normal", 1280 - 300, 3100, "restingDogCircle");
+            this.generateEnemyInfo("Training Dog", 32, "Terra", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 17, 17, 12, 5, "normal", 1280 - 600, 2900, "gangsterDogCircle");
+
+            this.cameras.main.setBounds(0, 0, training.widthInPixels, training.heightInPixels);
 
             this.setup();
 
@@ -236,15 +273,28 @@ var WorldScene = new Phaser.Class({
             this.cameras.main.roundPixels = true;
 
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Bird", 27, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+            this.generateEnemyInfo("Odd Bird", 29, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
                 new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
-            ], 136, 19, 29, 1, "oddBird", 1280, 635, "oddBirdCircle");
+            ], 136, 21, 29, 1, "oddBird", 1280, 635, "oddBirdCircle");
             this.generateEnemyInfo("Incarnation of Delusion", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
                 new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
-            ], 90, 33, 26, 3, "oddFox", 1280 - 500, 735, "oddFoxCircle");
+            ], 90, 43, 26, 3, "oddFox", 1280 - 500, 735, "oddFoxCircle");
             this.generateEnemyInfo("Incarnation of Delusion", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
                 new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
-            ], 90, 33, 26, 3, "oddFox", 1280 + 500, 735, "oddFoxCircle");
+            ], 90, 43, 26, 3, "oddFox", 1280 + 500, 735, "oddFoxCircle");
+            this.generateEnemyInfo("Tank Dog", 21, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 40, 31, 28, 10, "normalSkill", 1280 - 400, 3735, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 22, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 42, 32, 29, 10, "normalSkill", 1280 - 400 + 266, 3735, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 23, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 44, 33, 30, 10, "normalSkill", 1280 - 400 + 266 + 266, 3735, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 24, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 46, 34, 31, 10, "normalSkill", 1280 - 400 + 266 + 266 + 266, 3735, "tankDogCircle");
+            this.generateEnemyInfo("Wise Dog", 25, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 49, 28, 19, 1, "immovableSkill", 1280 - 400 - 128 * 3, 4100, "sageDogCircle");
+            this.generateEnemyInfo("Wise Dog", 25, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 49, 28, 19, 1, "immovableSkill", 1280 - 400 + 266 + 266 + 266 + 128 * 3, 4100, "sageDogCircle");
+            this.generateEnemyInfo("Sleepy Dog", 28, "Terra", "", [new EnemySkill("Sleep...", "Refreshes all status changes for nearby enemies")], 15, 50, 16, 5, "immovableSkill", 1280, 2800, "restingDogCircle");
+            this.generateEnemyInfo("Tank Dog", 21, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 40, 27, 28, 10, "normalSkill", 1280 - 400, 2435, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 22, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 42, 28, 29, 10, "normalSkill", 1280 - 400 + 266, 2435, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 23, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 44, 29, 30, 10, "normalSkill", 1280 - 400 + 266 + 266, 2435, "tankDogCircle");
+            this.generateEnemyInfo("Tank Dog", 24, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 46, 30, 31, 10, "normalSkill", 1280 - 400 + 266 + 266 + 266, 2435, "tankDogCircle");
+            this.generateEnemyInfo("Skilled Warrior Dog", 24, "Anemo", "", [], 54, 31, 27, 5, "seeker", 1280, 4200, "warriorDogCircle");
+            this.generateEnemyInfo("Skilled Warrior Dog", 26, "Anemo", "", [], 54, 31, 27, 5, "seeker", 1280, 4200, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, level4.widthInPixels, level4.heightInPixels);
 
@@ -253,16 +303,15 @@ var WorldScene = new Phaser.Class({
             //identify the boss
             this.identifyBoss("Odd Bird");
 
-            // for (var i = 0; i < this.allUnits.length; i++) {
-            //     if (this.allUnits[i].unitInformation.name == "Stuffed Dog") {
-            //         this.allUnits[i].unitInformation.status = new Status("backup", "waiting to be summoned", 1); //backup means to be summoned, count meant the turn it will be summoned
-            //         this.allUnits[i].setInteractive(false);
-            //         this.allUnits[i].setActive(false).setVisible(false);
-            //         this.allUnits[i].x = -9999;
-            //         this.allUnits[i].y = -9999;
-            //     }
-            // }
-
+            for (var i = 0; i < this.allUnits.length; i++) {
+                if (this.allUnits[i].unitInformation.name == "Skilled Warrior Dog") {
+                    this.allUnits[i].unitInformation.status = new Status("backup", "waiting to be summoned", 1); //backup means to be summoned, count meant the turn it will be summoned
+                    this.allUnits[i].setInteractive(false);
+                    this.allUnits[i].setActive(false).setVisible(false);
+                    this.allUnits[i].x = -9999;
+                    this.allUnits[i].y = -9999;
+                }
+            }
             this.nextTurn();
 
         }
@@ -291,6 +340,10 @@ var WorldScene = new Phaser.Class({
         this.coinCollide = this.sound.add('coinCollide');
         this.buttonHover = this.sound.add('buttonHover');
         this.buttonClick = this.sound.add('buttonClick');
+
+        if (this.currentLevel == "trainingArena"){
+            this.spawnCats(920, 4500);
+        }
 
         if (this.currentLevel == 0) {
             this.spawnCats(1280, 1580);
@@ -911,6 +964,23 @@ var WorldScene = new Phaser.Class({
             }
         }
 
+        if (this.currentLevel == 4) {
+            if (this.sideTurnCounter == 5) {
+                var magic = 1;
+                for (var i = 0; i < this.allUnits.length; i++) {
+                    if (this.allUnits[i].unitInformation.name == "Skilled Warrior Dog") {
+                        magic = magic * -1;
+                        this.allUnits[i].setInteractive(true);
+                        this.allUnits[i].setActive(true).setVisible(true);
+                        this.allUnits[i].x = 1280 - 800 * magic
+                        this.allUnits[i].y = 4700;
+                        this.allUnits[i].unitInformation.status = new Status("None", "", "∞");
+                    }
+                }
+
+            }
+        }
+
 
         this.checkEndBattle()
 
@@ -926,6 +996,9 @@ var WorldScene = new Phaser.Class({
         // } while (!this.allUnits[this.index].unitInformation.status.name == "dead")
         while (true) {
             this.index++;
+            if (this.index == 0) {
+                this.sideTurnCounter++;
+            }
             if (this.index >= this.allUnits.length) {
                 this.index = 0;
             }
@@ -940,9 +1013,6 @@ var WorldScene = new Phaser.Class({
         //if player
         if (this.allUnits[this.index].unitInformation.type === "cat") {
             //if the previous turn was an enemy 
-            if (this.index == 0) {
-                this.sideTurnCounter++;
-            }
             //camera focus zoom onto the player
             this.hideLine = false;
             this.currentCat = this.allUnits[this.index];
@@ -1044,7 +1114,7 @@ var WorldScene = new Phaser.Class({
                     //this.enemySkillPhase = true;
                     //this.enemyUseSkill();
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                    this.sleep(3000).then(() => {
+                    this.sleep(1500).then(() => {
                         this.enemyPhase = false;
                         this.nextTurn();
                     });
@@ -1053,7 +1123,7 @@ var WorldScene = new Phaser.Class({
 
             case "immovable":
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                this.sleep(3000).then(() => {
+                this.sleep(1500).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1080,7 +1150,7 @@ var WorldScene = new Phaser.Class({
                 } else {
                     this.enemyMovePhase = false;
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                    this.sleep(3000).then(() => {
+                    this.sleep(1500).then(() => {
                         this.enemyPhase = false;
                         this.nextTurn();
                     });
@@ -1215,6 +1285,25 @@ var WorldScene = new Phaser.Class({
                             }
                         };
                         break;
+                    case "Fire!!":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 800) {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.maxHP * 0.05));
+                                if (this.allUnits[i].unitInformation.status.name != "dead") {
+                                    this.allUnits[i].unitInformation.status = new Status("Burned", "Takes 8% burn damage each turn.", 10);
+                                }
+                            }
+                        };
+                        break;
+                    case "Sleep...":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 2000) {
+                                if (this.allUnits[i].unitInformation.status.name != "dead") {
+                                    this.allUnits[i].unitInformation.status = new Status("Sleepy", "Dosing", 1);
+                                }
+                            }
+                        }
+                        break;
                     case "Summoning I":
                         if (this.turnCounter % 1 == 0) {
                             this.generateEnemyInfo("Summoned Warrior Dog", 10, "Terra", "", [], 35, 15, 20, 7, "seeker", 1280 - 600, 1056, "oddAnteaterCircle");
@@ -1305,16 +1394,16 @@ var WorldScene = new Phaser.Class({
                 case "Some catfood for you!":
                     for (var i = 0; i < this.allUnits.length; i++) {
                         if (this.allUnits[i].unitInformation.type == "cat" && this.allUnits[i].unitInformation.status.name != "dead") {
-                            this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.15);
+                            this.allUnits[i].unitInformation.HP += Math.floor(this.allUnits[i].unitInformation.maxHP * 0.35);
                             if (this.allUnits[i].unitInformation.HP > this.allUnits[i].unitInformation.maxHP) {
                                 this.allUnits[i].unitInformation.HP = this.allUnits[i].unitInformation.maxHP;
                             } else {
                                 if (this.sideMenuText.text.includes(this.allUnits[i].unitInformation.name)) {
-                                    this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.15));
+                                    this.healthBar.increase(Math.floor(this.allUnits[i].unitInformation.maxHP * 0.35));
                                     this.resetText(this.allUnits[i]);
                                 }
                             }
-                            this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.15));
+                            this.allUnits[i].healText.setText("+" + Math.floor(this.allUnits[i].unitInformation.maxHP * 0.35));
                             this.allUnits[i].healText.visible = true;
                             this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
                         }
