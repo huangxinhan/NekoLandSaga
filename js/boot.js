@@ -24,7 +24,7 @@ var BootScene = new Phaser.Class({
                 //new Game, initialize cat party
                 this.catParty = new catParty();
                 this.catParty.obtainCatFood(50);
-                this.catParty.levelsPassed = 7;
+                // this.catParty.levelsPassed = 7;
             }
         }
         console.log(this.catParty);
@@ -229,23 +229,23 @@ var BootScene = new Phaser.Class({
             help.clearTint();
         });
 
-        var saveGame = this.physics.add.image(1350, 150, 'saveGame').setInteractive();
+        // var saveGame = this.physics.add.image(1350, 150, 'saveGame').setInteractive();
 
-        saveGame.on('pointerdown', () => {
-            alert("Game Saved!");
-            localStorage.setItem('catParty', JSON.stringify(this.catParty));
-            this.buttonClick.play();
+        // saveGame.on('pointerdown', () => {
+        //     alert("Game Saved!");
+        //     localStorage.setItem('catParty', JSON.stringify(this.catParty));
+        //     this.buttonClick.play();
 
-        });
+        // });
 
-        saveGame.on('pointerover', () => {
-            this.buttonHover.play();
-            saveGame.setTint("0xf2b3ff");
-        });
+        // saveGame.on('pointerover', () => {
+        //     this.buttonHover.play();
+        //     saveGame.setTint("0xf2b3ff");
+        // });
 
-        saveGame.on('pointerout', () => {
-            saveGame.clearTint();
-        })
+        // saveGame.on('pointerout', () => {
+        //     saveGame.clearTint();
+        // })
     }
 
 });
