@@ -25,6 +25,17 @@ var LevelSelectionScene = new Phaser.Class({
 
         var nekolandsagaText = this.physics.add.image(400, 110, 'nekolandsagaText');
 
+        this.rateText = this.add.text(970, 130, "Get Cat Food x100" + "\n" + "\n" +"for clearing the Apotheosis Challenge!", {
+            color: "#000000",
+            align: "center",
+            fontWeight: 'bold',
+            font: '28px Arial',
+            wordWrap: {
+                width: 600,
+                useAdvancedWrap: true
+            }
+        }).setInteractive();
+
         var levelSelection = this.physics.add.image(400, 200, 'arc1').setInteractive();
         levelSelection.on('pointerdown', () => {
             this.buttonClick.play();
@@ -68,8 +79,9 @@ var LevelSelectionScene = new Phaser.Class({
         var apotheosisChallenge = this.physics.add.image(400, 400, 'apotheosisChallenge').setInteractive();
         apotheosisChallenge.on('pointerdown', () => {
             this.buttonClick.play();
-            this.scene.start('BootScene', {
-                "catParty": this.catParty
+            this.scene.start('WorldScene', {
+                "catParty": this.catParty,
+                "level": "apotheosisChallenge"
             })
         });
 

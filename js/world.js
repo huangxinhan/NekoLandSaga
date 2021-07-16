@@ -67,6 +67,22 @@ var WorldScene = new Phaser.Class({
             this.load.tilemapTiledJSON('level4', 'assets/map/level4.json');
             this.bossStage = true;
             this.enemyCount = 20;
+        } else if (this.currentLevel === 5) {
+            this.load.tilemapTiledJSON('level5', 'assets/map/level5.json');
+            this.bossStage = true;
+            this.enemyCount = 10;
+        } else if (this.currentLevel === 6) {
+            this.load.tilemapTiledJSON('level6', 'assets/map/level6.json');
+            this.bossStage = true;
+            this.enemyCount = 10;
+        } else if (this.currentLevel === 7) {
+            this.load.tilemapTiledJSON('level7', 'assets/map/level7.json');
+            this.bossStage = true;
+            this.enemyCount = 10;
+        } else if (this.currentLevel === "apotheosisChallenge") {
+            this.load.tilemapTiledJSON('level7', 'assets/map/level7.json');
+            this.bossStage = false;
+            this.enemyCount = 7;
         } else if (this.currentLevel === "trainingArena") {
             this.load.tilemapTiledJSON('training', 'assets/map/training.json');
             this.bossStage = false;
@@ -145,6 +161,43 @@ var WorldScene = new Phaser.Class({
             this.setUnitCollisionAndLine();
 
             this.nextTurn();
+        } else if (this.currentLevel === "apotheosisChallenge") {
+            var level7 = this.make.tilemap({
+                key: 'level7'
+            });
+            var tiles = level7.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level7.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level7.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Incarnation of Melancholy", 40, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
+            ], 550, 48, 86, 1, "normalSkill", 1280, 635, "oddGoatCircle");
+            this.generateEnemyInfo("Incarnation of Malice", 37, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
+                new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
+            ], 179, 58, 66, 5, "oddCat", 1280, 1175, "oddCatCircle");
+            this.generateEnemyInfo("Incarnation of Wrath", 35, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 150, 35, 39, 1, "oddBird", 1280 - 500, 1175, "oddBirdCircle");
+            this.generateEnemyInfo("Incarnation of Pride", 34, "Terra", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 109, 74, 36, 2, "normal", 1280 + 500, 1175, "oddSnakeCircle");
+            this.generateEnemyInfo("Incarnation of Delusions", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
+                new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
+            ], 90, 43, 26, 3, "oddFox", 1280, 2535, "oddFoxCircle");
+            this.generateEnemyInfo("Incarnation of Greed", 36, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 179, 59, 50, 1, "normalSkill", 1280 - 500, 3300, "oddRabbitCircle");
+            this.generateEnemyInfo("Incarnation of Sloth", 36, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 296, 48, 65, 7, "normalSkill", 1280 + 500, 3300, "oddAnteaterCircle");
+
+
+            this.cameras.main.setBounds(0, 0, level7.widthInPixels, level7.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            this.identifyBoss("Odd Ram");
+
+            this.nextTurn();
         } else if (this.currentLevel === 1) {
             var level1 = this.make.tilemap({
                 key: 'level1'
@@ -192,22 +245,22 @@ var WorldScene = new Phaser.Class({
 
             this.enemiesInfo = [];
             this.generateEnemyInfo("Odd Rabbit", 12, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 56, 29, 18, 1, "normalSkill", 1280, 356, "oddRabbitCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 - 900, 4250, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 + 900, 4250, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 - 900, 4700, "spyDogCircle");
-            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 17, 13, 3, "normalSkill", 1280 + 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 15, 13, 3, "normalSkill", 1280 - 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 15, 13, 3, "normalSkill", 1280 + 900, 4250, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 15, 13, 3, "normalSkill", 1280 - 900, 4700, "spyDogCircle");
+            this.generateEnemyInfo("Super Spy Dog", 7, "Dark", "", [new EnemySkill("Enraged", "Inflicts 'rage' status to self.")], 20, 15, 13, 3, "normalSkill", 1280 + 900, 4700, "spyDogCircle");
             this.generateEnemyInfo("Wise Dog", 10, "Light", "", [new EnemySkill("Wall of Healing", "recovers 25% HP for all allies nearby.")], 20, 3, 23, 3, "immovableSkill", 1280, 3100, "sageDogCircle");
-            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 25, 11, 5, "normal", 1280, 4200, "warriorDogCircle");
-            this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 15, 25, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
-            this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 25, 15, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 660, 2100, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 660, 2100, "warriorDogCircle");
+            this.generateEnemyInfo("Strong Warrior Dog", 9, "Anemo", "", [], 18, 23, 11, 5, "normal", 1280, 4200, "warriorDogCircle");
+            this.generateEnemyInfo("Tough Warrior Dog", 9, "Terra", "", [], 38, 13, 25, 5, "normal", 1280 - 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Smart Warrior Dog", 9, "Aqua", "", [], 25, 23, 15, 5, "normal", 1280 + 800, 3100, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 - 660, 2100, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 + 660, 2100, "warriorDogCircle");
 
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 760, 1300, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 760, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 - 760, 1300, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 + 760, 1300, "warriorDogCircle");
 
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 - 760, 800, "warriorDogCircle");
-            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 18, 15, 4, "normal", 1280 + 760, 800, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 - 760, 800, "warriorDogCircle");
+            this.generateEnemyInfo("Guard Dog", 9, "Terra", "", [], 25, 13, 15, 5, "normal", 1280 + 760, 800, "warriorDogCircle");
 
 
             this.cameras.main.setBounds(0, 0, level2.widthInPixels, level2.heightInPixels);
@@ -314,6 +367,125 @@ var WorldScene = new Phaser.Class({
             }
             this.nextTurn();
 
+        } else if (this.currentLevel == 5) {
+            var level5 = this.make.tilemap({
+                key: 'level5'
+            });
+            var tiles = level5.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level5.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level5.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Odd Snake", 34, "Terra", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 109, 74, 36, 2, "normal", 1280, 635, "oddSnakeCircle");
+            this.generateEnemyInfo("Thief Dog", 31, "Anemo", "", [], 54, 31, 24, 3, "normal", 1280 - 750, 4035, "thiefDogCircle");
+            this.generateEnemyInfo("Thief Dog", 31, "Anemo", "", [], 54, 31, 24, 3, "normal", 1280 + 750, 4035, "thiefDogCircle");
+            this.generateEnemyInfo("Thief Dog", 31, "Anemo", "", [], 54, 31, 24, 3, "normal", 1280 - 875, 2550, "thiefDogCircle");
+            this.generateEnemyInfo("Thief Dog", 31, "Anemo", "", [], 54, 31, 24, 3, "normal", 1280 + 875, 2550, "thiefDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 - 400, 3535, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 + 400, 3535, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 - 400, 2835, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 + 400, 2835, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 - 400, 2335, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 32, "Dark", "", [], 74, 36, 25, 3, "normal", 1280 + 400, 2335, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 33, "Dark", "", [], 77, 38, 26, 6, "normal", 1280 - 400, 4700, "gangsterDogCircle");
+            this.generateEnemyInfo("Gangster Dog", 33, "Dark", "", [], 77, 38, 26, 6, "normal", 1280 + 400, 4700, "gangsterDogCircle");
+
+            this.cameras.main.setBounds(0, 0, level5.widthInPixels, level5.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            this.identifyBoss("Odd Snake");
+
+            this.nextTurn();
+        } else if (this.currentLevel == 6) {
+            var level6 = this.make.tilemap({
+                key: 'level6'
+            });
+            var tiles = level6.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level6.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level6.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Odd Cat", 37, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
+                new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
+            ], 179, 58, 66, 5, "oddCat", 1280, 635, "oddCatCircle");
+            this.generateEnemyInfo("Incarnation of Wrath", 35, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 150, 35, 39, 1, "oddBird", 1280 - 600, 1175, "oddBirdCircle");
+            this.generateEnemyInfo("Incarnation of Pride", 35, "Terra", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 129, 77, 38, 2, "normal", 1280 + 600, 1175, "oddSnakeCircle");
+            this.generateEnemyInfo("Sleepy Dog", 36, "Terra", "", [new EnemySkill("Sleep...", "Refreshes all status changes for nearby enemies")], 287, 50, 275, 5, "immovableSkill", 1280, 2800, "restingDogCircle");
+
+            this.generateEnemyInfo("Sage Dog", 28, "Light", "", [new EnemySkill("Ruin", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 - 880, 1550, "sageDogCircle");
+            this.generateEnemyInfo("Wise Dog", 28, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 + 880, 1550, "sageDogCircle");
+            this.generateEnemyInfo("Sage Dog", 28, "Light", "", [new EnemySkill("Ruin", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 - 780, 3050, "sageDogCircle");
+            this.generateEnemyInfo("Wise Dog", 28, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 + 780, 3050, "sageDogCircle");
+            this.generateEnemyInfo("Sage Dog", 28, "Light", "", [new EnemySkill("Ruin", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 - 880, 4550, "sageDogCircle");
+            this.generateEnemyInfo("Wise Dog", 28, "Light", "", [new EnemySkill("Wall of Healing", "Summons 'Warrior Dog'")], 52, 49, 79, 1, "immovableSkill", 1280 + 880, 4550, "sageDogCircle");
+
+            this.cameras.main.setBounds(0, 0, level6.widthInPixels, level6.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            this.identifyBoss("Odd Cat");
+
+            this.nextTurn();
+        } else if (this.currentLevel == 7) {
+            var level7 = this.make.tilemap({
+                key: 'level7'
+            });
+            var tiles = level7.addTilesetImage('Mapset', 'tiles');
+            this.traverseLayer = level7.createStaticLayer('traverseLayer', tiles, 0, 0);
+            this.blockedLayer = level7.createStaticLayer('blockedLayer', tiles, 0, 0);
+            this.blockedLayer.setCollisionByExclusion([-1]);
+            this.cameras.main.roundPixels = true;
+
+            this.enemiesInfo = [];
+            this.generateEnemyInfo("Odd Ram", 40, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1."),
+                new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
+            ], 550, 48, 86, 1, "normalSkill", 1280, 635, "oddGoatCircle");
+            this.generateEnemyInfo("Incarnation of Melancholy", 39, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
+            ], 350, 42, 56, 1, "oddCat", 1280 - 300, 935, "oddGoatCircle");
+            this.generateEnemyInfo("Incarnation of Melancholy", 39, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
+            ], 350, 42, 56, 1, "oddCat", 1280 + 300, 935, "oddGoatCircle");
+            this.generateEnemyInfo("Incarnation of Malice", 37, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
+                new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
+            ], 179, 58, 66, 5, "oddCat", 1280, 1175, "oddCatCircle");
+            this.generateEnemyInfo("Incarnation of Wrath", 35, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 150, 35, 39, 1, "oddBird", 1280 - 500, 1175, "oddBirdCircle");
+            this.generateEnemyInfo("Incarnation of Wrath", 35, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+                new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
+            ], 150, 35, 39, 1, "oddBird", 1280 + 500, 1175, "oddBirdCircle");
+            this.generateEnemyInfo("Commander Dog", 38, "Terra", "", [new EnemySkill("Fire!!"), "Deals 5% of max HP as damage to the last target. Applies Burned status."], 100, 51, 78, 10, "normalSkill", 1280, 3735, "tankDogCircle");
+            this.generateEnemyInfo("Incarnation of Greed", 36, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 179, 59, 50, 1, "normalSkill", 1280 - 500, 3800, "oddRabbitCircle");
+            this.generateEnemyInfo("Incarnation of Sloth", 36, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 296, 48, 65, 7, "normalSkill", 1280 + 500, 3800, "oddAnteaterCircle");
+            this.generateEnemyInfo("Flying Dog", 36, "Anemo", "", [], 79, 59, 50, 1, "normal", 1280 - 500, 3300, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 37, "Anemo", "", [], 96, 48, 65, 1, "normal", 1280 + 500, 3300, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 36, "Anemo", "", [], 79, 59, 50, 1, "normal", 1280 - 500, 2800, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 37, "Anemo", "", [], 96, 48, 65, 1, "normal", 1280 + 500, 2800, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 36, "Anemo", "", [], 79, 59, 50, 1, "normal", 1280 - 500, 2300, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 37, "Anemo", "", [], 96, 48, 65, 1, "normal", 1280 + 500, 2300, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 36, "Anemo", "", [], 79, 59, 50, 1, "normal", 1280 - 500, 1700, "flyingDogCircle");
+            this.generateEnemyInfo("Flying Dog", 37, "Anemo", "", [], 96, 48, 65, 1, "normal", 1280 + 500, 1700, "flyingDogCircle");
+
+            this.cameras.main.setBounds(0, 0, level7.widthInPixels, level7.heightInPixels);
+
+            this.setup();
+            this.setUnitCollisionAndLine();
+            //identify the boss
+            this.identifyBoss("Odd Ram");
+
+            this.nextTurn();
         }
     },
 
@@ -341,7 +513,7 @@ var WorldScene = new Phaser.Class({
         this.buttonHover = this.sound.add('buttonHover');
         this.buttonClick = this.sound.add('buttonClick');
 
-        if (this.currentLevel == "trainingArena"){
+        if (this.currentLevel == "trainingArena") {
             this.spawnCats(920, 4500);
         }
 
@@ -363,6 +535,10 @@ var WorldScene = new Phaser.Class({
 
         if (this.currentLevel == 4) {
             this.spawnCats(920, 4500);
+        }
+
+        if (this.currentLevel == 5 || this.currentLevel == 6 || this.currentLevel == 7 || "apotheosisChallenge") {
+            this.spawnCats(990, 4500);
         }
 
 
@@ -775,7 +951,7 @@ var WorldScene = new Phaser.Class({
             damage = Math.floor(damage * 1.5);
         }
         if (unit2.unitInformation.status.name == "Iron Wall") {
-            damage = Math.floor(damage * 0.5);
+            damage = Math.floor(damage * 0.05);
         }
         if (unit1.unitInformation.element == "Anemo" && unit2.unitInformation.element == "Aqua") {
             damage = Math.floor(damage * 1.5);
@@ -1178,6 +1354,40 @@ var WorldScene = new Phaser.Class({
                     this.nextTurn();
                 });
                 break;
+            case "oddCat":
+                this.enemySkillPhase = false;
+                var dualSkill = 1;
+                var random = Math.floor(Math.random() * 101);
+                if (random < 50) {
+                    dualSkill = 0;
+                }
+                this.announcementText.setText(this.currentEnemy.unitInformation.name + " used '" + this.currentEnemy.unitInformation.skill[dualSkill].name + "'!");
+                switch (this.currentEnemy.unitInformation.skill[dualSkill].name) {
+                    case "Odd Sludge":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat") {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.maxHP * 0.25));
+                                if (this.allUnits[i].unitInformation.status.name != "dead") {
+                                    this.allUnits[i].unitInformation.status = new Status("Poisoned", "Takes 3% poison damage each turn.", 10);
+                                }
+                            }
+                        };
+                        break;
+                    case "Energy Drain":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat") {
+                                if (this.allUnits[i].unitInformation.status.name != "dead" && this.allUnits[i].unitInformation.energy > 0) {
+                                    this.allUnits[i].unitInformation.energy--;
+                                }
+                            }
+                        };
+                        break;
+                }
+                this.sleep(3000).then(() => {
+                    this.enemyPhase = false;
+                    this.nextTurn();
+                });
+                break;
             case "oddBird":
                 this.enemySkillPhase = false;
                 var dualSkill = 1;
@@ -1275,6 +1485,13 @@ var WorldScene = new Phaser.Class({
                             this.currentEnemy.healText.visible = false;
                         });
                         break;
+                    case "Endless Nightmare":
+                        for (var i = 0; i < this.allUnits.length; i++) {
+                            if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 500) {
+                                this.dealEffectDamage(this.currentEnemy, this.allUnits[i], Math.floor(this.allUnits[i].unitInformation.HP * 0.99));
+                            }
+                        };
+                        break; 
                     case "Odd Flame":
                         for (var i = 0; i < this.allUnits.length; i++) {
                             if (this.allUnits[i].unitInformation.type == "cat" && this.ManhattanDistance(this.allUnits[i].x, this.allUnits[i].y, this.currentEnemy.x, this.currentEnemy.y) <= 800) {
@@ -1423,7 +1640,7 @@ var WorldScene = new Phaser.Class({
                     }
                     break;
                 case "Immovable Rock":
-                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 5);
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 95%", 5);
                     this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.5);
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;
@@ -1440,7 +1657,7 @@ var WorldScene = new Phaser.Class({
                     });
                     break;
                 case "Home Sweet Home":
-                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 50%", 1);
+                    this.currentCat.unitInformation.status = new Status("Iron Wall", "Any physical damage delt to unit is decreased by 95%", 1);
                     this.currentCat.unitInformation.HP += Math.floor(this.currentCat.unitInformation.maxHP * 0.25);
                     if (this.currentCat.unitInformation.HP > this.currentCat.unitInformation.maxHP) {
                         this.currentCat.unitInformation.HP = this.currentCat.unitInformation.maxHP;

@@ -136,7 +136,7 @@ var ancientCivilizationScene = new Phaser.Class({
             } else {
                 this.scene.start('WorldScene', {
                     "catParty": this.catParty,
-                    "level": 2
+                    "level": 5
                 });
             }
         });

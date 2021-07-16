@@ -24,7 +24,7 @@ var BootScene = new Phaser.Class({
                 //new Game, initialize cat party
                 this.catParty = new catParty();
                 this.catParty.obtainCatFood(50);
-                this.catParty.levelsPassed = 4;
+                this.catParty.levelsPassed = 7;
             }
         }
         console.log(this.catParty);
@@ -130,6 +130,8 @@ var BootScene = new Phaser.Class({
         this.load.image('thiefDogCircle', 'assets/enemies/thiefDogCircle.png');
         this.load.image('gangsterDog', 'assets/enemies/gangsterDog.png');
         this.load.image('gangsterDogCircle', 'assets/enemies/gangsterDogCircle.png');
+        this.load.image('flyingDog', 'assets/enemies/flyingDog.png');
+        this.load.image('flyingDogCircle', 'assets/enemies/flyingDogCircle.png');
 
         //audio
         this.load.audio('coinCollide', 'assets/sfx/coinCollide.mp3');
