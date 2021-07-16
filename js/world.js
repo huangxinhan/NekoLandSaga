@@ -46,47 +46,59 @@ var WorldScene = new Phaser.Class({
     },
 
     preload: function () {
+        this.apotheosis = this.sound.add('apotheosis', {loop: true, volume: 0.2});
+        this.battleTheme = this.sound.add('battleTheme', {loop: true, volume: 0.2});
         //load based on the level
         if (this.currentLevel === 0) {
             this.load.tilemapTiledJSON('tutorial', 'assets/map/tutorial.json');
             this.bossStage = false;
             this.enemyCount = 1;
+            this.battleTheme.play();
         } else if (this.currentLevel === 1) {
             this.load.tilemapTiledJSON('level1', 'assets/map/level1.json');
             this.bossStage = true;
             this.enemyCount = 9;
+            this.battleTheme.play();
         } else if (this.currentLevel === 2) {
             this.load.tilemapTiledJSON('level2', 'assets/map/level2.json');
             this.bossStage = true;
             this.enemyCount = 12;
+            this.battleTheme.play();
         } else if (this.currentLevel === 3) {
             this.load.tilemapTiledJSON('level3', 'assets/map/level3.json');
             this.bossStage = true;
             this.enemyCount = 5;
+            this.battleTheme.play();
         } else if (this.currentLevel === 4) {
             this.load.tilemapTiledJSON('level4', 'assets/map/level4.json');
             this.bossStage = true;
             this.enemyCount = 20;
+            this.battleTheme.play();
         } else if (this.currentLevel === 5) {
             this.load.tilemapTiledJSON('level5', 'assets/map/level5.json');
             this.bossStage = true;
             this.enemyCount = 10;
+            this.battleTheme.play();
         } else if (this.currentLevel === 6) {
             this.load.tilemapTiledJSON('level6', 'assets/map/level6.json');
             this.bossStage = true;
             this.enemyCount = 10;
+            this.battleTheme.play();
         } else if (this.currentLevel === 7) {
             this.load.tilemapTiledJSON('level7', 'assets/map/level7.json');
             this.bossStage = true;
             this.enemyCount = 10;
+            this.apotheosis.play();
         } else if (this.currentLevel === "apotheosisChallenge") {
             this.load.tilemapTiledJSON('level7', 'assets/map/level7.json');
             this.bossStage = false;
             this.enemyCount = 7;
+            this.apotheosis.play();
         } else if (this.currentLevel === "trainingArena") {
             this.load.tilemapTiledJSON('training', 'assets/map/training.json');
             this.bossStage = false;
             this.enemyCount = 12;
+            this.battleTheme.play();
         }
 
 
@@ -1853,6 +1865,8 @@ var WorldScene = new Phaser.Class({
     },
 
     endBattle: function () {
+        this.apotheosis.stop();
+        this.battleTheme.stop();
         console.log("battle ends");
         this.announcementText.setText("Defeated...");
         this.catParty.resetCats();
@@ -1881,6 +1895,8 @@ var WorldScene = new Phaser.Class({
     },
 
     endBattleVictory: function () {
+        this.apotheosis.stop();
+        this.battleTheme.stop();
         this.victory = true;
         this.catParty.resetCats();
         for (var i = 0; i < this.allUnits.length; i++) {

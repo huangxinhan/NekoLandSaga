@@ -137,6 +137,8 @@ var BootScene = new Phaser.Class({
         this.load.audio('coinCollide', 'assets/sfx/coinCollide.mp3');
         this.load.audio('buttonHover', 'assets/sfx/buttonHover.mp3');
         this.load.audio('buttonClick', 'assets/sfx/buttonClick.mp3');
+        this.load.audio('apotheosis', 'assets/sfx/apotheosis.mp3');
+        this.load.audio('battleTheme', 'assets/sfx/battleTheme.mp3');
     },
 
     create: function () {
