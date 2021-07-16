@@ -110,21 +110,14 @@ var WorldScene = new Phaser.Class({
 
             //enemy spawns for this current level
             this.enemiesInfo = [];
-
-            var enemyInformation = {
-                info: new Enemy("Warrior Dog", 5, "Anemo", "", [
-                    new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")
-                ], 30, 15, 25, 5, "normalSkill"),
-                spawnX: 1280,
-                spawnY: 1300,
-                image: "warriorDogCircle"
-            };
-            this.enemiesInfo.push(enemyInformation);
+            console.log(this.catParty);
+            this.generateEnemyInfo("Warrior Dog", 5, "Anemo", "", [new EnemySkill("Recover", "recovers 25% of user's max HP"), new EnemySkill("Warning", "This skill does nothing.")],
+            30, 15, 25, 5, "normalSkill", 1280, 1300, "warriorDogCircle");
 
             this.cameras.main.setBounds(0, 0, tutorial.widthInPixels, tutorial.heightInPixels);
 
             this.setup();
-
+            console.log(this.catParty);
             this.setUnitCollisionAndLine();
 
             this.nextTurn();
@@ -172,22 +165,22 @@ var WorldScene = new Phaser.Class({
             this.cameras.main.roundPixels = true;
 
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Incarnation of Melancholy", 40, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
-            ], 550, 48, 86, 1, "normalSkill", 1280, 635, "oddGoatCircle");
-            this.generateEnemyInfo("Incarnation of Malice", 37, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
+            this.generateEnemyInfo("Incarnation of Melancholy", 50, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
+            ], 1550, 87, 106, 1, "normalSkill", 1280, 635, "oddGoatCircle");
+            this.generateEnemyInfo("Incarnation of Malice", 50, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
                 new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
-            ], 179, 58, 66, 5, "oddCat", 1280, 1175, "oddCatCircle");
-            this.generateEnemyInfo("Incarnation of Wrath", 35, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+            ], 286, 77, 84, 5, "oddCat", 1280, 1175, "oddCatCircle");
+            this.generateEnemyInfo("Incarnation of Wrath", 50, "Anemo", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
                 new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
-            ], 150, 35, 39, 1, "oddBird", 1280 - 500, 1175, "oddBirdCircle");
-            this.generateEnemyInfo("Incarnation of Pride", 34, "Terra", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
+            ], 250, 63, 56, 1, "oddBird", 1280 - 500, 1175, "oddBirdCircle");
+            this.generateEnemyInfo("Incarnation of Pride", 50, "Terra", "", [new EnemySkill("Odd Storm", "Odd Bird can start its movephase again after the end of its turn."),
                 new EnemySkill("Ominous Tempest", "Inflicts massive AOE damage to all opponents. Reduces their energy count by 1.")
-            ], 109, 74, 36, 2, "normal", 1280 + 500, 1175, "oddSnakeCircle");
-            this.generateEnemyInfo("Incarnation of Delusions", 23, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
+            ], 259, 128, 66, 2, "normal", 1280 + 500, 1175, "oddSnakeCircle");
+            this.generateEnemyInfo("Incarnation of Delusions", 50, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets."),
                 new EnemySkill("Odd Waters", "Heals 25% of max HP to allies within 800 Range. Applies 'Calm Mind' to those allies.")
-            ], 90, 43, 26, 3, "oddFox", 1280, 2535, "oddFoxCircle");
-            this.generateEnemyInfo("Incarnation of Greed", 36, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 179, 59, 50, 1, "normalSkill", 1280 - 500, 3300, "oddRabbitCircle");
-            this.generateEnemyInfo("Incarnation of Sloth", 36, "Aqua", "", [new EnemySkill("Recover", "recovers 25% of user's max HP")], 296, 48, 65, 7, "normalSkill", 1280 + 500, 3300, "oddAnteaterCircle");
+            ], 275, 73, 66, 3, "oddFox", 1280, 2535, "oddFoxCircle");
+            this.generateEnemyInfo("Incarnation of Greed", 50, "Light", "", [new EnemySkill("Odd Flame", "Deals 25% damage to enemies within 800 Range. Inflicts burn on targets.")], 215, 79, 60, 1, "normalSkill", 1280 - 500, 3300, "oddRabbitCircle");
+            this.generateEnemyInfo("Incarnation of Sloth", 50, "Aqua", "", [new EnemySkill("Odd Recovery", "recovers 25% of user's max HP")], 396, 68, 95, 7, "normalSkill", 1280 + 500, 3300, "oddAnteaterCircle");
 
 
             this.cameras.main.setBounds(0, 0, level7.widthInPixels, level7.heightInPixels);
@@ -450,13 +443,12 @@ var WorldScene = new Phaser.Class({
             this.cameras.main.roundPixels = true;
 
             this.enemiesInfo = [];
-            this.generateEnemyInfo("Odd Ram", 40, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1."),
-                new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
+            this.generateEnemyInfo("Odd Ram", 40, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
             ], 550, 48, 86, 1, "normalSkill", 1280, 635, "oddGoatCircle");
             this.generateEnemyInfo("Incarnation of Melancholy", 39, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
-            ], 350, 42, 56, 1, "oddCat", 1280 - 300, 935, "oddGoatCircle");
+            ], 350, 42, 56, 1, "normalSkill", 1280 - 300, 935, "oddGoatCircle");
             this.generateEnemyInfo("Incarnation of Melancholy", 39, "Light", "", [new EnemySkill("Endless Nightmare", "Reduces opponent's HP to 1.")
-            ], 350, 42, 56, 1, "oddCat", 1280 + 300, 935, "oddGoatCircle");
+            ], 350, 42, 56, 1, "normalSkill", 1280 + 300, 935, "oddGoatCircle");
             this.generateEnemyInfo("Incarnation of Malice", 37, "Dark", "", [new EnemySkill("Energy Drain", "Decreases all of opponent's energy counter by 1."),
                 new EnemySkill("Odd Sludge", "Inflicts massive AOE damage to all opponents. All opponents poisoned.")
             ], 179, 58, 66, 5, "oddCat", 1280, 1175, "oddCatCircle");
@@ -513,6 +505,8 @@ var WorldScene = new Phaser.Class({
         this.buttonHover = this.sound.add('buttonHover');
         this.buttonClick = this.sound.add('buttonClick');
 
+        console.log(this.currentLevel);
+
         if (this.currentLevel == "trainingArena") {
             this.spawnCats(920, 4500);
         }
@@ -537,7 +531,7 @@ var WorldScene = new Phaser.Class({
             this.spawnCats(920, 4500);
         }
 
-        if (this.currentLevel == 5 || this.currentLevel == 6 || this.currentLevel == 7 || "apotheosisChallenge") {
+        if (this.currentLevel == 5 || this.currentLevel == 6 || this.currentLevel == 7 || this.currentLevel == "apotheosisChallenge") {
             this.spawnCats(990, 4500);
         }
 
@@ -1235,6 +1229,7 @@ var WorldScene = new Phaser.Class({
     },
 
     invokeEnemyAI: function () {
+        console.log(this.currentEnemy.unitInformation.AIType)
         switch (this.currentEnemy.unitInformation.AIType) {
             case "normal":
                 //normal AIs will go max speed at the nearest cat 
@@ -1311,6 +1306,7 @@ var WorldScene = new Phaser.Class({
                 this.enemyUseSkill();
                 break;
 
+            case "oddCat":
             case "oddBird":
             case "oddFox":
                 for (var i = 0; i < this.allUnits.length; i++) {
@@ -1480,6 +1476,22 @@ var WorldScene = new Phaser.Class({
                             }
                         }
                         this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.25));
+                        this.currentEnemy.healText.visible = true;
+                        this.sleep(1000).then(() => {
+                            this.currentEnemy.healText.visible = false;
+                        });
+                        break;
+                    case "odd Recovery":
+                        this.currentEnemy.unitInformation.HP += Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5);
+                        if (this.currentEnemy.unitInformation.HP > this.currentEnemy.unitInformation.maxHP) {
+                            this.currentEnemy.unitInformation.HP = this.currentEnemy.unitInformation.maxHP;
+                        } else {
+                            if (this.sideMenuText.text.includes(this.currentEnemy.unitInformation.name)) {
+                                this.healthBar.increase(Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
+                                this.resetText(this.currentEnemy);
+                            }
+                        }
+                        this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
                         this.currentEnemy.healText.visible = true;
                         this.sleep(1000).then(() => {
                             this.currentEnemy.healText.visible = false;
