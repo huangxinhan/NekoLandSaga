@@ -97,7 +97,7 @@ var BootScene = new Phaser.Class({
         this.load.image('fishingCat', 'assets/cats/fishingCat.png');
         this.load.image('fishingCatCircle', 'assets/cats/fishingCatCircle.png');
         this.load.image('homeownerCats', 'assets/cats/homeownerCats.png');
-        this.load.image('homeownerCatsCircle', 'assets/cats/homeownerCatscircle.png');
+        this.load.image('homeownerCatsCircle', 'assets/cats/homeownerCatsCircle.png');
 
         //enemies
         this.load.image('oddAnteater', 'assets/enemies/oddAnteater.png');

@@ -46,7 +46,7 @@ var WorldScene = new Phaser.Class({
     },
 
     preload: function () {
-        this.apotheosis = this.sound.add('apotheosis', {loop: true, volume: 0.2});
+        this.apotheosis = this.sound.add('apotheosis', {loop: true, volume: 0.4});
         this.battleTheme = this.sound.add('battleTheme', {loop: true, volume: 0.2});
         //load based on the level
         if (this.currentLevel === 0) {
@@ -769,9 +769,9 @@ var WorldScene = new Phaser.Class({
             right: cursors.right,
             up: cursors.up,
             down: cursors.down,
-            acceleration: 0.06,
+            acceleration: 0.10,
             drag: 0.003,
-            maxSpeed: 1.0
+            maxSpeed: 1.5
         };
 
         this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
@@ -861,7 +861,7 @@ var WorldScene = new Phaser.Class({
         console.log(unit2);
         unit2.damageText.setText("-" + damage);
         unit2.damageText.visible = true;
-        this.sleep(1000).then(() => {
+        this.sleep(2000).then(() => {
             unit2.damageText.visible = false;
         });
         return success;
@@ -888,7 +888,7 @@ var WorldScene = new Phaser.Class({
                     this.currentCat.unitInformation.maxHP += 1;
                     this.currentCat.healText.visible = true;
                     this.currentCat.healText.setText("Level up!");
-                    this.sleep(1000).then(() => {
+                    this.sleep(3000).then(() => {
                         this.currentCat.healText.visible = false;
                     });
                 }
@@ -896,7 +896,7 @@ var WorldScene = new Phaser.Class({
                 console.log("gained exp!")
                 this.currentCat.healText.visible = true;
                 this.currentCat.healText.setText("EXP + " + expGain);
-                this.sleep(1000).then(() => {
+                this.sleep(3000).then(() => {
                     this.currentCat.healText.visible = false;
                 });
                 this.currentCat.unitInformation.exp += expGain;
@@ -1297,7 +1297,7 @@ var WorldScene = new Phaser.Class({
                     //this.enemySkillPhase = true;
                     //this.enemyUseSkill();
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                    this.sleep(1500).then(() => {
+                    this.sleep(1200).then(() => {
                         this.enemyPhase = false;
                         this.nextTurn();
                     });
@@ -1306,7 +1306,7 @@ var WorldScene = new Phaser.Class({
 
             case "immovable":
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                this.sleep(1500).then(() => {
+                this.sleep(1200).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1334,7 +1334,7 @@ var WorldScene = new Phaser.Class({
                 } else {
                     this.enemyMovePhase = false;
                     this.announcementText.setText(this.currentEnemy.unitInformation.name + " stays still...");
-                    this.sleep(1500).then(() => {
+                    this.sleep(1200).then(() => {
                         this.enemyPhase = false;
                         this.nextTurn();
                     });
@@ -1357,7 +1357,7 @@ var WorldScene = new Phaser.Class({
                 //then we don't use a skill
                 this.enemySkillPhase = false;
                 this.announcementText.setText(this.currentEnemy.unitInformation.name + " skips its turn!");
-                this.sleep(3000).then(() => {
+                this.sleep(1000).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1391,7 +1391,7 @@ var WorldScene = new Phaser.Class({
                         };
                         break;
                 }
-                this.sleep(3000).then(() => {
+                this.sleep(1000).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1419,7 +1419,7 @@ var WorldScene = new Phaser.Class({
                         };
                         break;
                 }
-                this.sleep(3000).then(() => {
+                this.sleep(1200).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1450,7 +1450,7 @@ var WorldScene = new Phaser.Class({
                                 this.allUnits[i].healText.visible = true;
                             }
                         }
-                        this.sleep(1800).then(() => {
+                        this.sleep(1200).then(() => {
                             for (var i = 0; i < this.allUnits.length; i++) {
                                 this.allUnits[i].healText.visible = false;
                             }
@@ -1466,7 +1466,7 @@ var WorldScene = new Phaser.Class({
                             }
                         };
                 }
-                this.sleep(3000).then(() => {
+                this.sleep(1200).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1489,7 +1489,7 @@ var WorldScene = new Phaser.Class({
                         }
                         this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.25));
                         this.currentEnemy.healText.visible = true;
-                        this.sleep(1000).then(() => {
+                        this.sleep(2000).then(() => {
                             this.currentEnemy.healText.visible = false;
                         });
                         break;
@@ -1505,7 +1505,7 @@ var WorldScene = new Phaser.Class({
                         }
                         this.currentEnemy.healText.setText("+" + Math.floor(this.currentEnemy.unitInformation.maxHP * 0.5));
                         this.currentEnemy.healText.visible = true;
-                        this.sleep(1000).then(() => {
+                        this.sleep(2000).then(() => {
                             this.currentEnemy.healText.visible = false;
                         });
                         break;
@@ -1596,7 +1596,7 @@ var WorldScene = new Phaser.Class({
                                 this.allUnits[i].healText.visible = true;
                             }
                         }
-                        this.sleep(1800).then(() => {
+                        this.sleep(2000).then(() => {
                             for (var i = 0; i < this.allUnits.length; i++) {
                                 this.allUnits[i].healText.visible = false;
                             }
@@ -1604,7 +1604,7 @@ var WorldScene = new Phaser.Class({
                         break;
 
                 }
-                this.sleep(3000).then(() => {
+                this.sleep(1500).then(() => {
                     this.enemyPhase = false;
                     this.nextTurn();
                 });
@@ -1649,7 +1649,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].unitInformation.status = new Status("Satisfied", "A satisfied Cat.", 1);
                         }
                     }
-                    this.sleep(1700).then(() => {
+                    this.sleep(2000).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
@@ -1676,7 +1676,7 @@ var WorldScene = new Phaser.Class({
                     }
                     this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.5));
                     this.currentCat.healText.visible = true;
-                    this.sleep(1700).then(() => {
+                    this.sleep(2000).then(() => {
                         this.currentCat.healText.visible = false;
                     });
                     break;
@@ -1693,7 +1693,7 @@ var WorldScene = new Phaser.Class({
                     }
                     this.currentCat.healText.setText("+" + Math.floor(this.currentCat.unitInformation.maxHP * 0.25));
                     this.currentCat.healText.visible = true;
-                    this.sleep(1700).then(() => {
+                    this.sleep(2000).then(() => {
                         this.currentCat.healText.visible = false;
                     });
                     break;
@@ -1773,7 +1773,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].healText.visible = true;
                         };
                     };
-                    this.sleep(1700).then(() => {
+                    this.sleep(2000).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
@@ -1797,7 +1797,7 @@ var WorldScene = new Phaser.Class({
                             this.allUnits[i].healText.visible = true;
                         };
                     };
-                    this.sleep(1700).then(() => {
+                    this.sleep(2000).then(() => {
                         for (var i = 0; i < this.allUnits.length; i++) {
                             this.allUnits[i].healText.visible = false;
                         }
@@ -1811,7 +1811,7 @@ var WorldScene = new Phaser.Class({
             this.announcementText.setText("Not enough energy to use skill!");
         }
 
-        this.sleep(3000).then(() => {
+        this.sleep(1500).then(() => {
             this.skillPhase = false;
             this.buttonLock = false;
             this.nextTurn();
@@ -1824,7 +1824,7 @@ var WorldScene = new Phaser.Class({
         this.skipTurnButton.visible = false;
         this.useSkillButton.visible = false;
         this.announcementText.setText(this.currentCat.unitInformation.name + " skips its turn!");
-        this.sleep(3000).then(() => {
+        this.sleep(1000).then(() => {
             this.skillPhase = false;
             this.buttonLock = false;
             this.nextTurn();
@@ -1886,7 +1886,7 @@ var WorldScene = new Phaser.Class({
         }
         this.scene.pause('WorldScene');
         localStorage.setItem('catParty', JSON.stringify(this.catParty));
-        this.sleep(5000).then(() => {
+        this.sleep(3000).then(() => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
@@ -1956,8 +1956,11 @@ var WorldScene = new Phaser.Class({
                 this.catParty.levelsPassed = 7;
             }
         }
+        if (this.currentLevel == "apotheosisChallenge"){
+            this.catParty.obtainCatFood(Math.floor(100 * this.richCatMultiplier));
+        }
         localStorage.setItem('catParty', JSON.stringify(this.catParty));
-        this.sleep(5000).then(() => {
+        this.sleep(3000).then(() => {
             this.scene.start('BootScene', {
                 "catParty": this.catParty
             })
